@@ -1,0 +1,15 @@
+{
+  "bot_description": "Welcome to Latitude Bot",
+  "commands_descriptions": {
+    "start": "▶️ Start Bot"
+  },
+  "menus": {
+    "start": {
+      "message": "Hi",
+      "buttons": {
+        "welcome_button": "Lets do it",
+        "close": "❌ Close"
+      }
+    }
+  }
+}

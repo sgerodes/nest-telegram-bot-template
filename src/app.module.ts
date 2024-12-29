@@ -11,7 +11,7 @@ import {
   RootConfig,
   TelegramI18nConfig,
   validateConfiguration
-} from '@configuration/configurationSchema';
+} from '@configuration/validationAndInterfaces';
 import * as path from "node:path";
 
 @Module({

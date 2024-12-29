@@ -1,13 +1,13 @@
 import {Scenes, Telegraf, Context as TelegrafContext} from 'telegraf';
-import {Action, Command, Context as NestjsTelegrafContext, InjectBot, Update} from 'nestjs-telegraf';
+import {Action, Command, Context as NestjsTelegrafContext, InjectBot, Start, Update} from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
-import { BotCommands, CommandDescriptions} from "@configuration/telegram";
+import {BotCommands, CommandDescriptions, TELEGRAM_BTN_ACTIONS} from "@configuration/telegramConstants";
 import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 
 
 @Update()
-export class BotService {
+export class BotUpdate {
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
@@ -17,7 +17,8 @@ export class BotService {
     this.bot.telegram.setMyCommands(CommandDescriptions);
   }
 
-  @Command(BotCommands.START)
+  // @Command(BotCommands.START)
+  @Start()
   async startCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
 
     const message = this.i18n.translate('i18n.menus.start.message');
@@ -26,7 +27,7 @@ export class BotService {
         text: await this.i18n.translate('i18n.menus.start.buttons.welcome_button'),
         url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
       }],
-      [{ text: await this.i18n.translate('i18n.menus.start.buttons.close'), callback_data: 'close' }],
+      [{ text: await this.i18n.translate('i18n.menus.start.buttons.close'), callback_data: TELEGRAM_BTN_ACTIONS.CLOSE }],
     ];
 
     await ctx.reply(
@@ -46,7 +47,7 @@ export class BotService {
     await ctx.reply('Wrong answer!');
   }
 
-  @Action('close')
+  @Action(TELEGRAM_BTN_ACTIONS.CLOSE)
   async close(ctx) {
     await ctx.deleteMessage();
   }

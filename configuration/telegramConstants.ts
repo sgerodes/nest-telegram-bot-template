@@ -10,3 +10,11 @@ export const CommandDescriptions: tg.BotCommand[] = [
         description: 'Starts the bot',
     }
 ];
+
+export const TELEGRAM_BTN_ACTIONS = {
+    CLOSE: 'id_0_close',
+};
+
+export const SCENES = {
+    START: 'startScene',
+};

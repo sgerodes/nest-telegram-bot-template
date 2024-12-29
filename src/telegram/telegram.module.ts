@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {BotService} from "@telegram/bot.service";
-import {TelegramConfig} from "@configuration/configurationSchema";
+import {BotUpdate} from "@telegram/bot.update";
+import {TelegramConfig} from "@configuration/validationAndInterfaces";
 
 
 @Module({
@@ -16,7 +16,7 @@ import {TelegramConfig} from "@configuration/configurationSchema";
         }),
     ],
     providers: [
-        BotService,
+        BotUpdate,
     ]
 })
 export class TelegramModule {}

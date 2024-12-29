@@ -1,11 +1,11 @@
 import * as process from 'node:process';
 import { getAbsolutePathForProjectDirectory } from '@configuration/configUtils';
-import {RootConfig} from "@configuration/configurationSchema";
+import {RootConfig} from "@configuration/validationAndInterfaces";
 
 
 export const configuration = (): RootConfig => ({
   application: {
-    port: Number(process.env.PORT) || 3080,
+    port: Number(process.env.PORT) || 3069,
   },
   telegram: {
     bot: {

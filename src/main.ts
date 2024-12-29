@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {Logger} from "@nestjs/common";
-import {RootConfig} from "../configuration/configurationSchema";
+import {RootConfig} from "@configuration/validationAndInterfaces";
 
 const logger = new Logger("main");
 

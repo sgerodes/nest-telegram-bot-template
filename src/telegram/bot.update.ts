@@ -5,6 +5,7 @@ import {BotCommands, CommandDescriptions, TELEGRAM_BTN_ACTIONS} from "@configura
 import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import {UserRepositoryService} from "@database/user-repository/user-repository.service";
+import { TelegramBotConfig, TelegramConfig } from '@configuration/validationAndInterfaces';
 
 
 @Update()
@@ -15,9 +16,22 @@ export class BotUpdate {
     @InjectBot() private readonly bot: Telegraf<TelegrafContext>,
     private readonly i18n: I18nService,
     private readonly userRepositoryService: UserRepositoryService,
+    private readonly telegramConfig: TelegramConfig,
   ) {
+    // this.updateDescriptions()
+    this.bot.telegram.setMyName(this.telegramConfig.bot.displayName);
+    this.bot.telegram.setMyShortDescription(telegramConfig.bot.shortDescription);
+    this.bot.telegram.setMyDescription(telegramConfig.bot.description);
     this.bot.telegram.setMyCommands(CommandDescriptions);
   }
+
+  // async updateDescriptions() {
+  //   if ((await this.bot.telegram.getMyName()).name !== this.telegramConfig.bot.displayName) {
+  //     const previousName = (await this.bot.telegram.getMyName()).name;
+  //     await this.bot.telegram.setMyName(this.telegramConfig.bot.displayName);
+  //     this.logger.log(`Bot name was changed from '${previousName}' to '${this.telegramConfig.bot.displayName}'`);
+  //   }
+  // }
 
   // @Command(BotCommands.START)
   @Start()

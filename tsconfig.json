@@ -12,7 +12,8 @@
     "baseUrl": "./",
     "paths": {
       "@telegram/*": ["src/telegram/*"],
-      "@configuration/*": ["configuration/*"]
+      "@configuration/*": ["configuration/*"],
+      "@database/*": ["src/database/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

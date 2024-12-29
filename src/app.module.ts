@@ -2,15 +2,17 @@ import { Module } from '@nestjs/common';
 import { TelegramModule } from '@telegram/telegram.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
-import configuration, {
+import {
+  configuration,
   configurationValidationSchema,
 } from '../configuration/configuration';
+import {TypedConfigService} from "../configuration/typedConfig";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       cache: true,
-      isGlobal: true,
+      isGlobal: true, // Makes the ConfigService globally available
       load: [configuration],
       validationSchema: configurationValidationSchema,
     }),
@@ -28,5 +30,7 @@ import configuration, {
     }),
     TelegramModule,
   ],
+  providers: [TypedConfigService], // Register TypedConfigService as a provider
+  exports: [TypedConfigService],   // Export if needed in other modules
 })
 export class AppModule {}

@@ -1,7 +1,7 @@
-import { Scenes } from 'telegraf';
-import { Action, Command, Context, Update } from 'nestjs-telegraf';
+import {Scenes, Telegraf, Context as TelegrafContext} from 'telegraf';
+import {Action, Command, Context as NestjsTelegrafContext, InjectBot, Update} from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
-import {BotCommands} from "../../configuration/configuration";
+import { BotCommands, CommandDescriptions} from "../../configuration/telegram";
 import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import { InputMediaPhoto } from 'telegraf/types';
@@ -11,11 +11,14 @@ export class BotService {
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
+    @InjectBot() private readonly bot: Telegraf<TelegrafContext>,
     private readonly i18n: I18nService,
-  ) {}
+  ) {
+    this.bot.telegram.setMyCommands(CommandDescriptions);
+  }
 
   @Command(BotCommands.START)
-  async startCommand(@Context() ctx: Scenes.WizardContext) {
+  async startCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
 
     const message = this.i18n.translate('i18n.menus.start.message');
     const buttons: InlineKeyboardButton[][] = [
@@ -30,7 +33,6 @@ export class BotService {
       message, {
         reply_markup: { inline_keyboard: buttons },
       });
-
   }
 
 

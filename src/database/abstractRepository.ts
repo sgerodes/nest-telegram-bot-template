@@ -11,7 +11,6 @@ export class AbstractRepository<T, Delegate extends {
 
   constructor(modelDelegate: Delegate) {
     this.modelDelegate = modelDelegate;
-    // this.create = this.modelDelegate.create.bind(this.modelDelegate);
   }
 
   async createData(obj: CreateInput): Promise<T> {

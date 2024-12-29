@@ -1,24 +1,10 @@
 import * as Joi from 'joi';
 import * as process from 'node:process';
 import { getAbsolutePathForProjectDirectory } from './configUtils';
+import {RootConfig} from "./configurationSchema";
 
 
-export interface AppConfig {
-  application: {
-    port: number;
-  };
-  telegram: {
-    bot: {
-      token: string;
-    };
-    i18n: {
-      fallbackLanguage: string;
-      i18nFolderPath: string;
-    };
-  };
-}
-
-export const configuration = (): AppConfig => ({
+export const configuration = (): RootConfig => ({
   application: {
     port: Number(process.env.PORT) || 3080,
   },

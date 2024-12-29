@@ -6,7 +6,9 @@ import {
   configuration,
   configurationValidationSchema,
 } from '../configuration/configuration';
-import {TypedConfigService} from "../configuration/typedConfig";
+// import {TypedConfigService} from "../configuration/typedConfig";
+import { TypedConfigModule, dotenvLoader } from 'nest-typed-config';
+import {RootConfig, validateConfiguration} from '../configuration/configurationSchema';
 
 @Module({
   imports: [
@@ -16,6 +18,13 @@ import {TypedConfigService} from "../configuration/typedConfig";
       load: [configuration],
       validationSchema: configurationValidationSchema,
     }),
+    TypedConfigModule.forRoot({
+      schema: RootConfig,
+      load: configuration, // Load configuration with defaults
+      validate: validateConfiguration, // Validate against the schema
+    }),
+
+
     I18nModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -30,7 +39,5 @@ import {TypedConfigService} from "../configuration/typedConfig";
     }),
     TelegramModule,
   ],
-  providers: [TypedConfigService], // Register TypedConfigService as a provider
-  exports: [TypedConfigService],   // Export if needed in other modules
 })
 export class AppModule {}

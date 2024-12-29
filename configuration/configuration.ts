@@ -10,9 +10,6 @@ export const configuration = (): RootConfig => ({
   telegram: {
     bot: {
       token: process.env.TELEGRAM_BOT_TOKEN,
-      displayName: "A very awesome bot",
-      shortDescription: "Does awesome stuff",
-      description: "Does a lot of awesome stuff",
     },
     i18n: {
       fallbackLanguage: 'en',

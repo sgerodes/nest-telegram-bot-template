@@ -5,6 +5,7 @@ import {BotUpdate} from "@telegram/bot.update";
 import {TelegramConfig} from "@configuration/validationAndInterfaces";
 import {DatabaseModule} from "@database/database.module";
 import {UserRepositoryService} from "@database/user-repository/user-repository.service";
+import { LanguageModule } from '../language/language.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import {UserRepositoryService} from "@database/user-repository/user-repository.s
             }),
         }),
         DatabaseModule,
+        LanguageModule
     ],
     providers: [
         BotUpdate,

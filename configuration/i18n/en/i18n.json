@@ -1,5 +1,9 @@
 {
-  "bot_description": "Welcome to Latitude Bot",
+  "metadata": {
+    "bot_name": "A very awesome bot",
+    "description": "Welcome to the Bot",
+    "short_description": "Does awesome stuff"
+  },
   "commands_descriptions": {
     "start": "▶️ Start Bot"
   },

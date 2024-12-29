@@ -23,20 +23,20 @@ export class TelegramBotConfig {
     @IsNotEmpty()
     token!: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(64)
-    displayName!: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(120)
-    shortDescription!: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(512)
-    description!: string;
+    // @IsString()
+    // @IsNotEmpty()
+    // @MaxLength(64)
+    // displayName!: string;
+    //
+    // @IsString()
+    // @IsNotEmpty()
+    // @MaxLength(120)
+    // shortDescription!: string;
+    //
+    // @IsString()
+    // @IsNotEmpty()
+    // @MaxLength(512)
+    // description!: string;
 }
 
 export class TelegramI18nConfig {

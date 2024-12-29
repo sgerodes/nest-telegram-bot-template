@@ -14,6 +14,7 @@ import {
 } from '@configuration/validationAndInterfaces';
 import * as path from "node:path";
 import {DatabaseModule} from "@database/database.module";
+import { LanguageModule } from './language/language.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import {DatabaseModule} from "@database/database.module";
     }),
     TelegramModule,
     DatabaseModule,
+    LanguageModule
   ],
 })
 export class AppModule {}

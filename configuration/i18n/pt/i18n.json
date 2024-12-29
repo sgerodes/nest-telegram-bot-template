@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "bot_name": "Um bot muito incrível",
+    "description": "Bem-vindo ao Bot",
+    "short_description": "Faz coisas incríveis"
+  },
+  "commands_descriptions": {
+    "start": "▶️ Iniciar Bot"
+  },
+  "menus": {
+    "start": {
+      "message": "Olá",
+      "buttons": {
+        "welcome_button": "Vamos fazer isso",
+        "close": "❌ Fechar"
+      }
+    }
+  }
+}

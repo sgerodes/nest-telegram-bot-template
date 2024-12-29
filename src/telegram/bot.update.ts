@@ -6,6 +6,7 @@ import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import {UserRepositoryService} from "@database/user-repository/user-repository.service";
 import { TelegramBotConfig, TelegramConfig } from '@configuration/validationAndInterfaces';
+import { LanguageService } from '../language/language.service';
 
 
 @Update()
@@ -17,21 +18,29 @@ export class BotUpdate {
     private readonly i18n: I18nService,
     private readonly userRepositoryService: UserRepositoryService,
     private readonly telegramConfig: TelegramConfig,
+    private readonly languageService: LanguageService,
   ) {
-    // this.updateDescriptions()
-    this.bot.telegram.setMyName(this.telegramConfig.bot.displayName);
-    this.bot.telegram.setMyShortDescription(telegramConfig.bot.shortDescription);
-    this.bot.telegram.setMyDescription(telegramConfig.bot.description);
+    this.updateMetadata();
     this.bot.telegram.setMyCommands(CommandDescriptions);
   }
 
-  // async updateDescriptions() {
-  //   if ((await this.bot.telegram.getMyName()).name !== this.telegramConfig.bot.displayName) {
-  //     const previousName = (await this.bot.telegram.getMyName()).name;
-  //     await this.bot.telegram.setMyName(this.telegramConfig.bot.displayName);
-  //     this.logger.log(`Bot name was changed from '${previousName}' to '${this.telegramConfig.bot.displayName}'`);
-  //   }
-  // }
+  async updateMetadata() {
+    for (const lang of this.languageService.getSupportedLanguages()) {
+      try {
+        await this.bot.telegram.setMyName(this.i18n.translate('i18n.metadata.bot_name', { lang }));
+        await wait(1000);
+        await this.bot.telegram.setMyShortDescription(this.i18n.translate('i18n.metadata.description', { lang }));
+        await wait(1000);
+        await this.bot.telegram.setMyDescription(this.i18n.translate('i18n.metadata.short_description', { lang }));
+        await wait(1000);
+      } catch (error) {
+        this.logger.error(
+          `Failed to update bot metadata for language '${lang}': ${error.message}`,
+          error.stack,
+        );
+      }
+    }
+  }
 
   // @Command(BotCommands.START)
   @Start()

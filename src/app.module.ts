@@ -4,11 +4,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import {
   configuration,
-  configurationValidationSchema,
-} from '../configuration/configuration';
-// import {TypedConfigService} from "../configuration/typedConfig";
-import { TypedConfigModule, dotenvLoader } from 'nest-typed-config';
-import {RootConfig, validateConfiguration} from '../configuration/configurationSchema';
+} from '@configuration/configuration';
+import { TypedConfigModule } from 'nest-typed-config';
+import {
+  environmentValidationSchema,
+  RootConfig,
+  TelegramI18nConfig,
+  validateConfiguration
+} from '@configuration/configurationSchema';
+import * as path from "node:path";
 
 @Module({
   imports: [
@@ -16,21 +20,21 @@ import {RootConfig, validateConfiguration} from '../configuration/configurationS
       cache: true,
       isGlobal: true, // Makes the ConfigService globally available
       load: [configuration],
-      validationSchema: configurationValidationSchema,
+      validationSchema: environmentValidationSchema,
     }),
+
     TypedConfigModule.forRoot({
       schema: RootConfig,
-      load: configuration, // Load configuration with defaults
-      validate: validateConfiguration, // Validate against the schema
+      load: configuration,
+      validate: validateConfiguration,
     }),
-
-
     I18nModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        fallbackLanguage: configService.get('telegram.i18n.fallbackLanguage'),
-        loaderOptions: { path: configService.get('telegram.i18n.i18nFolderPath') },
+      inject: [TelegramI18nConfig],
+      useFactory: (telegramI18Config: TelegramI18nConfig) => ({
+        fallbackLanguage: telegramI18Config.fallbackLanguage,
+        loaderOptions: { path: telegramI18Config.i18nFolderPath },
       }),
+
       resolvers: [{
         use: QueryResolver, options: ['lang'],
       },

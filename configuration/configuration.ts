@@ -1,7 +1,6 @@
-import * as Joi from 'joi';
 import * as process from 'node:process';
-import { getAbsolutePathForProjectDirectory } from './configUtils';
-import {RootConfig} from "./configurationSchema";
+import { getAbsolutePathForProjectDirectory } from '@configuration/configUtils';
+import {RootConfig} from "@configuration/configurationSchema";
 
 
 export const configuration = (): RootConfig => ({
@@ -17,10 +16,4 @@ export const configuration = (): RootConfig => ({
       i18nFolderPath: getAbsolutePathForProjectDirectory('configuration/i18n/'),
     },
   },
-});
-
-
-export const configurationValidationSchema = Joi.object({
-  PORT: Joi.number().integer().min(1).max(65535).optional(),
-  TELEGRAM_BOT_TOKEN: Joi.string().required(),
 });

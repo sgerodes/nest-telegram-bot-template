@@ -9,13 +9,14 @@ import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { Allow, ValidateNested } from 'class-validator';
 import {TypedConfigModule} from "nest-typed-config";
+import * as Joi from "joi";
+
 
 export class ApplicationConfig {
     @IsNumber()
     @IsOptional()
     port: number;
 }
-
 
 export class TelegramBotConfig {
     @IsString()
@@ -66,3 +67,9 @@ export const validateConfiguration = (config: Record<string, any>): RootConfig =
 
     return configInstance;
 };
+
+
+export const environmentValidationSchema = Joi.object({
+    PORT: Joi.number().integer().min(1).max(65535).optional(),
+    TELEGRAM_BOT_TOKEN: Joi.string().required(),
+});

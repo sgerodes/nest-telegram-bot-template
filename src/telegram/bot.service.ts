@@ -1,10 +1,10 @@
 import {Scenes, Telegraf, Context as TelegrafContext} from 'telegraf';
 import {Action, Command, Context as NestjsTelegrafContext, InjectBot, Update} from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
-import { BotCommands, CommandDescriptions} from "../../configuration/telegram";
+import { BotCommands, CommandDescriptions} from "@configuration/telegram";
 import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
-import { InputMediaPhoto } from 'telegraf/types';
+
 
 @Update()
 export class BotService {

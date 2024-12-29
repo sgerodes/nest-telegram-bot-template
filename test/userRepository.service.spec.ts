@@ -28,16 +28,13 @@ describe('UserRepositoryService', () => {
 
         userRepository = module.get<UserRepositoryService>(UserRepositoryService);
         prismaService = module.get<PrismaService>(PrismaService);
-    });
-
-    afterEach(() => {
         jest.clearAllMocks();
     });
 
     describe('readByTelegramId', () => {
         it('should return a user if found', async () => {
             const mockUser = { id: 1, telegramId: 123456, name: 'John Doe' };
-            prismaService.user.findUnique.mockReturnValue(Promise.resolve(mockUser));
+            (prismaService.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
             const result = await userRepository.readByTelegramId(123456);
             expect(result).toEqual(mockUser);
@@ -47,7 +44,7 @@ describe('UserRepositoryService', () => {
         });
 
         it('should return null if no user is found', async () => {
-            prismaService.user.findUnique.mockReturnValue(Promise.resolve(null));
+            (prismaService.user.findUnique as jest.Mock).mockResolvedValue(null);
 
             const result = await userRepository.readByTelegramId(123456);
             expect(result).toBeNull();
@@ -59,7 +56,7 @@ describe('UserRepositoryService', () => {
 
     describe('existsByTelegramId', () => {
         it('should return true if the user exists', async () => {
-            prismaService.user.findFirst.mockReturnValue(Promise.resolve({ telegramId: 123456 }));
+            (prismaService.user.findFirst as jest.Mock).mockResolvedValue({ telegramId: 123456 });
 
             const result = await userRepository.existsByTelegramId(123456);
             expect(result).toBe(true);
@@ -69,7 +66,7 @@ describe('UserRepositoryService', () => {
         });
 
         it('should return false if the user does not exist', async () => {
-            prismaService.user.findFirst.mockReturnValue(Promise.resolve(null));
+            (prismaService.user.findFirst as jest.Mock).mockResolvedValue(null);
 
             const result = await userRepository.existsByTelegramId(123456);
             expect(result).toBe(false);
@@ -83,7 +80,7 @@ describe('UserRepositoryService', () => {
         it('should create a user and return the created user', async () => {
             const mockUserInput = { name: 'Jane Doe', telegramId: 654321 };
             const mockUser = { id: 2, ...mockUserInput };
-            prismaService.user.create.mockReturnValue(Promise.resolve(mockUser));
+            (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
             const result = await userRepository.createData(mockUserInput);
             expect(result).toEqual(mockUser);
@@ -96,7 +93,7 @@ describe('UserRepositoryService', () => {
     describe('readById', () => {
         it('should return a user by id', async () => {
             const mockUser = { id: 1, telegramId: 123456, name: 'John Doe' };
-            prismaService.user.findUnique.mockReturnValue(Promise.resolve(mockUser));
+            (prismaService.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
             const result = await userRepository.readById(1);
             expect(result).toEqual(mockUser);

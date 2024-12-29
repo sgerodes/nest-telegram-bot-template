@@ -5,31 +5,22 @@ export class AbstractRepository<T, Delegate extends {
   findFirst: (args: any) => Promise<T | null>;
   count: (args: any) => Promise<number>;
   create: (args: any) => Promise<T>;
-}> {
+}, CreateInput> {
   protected readonly modelDelegate: Delegate;
   protected readonly logger = new Logger(this.constructor.name);
 
   constructor(modelDelegate: Delegate) {
     this.modelDelegate = modelDelegate;
-
     // this.create = this.modelDelegate.create.bind(this.modelDelegate);
-
   }
 
-  // create: typeof this.modelDelegate.create;
-  // async create(obj: any): Promise<T> {
-  //   return this.modelDelegate.create(
-  //     {
-  //       data: obj
-  //     }
-  //   );
-  // }
-  // async create(data: Parameters<typeof this.modelDelegate.create>[0]['data']): Promise<T> {
-  //   return this.modelDelegate.create({
-  //     data,
-  //   });
-  // }
-
+  async createData(obj: CreateInput): Promise<T> {
+    return this.modelDelegate.create(
+      {
+        data: obj
+      }
+    );
+  }
 
   async readById(id: number): Promise<T | null> {
     return this.modelDelegate.findUnique({

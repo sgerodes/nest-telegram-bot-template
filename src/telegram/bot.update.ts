@@ -5,6 +5,7 @@ import {BotCommands, CommandDescriptions, TELEGRAM_BTN_ACTIONS} from "@configura
 import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import {UserRepositoryService} from "@database/user-repository/user-repository.service";
+import {User} from "@prisma/client";
 
 
 @Update()
@@ -25,12 +26,17 @@ export class BotUpdate {
 
 
     if (!await this.userRepositoryService.existsByTelegramId(ctx.from.id)) {
-      await this.userRepositoryService.create({
-        data: {
-              telegramId: BigInt(ctx.from.id),
-              telegramUsername: ctx.from.username,
-              telegramFirstName: ctx.from.first_name,
-        }
+      // await this.userRepositoryService.create({
+      //   data: {
+      //         telegramId: BigInt(ctx.from.id),
+      //         telegramUsername: ctx.from.username,
+      //         telegramFirstName: ctx.from.first_name,
+      //   }
+      // });
+      const user = await this.userRepositoryService.createData({
+        telegramId: ctx.from.id,
+        telegramUsername: ctx.from.username,
+        telegramFirstName: ctx.from.first_name,
       });
     }
 

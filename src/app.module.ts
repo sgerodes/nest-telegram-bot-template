@@ -13,6 +13,7 @@ import {
   validateConfiguration
 } from '@configuration/validationAndInterfaces';
 import * as path from "node:path";
+import {DatabaseModule} from "@database/database.module";
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import * as path from "node:path";
         new HeaderResolver(['x-lang'])],
     }),
     TelegramModule,
+    DatabaseModule,
   ],
 })
 export class AppModule {}

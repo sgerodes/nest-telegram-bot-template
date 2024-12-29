@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import {BotCommands, CommandDescriptions, TELEGRAM_BTN_ACTIONS} from "@configuration/telegramConstants";
 import { I18nService } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
+import {UserRepositoryService} from "@database/user-repository/user-repository.service";
 
 
 @Update()
@@ -13,6 +14,7 @@ export class BotUpdate {
   constructor(
     @InjectBot() private readonly bot: Telegraf<TelegrafContext>,
     private readonly i18n: I18nService,
+    private readonly userRepositoryService: UserRepositoryService,
   ) {
     this.bot.telegram.setMyCommands(CommandDescriptions);
   }
@@ -20,6 +22,17 @@ export class BotUpdate {
   // @Command(BotCommands.START)
   @Start()
   async startCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
+
+
+    if (!await this.userRepositoryService.existsByTelegramId(ctx.from.id)) {
+      await this.userRepositoryService.create({
+        data: {
+              telegramId: BigInt(ctx.from.id),
+              telegramUsername: ctx.from.username,
+              telegramFirstName: ctx.from.first_name,
+        }
+      });
+    }
 
     const message = this.i18n.translate('i18n.menus.start.message');
     const buttons: InlineKeyboardButton[][] = [

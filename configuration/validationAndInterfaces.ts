@@ -43,6 +43,12 @@ export class TelegramConfig {
     i18n!: TelegramI18nConfig;
 }
 
+export class DatabaseConfig {
+    @IsString()
+    @IsNotEmpty()
+    url!: string;
+}
+
 export class RootConfig {
     @Type(() => ApplicationConfig)
     @ValidateNested()
@@ -51,6 +57,10 @@ export class RootConfig {
     @Type(() => TelegramConfig)
     @ValidateNested()
     telegram!: TelegramConfig;
+
+    @Type(() => DatabaseConfig)
+    @ValidateNested()
+    database!: DatabaseConfig;
 }
 
 
@@ -72,4 +82,5 @@ export const validateConfiguration = (config: Record<string, any>): RootConfig =
 export const environmentValidationSchema = Joi.object({
     PORT: Joi.number().integer().min(1).max(65535).optional(),
     TELEGRAM_BOT_TOKEN: Joi.string().required(),
+    DATABASE_URL: Joi.string().required(),
 });

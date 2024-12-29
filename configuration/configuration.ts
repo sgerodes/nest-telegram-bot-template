@@ -16,4 +16,7 @@ export const configuration = (): RootConfig => ({
       i18nFolderPath: getAbsolutePathForProjectDirectory('configuration/i18n/'),
     },
   },
+  database: {
+    url: process.env.DATABASE_URL
+  }
 });

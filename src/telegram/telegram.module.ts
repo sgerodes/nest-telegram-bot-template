@@ -3,6 +3,8 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {BotUpdate} from "@telegram/bot.update";
 import {TelegramConfig} from "@configuration/validationAndInterfaces";
+import {DatabaseModule} from "@database/database.module";
+import {UserRepositoryService} from "@database/user-repository/user-repository.service";
 
 
 @Module({
@@ -14,9 +16,11 @@ import {TelegramConfig} from "@configuration/validationAndInterfaces";
                 token: telegramConfig.bot.token,
             }),
         }),
+        DatabaseModule,
     ],
     providers: [
         BotUpdate,
+        UserRepositoryService
     ]
 })
 export class TelegramModule {}

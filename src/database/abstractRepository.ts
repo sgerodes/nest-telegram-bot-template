@@ -1,18 +1,35 @@
 import { Logger } from '@nestjs/common';
 
-export class AbstractRepository<T> {
-  protected readonly modelDelegate;
+export class AbstractRepository<T, Delegate extends {
+  findUnique: (args: any) => Promise<T | null>;
+  findFirst: (args: any) => Promise<T | null>;
+  count: (args: any) => Promise<number>;
+  create: (args: any) => Promise<T>;
+}> {
+  protected readonly modelDelegate: Delegate;
   protected readonly logger = new Logger(this.constructor.name);
 
-  constructor(modelDelegate) {
+  constructor(modelDelegate: Delegate) {
     this.modelDelegate = modelDelegate;
 
-    // TODO checks
-    // const typeName: string = (T as any).toString();
-    // if (!this.constructor.name.includes(typeName)){
-    //   this.logger.warn(`${this.constructor.name} does not include the typeName ${typeName}`)
-    // }
+    // this.create = this.modelDelegate.create.bind(this.modelDelegate);
+
   }
+
+  // create: typeof this.modelDelegate.create;
+  // async create(obj: any): Promise<T> {
+  //   return this.modelDelegate.create(
+  //     {
+  //       data: obj
+  //     }
+  //   );
+  // }
+  // async create(data: Parameters<typeof this.modelDelegate.create>[0]['data']): Promise<T> {
+  //   return this.modelDelegate.create({
+  //     data,
+  //   });
+  // }
+
 
   async readById(id: number): Promise<T | null> {
     return this.modelDelegate.findUnique({
@@ -20,13 +37,21 @@ export class AbstractRepository<T> {
     });
   }
 
-  async create(obj: T): Promise<T> {
-    return this.modelDelegate.create(
-      {
-        data: obj
-      }
-    );
+
+  async readByUnique(column: keyof T, value: any): Promise<T | null> {
+    return this.modelDelegate.findUnique({
+      where: { [column]: value },
+    });
   }
 
+  async readFirst(column: keyof T, value: any): Promise<T | null> {
+    return this.modelDelegate.findFirst({
+      where: { [column]: value },
+    });
+  }
+
+  async exists(column: keyof T, value: any): Promise<boolean> {
+    return await this.readFirst(column, value) !== null;
+  }
 
 }

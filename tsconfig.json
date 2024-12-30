@@ -13,7 +13,8 @@
     "paths": {
       "@telegram/*": ["src/telegram/*"],
       "@configuration/*": ["configuration/*"],
-      "@database/*": ["src/database/*"]
+      "@database/*": ["src/database/*"],
+      "@language/*": ["src/language/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -16,7 +16,7 @@ import {
   validateConfiguration,
 } from '@configuration/validationAndInterfaces';
 import { DatabaseModule } from '@database/database.module';
-import { LanguageModule } from './language/language.module';
+import { LanguageModule } from '@language/language.module';
 
 @Module({
   imports: [
@@ -38,7 +38,6 @@ import { LanguageModule } from './language/language.module';
         fallbackLanguage: telegramI18Config.fallbackLanguage,
         loaderOptions: { path: telegramI18Config.i18nFolderPath },
       }),
-
       resolvers: [
         {
           use: QueryResolver,

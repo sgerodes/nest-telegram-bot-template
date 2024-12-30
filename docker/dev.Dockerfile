@@ -1,16 +1,12 @@
-FROM pnpm/pnpm:8-alpine
+FROM node:20
+
+RUN corepack enable
 
 WORKDIR /app
 
-COPY pnpm-lock.yaml ./
-COPY package.json ./
-
-RUN pnpm install --frozen-lockfile
-
 COPY . .
 
-RUN pnpm build
+RUN pnpm install --frozen-lockfile
+RUN pnpm prisma:regenerate:sqlite
 
-EXPOSE 3000
-
-CMD ["pnpm", "start:prod"]
+CMD ["pnpm", "run", "start:dev"]

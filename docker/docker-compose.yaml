@@ -2,7 +2,7 @@ services:
   telegram-bot:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     ports:
       - "3000:3000"
     restart: unless-stopped

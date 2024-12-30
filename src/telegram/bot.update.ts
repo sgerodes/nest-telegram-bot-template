@@ -26,7 +26,7 @@ export class BotUpdate {
   }
 
   async updateMetadata() {
-    for (const language_code of this.languageService.getSupportedLanguages()) {
+    for (const language_code of this.telegramConfig.i18n.enabledLanguages) {
       try {
         await this.bot.telegram.setMyCommands(this.languageService.getCommandDescriptions(language_code), {language_code});
         await this.bot.telegram.setMyName(this.i18n.translate('i18n.metadata.bot_name', { lang: language_code }), language_code);

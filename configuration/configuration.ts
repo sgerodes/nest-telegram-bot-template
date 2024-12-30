@@ -15,6 +15,7 @@ export const configuration = (): RootConfig => ({
     i18n: {
       fallbackLanguage: 'en',
       i18nFolderPath: getAbsolutePathForProjectDirectory('configuration/i18n/'),
+      enabledLanguages: ['en'],
     },
   },
   database: {

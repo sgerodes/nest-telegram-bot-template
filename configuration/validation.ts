@@ -1,8 +1,7 @@
-import { plainToInstance } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { TypedConfigModule } from 'nest-typed-config';
-import * as Joi from 'joi';
-import { RootConfig } from '@configuration/configuration.models';
+import { EnvironmentVariables, RootConfig } from '@configuration/configuration.models';
 
 export const validateConfiguration = (
   config: Record<string, any>,
@@ -20,9 +19,18 @@ export const validateConfiguration = (
   return configInstance;
 };
 
-export const environmentValidationSchema = Joi.object({
-  PORT: Joi.number().integer().min(1).max(65535).optional(),
-  TELEGRAM_BOT_TOKEN: Joi.string().required(),
-  DATABASE_URL: Joi.string().required(),
-  UPDATE_METADATA: Joi.boolean().optional(),
-});
+
+export function validateEnvironmentVariables(config: Record<string, unknown>) {
+  const validatedConfig = plainToClass(EnvironmentVariables, config, {
+    enableImplicitConversion: true,
+  });
+  const errors = validateSync(validatedConfig, {
+    skipMissingProperties: false,
+  });
+
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
+
+  return validatedConfig;
+}

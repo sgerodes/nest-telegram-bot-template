@@ -4,10 +4,31 @@ import {
   IsNotEmpty,
   IsOptional,
   IsBoolean,
-  IsArray,
+  IsArray, Min, Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
+
+
+export class EnvironmentVariables {
+  @IsNumber()
+  @Min(1)
+  @Max(65535)
+  @IsOptional()
+  PORT?: number;
+
+  @IsString()
+  @IsNotEmpty()
+  TELEGRAM_BOT_TOKEN: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DATABASE_URL: string;
+
+  @IsBoolean()
+  @IsOptional()
+  UPDATE_METADATA?: boolean;
+}
 
 export class ApplicationConfig {
   @IsNumber()

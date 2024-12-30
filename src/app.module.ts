@@ -16,19 +16,15 @@ import {
 import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from '@language/language.module';
 import {
-  environmentValidationSchema,
-  validateConfiguration,
+  validateConfiguration, validateEnvironmentVariables,
 } from '@configuration/validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      cache: true,
-      isGlobal: true, // Makes the ConfigService globally available
-      load: [configuration],
-      validationSchema: environmentValidationSchema,
+      validate: validateEnvironmentVariables,
+      isGlobal: true,
     }),
-
     TypedConfigModule.forRoot({
       schema: RootConfig,
       load: configuration,

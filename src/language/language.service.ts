@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { TelegramConfig } from '@configuration/validationAndInterfaces';
+import { BotCommands } from '@configuration/telegramConstants';
+import * as tg from 'telegraf/src/core/types/typegram';
 
 @Injectable()
 export class LanguageService {
@@ -10,7 +12,16 @@ export class LanguageService {
     private readonly i18n: I18nService,
     private readonly telegramConfig: TelegramConfig,
   ) {
-    this.logger.log(`SupportedLanguages ${this.getSupportedLanguages()}`);
+    this.logger.log(`Supported languages ${this.getSupportedLanguages()}`);
+  }
+
+  getCommandDescriptions(lang: string): tg.BotCommand[] {
+    return [
+      {
+        command: '/' + BotCommands.START,
+        description: this.i18n.translate('i18n.command_descriptions.start', { lang }),
+      },
+    ];
   }
 
   getSupportedLanguages(): string[] {

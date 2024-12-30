@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "bot_name": "A very awesome bot",
-    "description": "Welcome to the Bot",
-    "short_description": "Does awesome stuff"
+    "bot_name": "Awesome bot",
+    "description": "Welcome to the Bot. It makes great stuff",
+    "short_description": "Does very awesome stuff"
   },
-  "commands_descriptions": {
+  "command_descriptions": {
     "start": "▶️ Start Bot"
   },
   "menus": {

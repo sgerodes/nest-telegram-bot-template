@@ -1,8 +1,8 @@
 import {Scenes, Telegraf, Context as TelegrafContext} from 'telegraf';
 import {Action, Command, Context as NestjsTelegrafContext, InjectBot, Start, Update} from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
-import {BotCommands, CommandDescriptions, TELEGRAM_BTN_ACTIONS} from "@configuration/telegramConstants";
-import { I18nService } from 'nestjs-i18n';
+import {BotCommands, TELEGRAM_BTN_ACTIONS} from "@configuration/telegramConstants";
+import { I18nService, logger } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import {UserRepositoryService} from "@database/user-repository/user-repository.service";
 import { TelegramBotConfig, TelegramConfig } from '@configuration/validationAndInterfaces';
@@ -21,21 +21,19 @@ export class BotUpdate {
     private readonly languageService: LanguageService,
   ) {
     this.updateMetadata();
-    this.bot.telegram.setMyCommands(CommandDescriptions);
   }
 
   async updateMetadata() {
-    for (const lang of this.languageService.getSupportedLanguages()) {
+    for (const language_code of this.languageService.getSupportedLanguages()) {
       try {
-        await this.bot.telegram.setMyName(this.i18n.translate('i18n.metadata.bot_name', { lang }));
-        await wait(1000);
-        await this.bot.telegram.setMyShortDescription(this.i18n.translate('i18n.metadata.description', { lang }));
-        await wait(1000);
-        await this.bot.telegram.setMyDescription(this.i18n.translate('i18n.metadata.short_description', { lang }));
-        await wait(1000);
+        await this.bot.telegram.setMyName(this.i18n.translate('i18n.metadata.bot_name', { lang: language_code }), language_code);
+        await this.bot.telegram.setMyShortDescription(this.i18n.translate('i18n.metadata.description', { lang: language_code }), language_code);
+        await this.bot.telegram.setMyDescription(this.i18n.translate('i18n.metadata.short_description', { lang: language_code }), language_code);
+        await this.bot.telegram.setMyCommands(this.languageService.getCommandDescriptions(language_code), {language_code});
+        logger.log(`Language '${language_code}' updated successfully.`);
       } catch (error) {
         this.logger.error(
-          `Failed to update bot metadata for language '${lang}': ${error.message}`,
+          `Failed to update bot metadata for language '${language_code}': ${error.message}`,
           error.stack,
         );
       }

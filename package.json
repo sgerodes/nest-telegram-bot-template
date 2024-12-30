@@ -20,7 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config test/jest-e2e.json",
 
-    "prisma:migrate:postres": "npx prisma migrate dev --name init",
+    "prisma:migrate:postres": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",
     "prisma:generate:postres": "npx prisma generate --schema=prisma/schema.postgresql.prisma",
     "prisma:create:schemas": "ts-node prisma/createSchemas.ts",
     "prisma:regenerate:sqlite": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma"

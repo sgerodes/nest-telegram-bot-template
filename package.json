@@ -36,7 +36,6 @@
     "@prisma/client": "^6.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "csv-parse": "^5.6.0",
     "fs": "0.0.1-security",
     "joi": "^17.13.3",
     "nest-typed-config": "^2.9.3",
@@ -44,8 +43,7 @@
     "nestjs-telegraf": "^2.8.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "telegraf": "^4.16.3",
-    "world_countries_lists": "^2.9.0"
+    "telegraf": "^4.16.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -59,6 +57,7 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
+    "depcheck": "^1.4.7",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",

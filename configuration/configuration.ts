@@ -5,7 +5,7 @@ import {RootConfig} from "@configuration/validationAndInterfaces";
 
 export const configuration = (): RootConfig => ({
   application: {
-    port: Number(process.env.PORT) || 3069,
+    port: Number(process.env.PORT) || 3000,
   },
   telegram: {
     bot: {

@@ -2,7 +2,7 @@ import {
     IsString,
     IsNumber,
     IsNotEmpty,
-    IsOptional, MaxLength,
+    IsOptional, MaxLength, IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { plainToInstance } from 'class-transformer';
@@ -22,6 +22,10 @@ export class TelegramBotConfig {
     @IsString()
     @IsNotEmpty()
     token!: string;
+
+    @IsBoolean()
+    @IsOptional()
+    updateMetadata: boolean;
 
     // @IsString()
     // @IsNotEmpty()

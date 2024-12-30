@@ -5,15 +5,23 @@
     "short_description": "Does very awesome stuff"
   },
   "command_descriptions": {
-    "start": "▶️ Start Bot"
+    "start": "▶️ Start Bot",
+    "hello": "Hello world"
+  },
+  "shared": {
+    "buttons": {
+      "close": "❌ Close"
+    }
   },
   "menus": {
     "start": {
-      "message": "Hi",
+      "message": "Welcome",
       "buttons": {
-        "welcome_button": "Lets do it",
-        "close": "❌ Close"
+        "welcome_button": "Lets do it"
       }
+    },
+    "hello": {
+      "message": "Hello"
     }
   }
 }

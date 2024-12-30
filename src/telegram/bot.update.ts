@@ -1,11 +1,11 @@
 import {Scenes, Telegraf, Context as TelegrafContext} from 'telegraf';
-import {Action, Command, Context as NestjsTelegrafContext, InjectBot, Start, Update} from 'nestjs-telegraf';
+import { Action, Command, Context as NestjsTelegrafContext, InjectBot, Start, Update} from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
-import {BotCommands, TELEGRAM_BTN_ACTIONS} from "@configuration/telegramConstants";
+import { BotCommands, TELEGRAM_BTN_ACTIONS} from "@configuration/telegramConstants";
 import { I18nService, logger } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import {UserRepositoryService} from "@database/user-repository/user-repository.service";
-import { TelegramBotConfig, TelegramConfig } from '@configuration/validationAndInterfaces';
+import { TelegramConfig } from '@configuration/validationAndInterfaces';
 import { LanguageService } from '../language/language.service';
 
 
@@ -20,7 +20,9 @@ export class BotUpdate {
     private readonly telegramConfig: TelegramConfig,
     private readonly languageService: LanguageService,
   ) {
-    this.updateMetadata();
+    if (this.telegramConfig.bot.updateMetadata) {
+      this.updateMetadata(); // TODO update on metadata change and respect the time to update the metadata
+    }
   }
 
   async updateMetadata() {
@@ -40,7 +42,7 @@ export class BotUpdate {
     }
   }
 
-  // @Command(BotCommands.START)
+
   @Start()
   async startCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
 
@@ -59,13 +61,24 @@ export class BotUpdate {
         text: await this.i18n.translate('i18n.menus.start.buttons.welcome_button'),
         url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
       }],
-      [{ text: await this.i18n.translate('i18n.menus.start.buttons.close'), callback_data: TELEGRAM_BTN_ACTIONS.CLOSE }],
+      [{ text: await this.i18n.translate('i18n.shared.buttons.close'), callback_data: TELEGRAM_BTN_ACTIONS.CLOSE }],
     ];
 
     await ctx.reply(
       message, {
         reply_markup: { inline_keyboard: buttons },
       });
+  }
+
+  @Command(BotCommands.HELLO)
+  async helloCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
+    const buttons: InlineKeyboardButton[][] = [
+      [{ text: await this.i18n.translate('i18n.shared.buttons.close'), callback_data: TELEGRAM_BTN_ACTIONS.CLOSE }],
+    ];
+    const message = this.i18n.translate('i18n.menus.hello.message');
+    await ctx.reply(message, {
+      reply_markup: { inline_keyboard: buttons },
+    });
   }
 
   @Action(TELEGRAM_BTN_ACTIONS.CLOSE)

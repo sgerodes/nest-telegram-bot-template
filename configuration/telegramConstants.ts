@@ -2,6 +2,7 @@ import * as tg from 'telegraf/src/core/types/typegram';
 
 export enum BotCommands {
     START = 'start',
+    HELLO = 'hello',
 }
 
 

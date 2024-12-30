@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "bot_name": "Крутой бот",
+    "description": "Добро пожаловать в Бота. Он делает отличные вещи",
+    "short_description": "Делает очень крутые вещи"
+  },
+  "command_descriptions": {
+    "start": "▶️ Запустить Бота",
+    "hello": "\uD83D\uDC4B Привет, мир"
+  },
+  "shared": {
+    "buttons": {
+      "close": "❌ Закрыть"
+    }
+  },
+  "menus": {
+    "start": {
+      "message": "Добро пожаловать",
+      "buttons": {
+        "welcome_button": "Давайте сделаем это"
+      }
+    },
+    "hello": {
+      "message": "Привет"
+    }
+  }
+}

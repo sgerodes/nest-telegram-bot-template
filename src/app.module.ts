@@ -15,7 +15,10 @@ import {
 } from '@configuration/configuration.models';
 import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from '@language/language.module';
-import { environmentValidationSchema, validateConfiguration } from '@configuration/validation';
+import {
+  environmentValidationSchema,
+  validateConfiguration,
+} from '@configuration/validation';
 
 @Module({
   imports: [

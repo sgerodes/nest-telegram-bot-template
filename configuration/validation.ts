@@ -4,7 +4,9 @@ import { TypedConfigModule } from 'nest-typed-config';
 import * as Joi from 'joi';
 import { RootConfig } from '@configuration/configuration.models';
 
-export const validateConfiguration = (config: Record<string, any>): RootConfig => {
+export const validateConfiguration = (
+  config: Record<string, any>,
+): RootConfig => {
   const configInstance = plainToInstance(RootConfig, config);
   const validationErrors = validateSync(configInstance, {
     whitelist: true,

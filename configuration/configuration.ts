@@ -1,7 +1,6 @@
 import * as process from 'node:process';
 import { getAbsolutePathForProjectDirectory } from '@configuration/configUtils';
-import {RootConfig} from "@configuration/configuration.models";
-
+import { RootConfig } from '@configuration/configuration.models';
 
 export const configuration = (): RootConfig => ({
   application: {
@@ -10,7 +9,9 @@ export const configuration = (): RootConfig => ({
   telegram: {
     bot: {
       token: process.env.TELEGRAM_BOT_TOKEN,
-      updateMetadata: process.env.UPDATE_METADATA ? process.env.UPDATE_METADATA.toLowerCase() === 'true' : true,
+      updateMetadata: process.env.UPDATE_METADATA
+        ? process.env.UPDATE_METADATA.toLowerCase() === 'true'
+        : true,
     },
     i18n: {
       fallbackLanguage: 'en',
@@ -19,6 +20,6 @@ export const configuration = (): RootConfig => ({
     },
   },
   database: {
-    url: process.env.DATABASE_URL
-  }
+    url: process.env.DATABASE_URL,
+  },
 });

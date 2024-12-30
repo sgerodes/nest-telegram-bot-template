@@ -24,10 +24,9 @@ export function getProjectRootPath(): string {
 export function getAbsolutePathForProjectDirectory(
   projectDirectory: string,
 ): string {
-  const pathSegments = projectDirectory.split('/').filter(segment => segment);
+  const pathSegments = projectDirectory.split('/').filter((segment) => segment);
   return path.join(getProjectRootPath(), ...pathSegments) + path.sep;
 }
-
 
 /**
  * Splits a comma-separated string into a set of numbers.
@@ -53,9 +52,9 @@ export function getAbsolutePathForProjectDirectory(
  * @param {(value: string) => T} transform - A function to transform the string elements into the desired type.
  * @returns {Set<T>} A set containing the unique elements of the specified type.
  */
-export function splitStringIntoSet<CollectionElementT> (
+export function splitStringIntoSet<CollectionElementT>(
   stringList: string | null | undefined,
-  transform: (value: string) => CollectionElementT
+  transform: (value: string) => CollectionElementT,
 ): Set<CollectionElementT> {
   if (!stringList) {
     return new Set<CollectionElementT>();
@@ -63,8 +62,8 @@ export function splitStringIntoSet<CollectionElementT> (
   return new Set(
     stringList
       .split(',')
-      .map(id => id.trim())
-      .filter(id => id !== '')
-      .map(transform)
+      .map((id) => id.trim())
+      .filter((id) => id !== '')
+      .map(transform),
   );
 }

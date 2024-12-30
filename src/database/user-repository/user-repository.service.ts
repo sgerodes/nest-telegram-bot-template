@@ -6,11 +6,11 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserRepositoryService extends AbstractRepository<
-    User, Prisma.UserDelegate, Prisma.UserCreateInput
+  User,
+  Prisma.UserDelegate,
+  Prisma.UserCreateInput
 > {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {
+  constructor(private readonly prisma: PrismaService) {
     super(prisma.user);
   }
 

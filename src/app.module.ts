@@ -1,19 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TelegramModule } from '@telegram/telegram.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import {
-  configuration,
-} from '@configuration/configuration';
+  AcceptLanguageResolver,
+  HeaderResolver,
+  I18nModule,
+  QueryResolver,
+} from 'nestjs-i18n';
+import { configuration } from '@configuration/configuration';
 import { TypedConfigModule } from 'nest-typed-config';
 import {
   environmentValidationSchema,
   RootConfig,
   TelegramI18nConfig,
-  validateConfiguration
+  validateConfiguration,
 } from '@configuration/validationAndInterfaces';
-import * as path from "node:path";
-import {DatabaseModule} from "@database/database.module";
+import * as path from 'node:path';
+import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from './language/language.module';
 
 @Module({
@@ -37,15 +40,18 @@ import { LanguageModule } from './language/language.module';
         loaderOptions: { path: telegramI18Config.i18nFolderPath },
       }),
 
-      resolvers: [{
-        use: QueryResolver, options: ['lang'],
-      },
+      resolvers: [
+        {
+          use: QueryResolver,
+          options: ['lang'],
+        },
         AcceptLanguageResolver,
-        new HeaderResolver(['x-lang'])],
+        new HeaderResolver(['x-lang']),
+      ],
     }),
     TelegramModule,
     DatabaseModule,
-    LanguageModule
+    LanguageModule,
   ],
 })
 export class AppModule {}

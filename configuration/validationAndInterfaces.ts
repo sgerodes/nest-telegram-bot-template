@@ -10,6 +10,7 @@ import { validateSync } from 'class-validator';
 import { Allow, ValidateNested } from 'class-validator';
 import {TypedConfigModule} from "nest-typed-config";
 import * as Joi from "joi";
+import process from 'node:process';
 
 
 export class ApplicationConfig {
@@ -41,7 +42,6 @@ export class TelegramI18nConfig {
     enabledLanguages: string[];
 }
 
-
 export class TelegramConfig {
     @Type(() => TelegramBotConfig)
     @ValidateNested()
@@ -72,7 +72,6 @@ export class RootConfig {
     database!: DatabaseConfig;
 }
 
-
 export const validateConfiguration = (config: Record<string, any>): RootConfig => {
     const configInstance = plainToInstance(RootConfig, config);
     const validationErrors = validateSync(configInstance, {
@@ -87,9 +86,9 @@ export const validateConfiguration = (config: Record<string, any>): RootConfig =
     return configInstance;
 };
 
-
 export const environmentValidationSchema = Joi.object({
     PORT: Joi.number().integer().min(1).max(65535).optional(),
     TELEGRAM_BOT_TOKEN: Joi.string().required(),
     DATABASE_URL: Joi.string().required(),
+    UPDATE_METADATA: Joi.boolean().optional(),
 });

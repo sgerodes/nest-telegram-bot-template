@@ -12,7 +12,8 @@ export class LanguageService {
     private readonly i18n: I18nService,
     private readonly telegramConfig: TelegramConfig,
   ) {
-    this.logger.log(`Supported languages ${this.getSupportedLanguages()}`);
+    this.logger.log(`Supported languages \t${this.getSupportedLanguages()}`);
+    this.logger.log(`Enabled languages \t${telegramConfig.i18n.enabledLanguages}`);
   }
 
   getCommandDescriptions(lang: string): tg.BotCommand[] {

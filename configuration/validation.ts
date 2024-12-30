@@ -1,7 +1,10 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { TypedConfigModule } from 'nest-typed-config';
-import { EnvironmentVariables, RootConfig } from '@configuration/configuration.models';
+import {
+  EnvironmentVariables,
+  RootConfig,
+} from '@configuration/configuration.models';
 
 export const validateConfiguration = (
   config: Record<string, any>,
@@ -18,7 +21,6 @@ export const validateConfiguration = (
 
   return configInstance;
 };
-
 
 export function validateEnvironmentVariables(config: Record<string, unknown>) {
   const validatedConfig = plainToClass(EnvironmentVariables, config, {

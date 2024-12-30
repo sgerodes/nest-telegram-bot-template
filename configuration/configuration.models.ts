@@ -4,11 +4,12 @@ import {
   IsNotEmpty,
   IsOptional,
   IsBoolean,
-  IsArray, Min, Max,
+  IsArray,
+  Min,
+  Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-
 
 export class EnvironmentVariables {
   @IsNumber()

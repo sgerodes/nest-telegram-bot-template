@@ -16,7 +16,8 @@ import {
 import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from '@language/language.module';
 import {
-  validateConfiguration, validateEnvironmentVariables,
+  validateConfiguration,
+  validateEnvironmentVariables,
 } from '@configuration/validation';
 
 @Module({

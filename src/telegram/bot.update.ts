@@ -28,10 +28,10 @@ export class BotUpdate {
   async updateMetadata() {
     for (const language_code of this.languageService.getSupportedLanguages()) {
       try {
+        await this.bot.telegram.setMyCommands(this.languageService.getCommandDescriptions(language_code), {language_code});
         await this.bot.telegram.setMyName(this.i18n.translate('i18n.metadata.bot_name', { lang: language_code }), language_code);
         await this.bot.telegram.setMyShortDescription(this.i18n.translate('i18n.metadata.description', { lang: language_code }), language_code);
         await this.bot.telegram.setMyDescription(this.i18n.translate('i18n.metadata.short_description', { lang: language_code }), language_code);
-        await this.bot.telegram.setMyCommands(this.languageService.getCommandDescriptions(language_code), {language_code});
         logger.log(`Language '${language_code}' updated successfully.`);
       } catch (error) {
         this.logger.error(
@@ -45,8 +45,6 @@ export class BotUpdate {
 
   @Start()
   async startCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
-
-
     if (!await this.userRepositoryService.existsByTelegramId(ctx.from.id)) {
       const user = await this.userRepositoryService.createData({
         telegramId: ctx.from.id,

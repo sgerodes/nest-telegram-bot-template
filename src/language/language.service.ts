@@ -21,6 +21,10 @@ export class LanguageService {
         command: '/' + BotCommands.START,
         description: this.i18n.translate('i18n.command_descriptions.start', { lang }),
       },
+      {
+        command: '/' + BotCommands.HELLO,
+        description: this.i18n.translate('i18n.command_descriptions.hello', { lang }),
+      },
     ];
   }
 

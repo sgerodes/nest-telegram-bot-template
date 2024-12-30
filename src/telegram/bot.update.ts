@@ -52,7 +52,6 @@ export class BotUpdate {
         telegramFirstName: ctx.from.first_name,
       });
     }
-
     const message = this.i18n.translate('i18n.menus.start.message');
     const buttons: InlineKeyboardButton[][] = [
       [{

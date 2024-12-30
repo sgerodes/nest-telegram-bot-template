@@ -6,7 +6,7 @@ export class AbstractRepository<T, Delegate extends {
   count: (args: any) => Promise<number>;
   create: (args: any) => Promise<T>;
 }, CreateInput> {
-  protected readonly modelDelegate: Delegate;
+  public readonly modelDelegate: Delegate;
   protected readonly logger = new Logger(this.constructor.name);
 
   constructor(modelDelegate: Delegate) {

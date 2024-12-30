@@ -1,6 +1,6 @@
 import * as process from 'node:process';
 import { getAbsolutePathForProjectDirectory } from '@configuration/configUtils';
-import {RootConfig} from "@configuration/validationAndInterfaces";
+import {RootConfig} from "@configuration/configuration.models";
 
 
 export const configuration = (): RootConfig => ({

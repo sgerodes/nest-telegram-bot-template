@@ -2,15 +2,10 @@ import {
     IsString,
     IsNumber,
     IsNotEmpty,
-    IsOptional, MaxLength, IsBoolean, ArrayNotEmpty, IsArray,
+    IsOptional, IsBoolean, IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { plainToInstance } from 'class-transformer';
-import { validateSync } from 'class-validator';
-import { Allow, ValidateNested } from 'class-validator';
-import {TypedConfigModule} from "nest-typed-config";
-import * as Joi from "joi";
-import process from 'node:process';
+import { ValidateNested } from 'class-validator';
 
 
 export class ApplicationConfig {
@@ -71,24 +66,3 @@ export class RootConfig {
     @ValidateNested()
     database!: DatabaseConfig;
 }
-
-export const validateConfiguration = (config: Record<string, any>): RootConfig => {
-    const configInstance = plainToInstance(RootConfig, config);
-    const validationErrors = validateSync(configInstance, {
-        whitelist: true,
-        forbidUnknownValues: true,
-    });
-
-    if (validationErrors.length) {
-        throw new Error(TypedConfigModule.getConfigErrorMessage(validationErrors));
-    }
-
-    return configInstance;
-};
-
-export const environmentValidationSchema = Joi.object({
-    PORT: Joi.number().integer().min(1).max(65535).optional(),
-    TELEGRAM_BOT_TOKEN: Joi.string().required(),
-    DATABASE_URL: Joi.string().required(),
-    UPDATE_METADATA: Joi.boolean().optional(),
-});

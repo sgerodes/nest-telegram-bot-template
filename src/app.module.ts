@@ -10,13 +10,12 @@ import {
 import { configuration } from '@configuration/configuration';
 import { TypedConfigModule } from 'nest-typed-config';
 import {
-  environmentValidationSchema,
   RootConfig,
   TelegramI18nConfig,
-  validateConfiguration,
-} from '@configuration/validationAndInterfaces';
+} from '@configuration/configuration.models';
 import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from '@language/language.module';
+import { environmentValidationSchema, validateConfiguration } from '@configuration/validation';
 
 @Module({
   imports: [

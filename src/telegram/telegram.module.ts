@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotUpdate } from '@telegram/bot.update';
-import { TelegramConfig } from '@configuration/validationAndInterfaces';
+import { TelegramConfig } from '@configuration/configuration.models';
 import { DatabaseModule } from '@database/database.module';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { LanguageModule } from '../language/language.module';

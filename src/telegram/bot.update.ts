@@ -72,7 +72,7 @@ export class BotUpdate {
   @Start()
   async startCommand(@NestjsTelegrafContext() ctx: Scenes.WizardContext) {
     if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
-      const user = await this.userRepositoryService.createData({
+      const _user = await this.userRepositoryService.createData({
         telegramId: ctx.from.id,
         telegramUsername: ctx.from.username,
         telegramFirstName: ctx.from.first_name,

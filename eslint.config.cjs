@@ -23,8 +23,8 @@ module.exports = [
       prettier: eslintPluginPrettier,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error'],
       'prettier/prettier': ['error'],
+      "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
     },
   },
 ];

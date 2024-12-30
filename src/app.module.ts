@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TelegramModule } from '@telegram/telegram.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -15,7 +15,6 @@ import {
   TelegramI18nConfig,
   validateConfiguration,
 } from '@configuration/validationAndInterfaces';
-import * as path from 'node:path';
 import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from './language/language.module';
 

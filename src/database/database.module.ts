@@ -4,9 +4,7 @@ import { PrismaService } from '@database/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot()
-  ],
+  imports: [ConfigModule.forRoot()],
   providers: [UserRepositoryService, PrismaService],
   exports: [PrismaService],
 })

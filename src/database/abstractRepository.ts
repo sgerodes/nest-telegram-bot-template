@@ -1,11 +1,15 @@
 import { Logger } from '@nestjs/common';
 
-export class AbstractRepository<T, Delegate extends {
-  findUnique: (args: any) => Promise<T | null>;
-  findFirst: (args: any) => Promise<T | null>;
-  count: (args: any) => Promise<number>;
-  create: (args: any) => Promise<T>;
-}, CreateInput> {
+export class AbstractRepository<
+  T,
+  Delegate extends {
+    findUnique: (args: any) => Promise<T | null>;
+    findFirst: (args: any) => Promise<T | null>;
+    count: (args: any) => Promise<number>;
+    create: (args: any) => Promise<T>;
+  },
+  CreateInput,
+> {
   public readonly modelDelegate: Delegate;
   protected readonly logger = new Logger(this.constructor.name);
 
@@ -14,11 +18,9 @@ export class AbstractRepository<T, Delegate extends {
   }
 
   async createData(obj: CreateInput): Promise<T> {
-    return this.modelDelegate.create(
-      {
-        data: obj
-      }
-    );
+    return this.modelDelegate.create({
+      data: obj,
+    });
   }
 
   async readById(id: number): Promise<T | null> {
@@ -26,7 +28,6 @@ export class AbstractRepository<T, Delegate extends {
       where: { id },
     });
   }
-
 
   async readByUnique(column: keyof T, value: any): Promise<T | null> {
     return this.modelDelegate.findUnique({
@@ -41,7 +42,6 @@ export class AbstractRepository<T, Delegate extends {
   }
 
   async exists(column: keyof T, value: any): Promise<boolean> {
-    return await this.readFirst(column, value) !== null;
+    return (await this.readFirst(column, value)) !== null;
   }
-
 }

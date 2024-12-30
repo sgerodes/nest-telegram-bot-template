@@ -13,24 +13,29 @@ export class LanguageService {
     private readonly telegramConfig: TelegramConfig,
   ) {
     this.logger.log(`Supported languages \t${this.getSupportedLanguages()}`);
-    this.logger.log(`Enabled languages \t${telegramConfig.i18n.enabledLanguages}`);
+    this.logger.log(
+      `Enabled languages \t${telegramConfig.i18n.enabledLanguages}`,
+    );
   }
 
   getCommandDescriptions(lang: string): tg.BotCommand[] {
     return [
       {
         command: '/' + BotCommands.START,
-        description: this.i18n.translate('i18n.command_descriptions.start', { lang }),
+        description: this.i18n.translate('i18n.command_descriptions.start', {
+          lang,
+        }),
       },
       {
         command: '/' + BotCommands.HELLO,
-        description: this.i18n.translate('i18n.command_descriptions.hello', { lang }),
+        description: this.i18n.translate('i18n.command_descriptions.hello', {
+          lang,
+        }),
       },
     ];
   }
 
   getSupportedLanguages(): string[] {
-    return this.i18n.getSupportedLanguages()
+    return this.i18n.getSupportedLanguages();
   }
-
 }

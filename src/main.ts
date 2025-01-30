@@ -6,12 +6,6 @@ import { RootConfig } from '@configuration/configuration.models';
 const logger = new Logger('main');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  const configuration = app.get(RootConfig);
-  const port = configuration.application.port;
-
-  logger.log(`Application starts on port ${port}`);
-  await app.listen(port);
+  const _app = await NestFactory.createApplicationContext(AppModule);
 }
 bootstrap();

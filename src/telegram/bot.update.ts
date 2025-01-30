@@ -17,6 +17,8 @@ import { InlineKeyboardButton } from '@telegraf/types';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { TelegramConfig } from '@configuration/configuration.models';
 import { LanguageService } from '@language/language.service';
+import { I18nTranslations } from '@i18n/i18n.generated';
+import { I18N_KEYS } from '@i18n/i18nKeys';
 
 @Update()
 export class BotUpdate {
@@ -24,7 +26,7 @@ export class BotUpdate {
 
   constructor(
     @InjectBot() private readonly bot: Telegraf<TelegrafContext>,
-    private readonly i18n: I18nService,
+    private readonly i18n: I18nService<I18nTranslations>,
     private readonly userRepositoryService: UserRepositoryService,
     private readonly telegramConfig: TelegramConfig,
     private readonly languageService: LanguageService,

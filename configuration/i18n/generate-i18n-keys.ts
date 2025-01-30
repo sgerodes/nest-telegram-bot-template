@@ -16,7 +16,7 @@ function generateKeys(obj, path = []) {
 }
 
 const i18nJson = JSON.parse(fs.readFileSync(i18nFilePath, "utf8"));
-const keysObject = generateKeys(i18nJson);
+const keysObject = generateKeys({"i18n": i18nJson});
 
 const content = `export const I18N_KEYS = ${JSON.stringify(keysObject, null, 2)} as const;`;
 fs.writeFileSync(outputFilePath, content);

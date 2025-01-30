@@ -36,6 +36,7 @@ import {
       useFactory: (telegramI18Config: TelegramI18nConfig) => ({
         fallbackLanguage: telegramI18Config.fallbackLanguage,
         loaderOptions: { path: telegramI18Config.i18nFolderPath },
+        typesOutputPath: telegramI18Config.typesOutputPath,
       }),
       resolvers: [
         {

@@ -13,6 +13,7 @@
     "paths": {
       "@telegram/*": ["src/telegram/*"],
       "@configuration/*": ["configuration/*"],
+      "@i18n/*": ["configuration/i18n/*"],
       "@database/*": ["src/database/*"],
       "@language/*": ["src/language/*"]
     },

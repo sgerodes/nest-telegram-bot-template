@@ -54,6 +54,9 @@ export class TelegramI18nConfig {
   @IsString()
   i18nFolderPath!: string;
 
+  @IsString()
+  typesOutputPath!: string;
+
   @IsArray()
   @IsString({ each: true })
   enabledLanguages: string[];

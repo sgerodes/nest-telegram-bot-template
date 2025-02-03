@@ -4,7 +4,8 @@ import { BotUpdate } from '@telegram/bot.update';
 import { TelegramConfig } from '@configuration/configuration.models';
 import { DatabaseModule } from '@database/database.module';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
-import { LanguageModule } from '../language/language.module';
+import { LanguageModule } from '@language/language.module';
+import { TelegrafI18nContext, TelegrafI18nMiddleware } from 'nestjs-telegraf-i18n';
 
 @Module({
   imports: [
@@ -12,11 +13,14 @@ import { LanguageModule } from '../language/language.module';
       inject: [TelegramConfig],
       useFactory: (telegramConfig: TelegramConfig) => ({
         token: telegramConfig.bot.token,
+        options: {
+          contextType: TelegrafI18nContext,
+        },
       }),
     }),
     DatabaseModule,
     LanguageModule,
   ],
-  providers: [BotUpdate, UserRepositoryService],
+  providers: [BotUpdate, UserRepositoryService, TelegrafI18nMiddleware],
 })
 export class TelegramModule {}

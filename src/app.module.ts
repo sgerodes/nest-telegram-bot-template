@@ -38,14 +38,6 @@ import {
         loaderOptions: { path: telegramI18Config.i18nFolderPath },
         typesOutputPath: telegramI18Config.typesOutputPath,
       }),
-      resolvers: [
-        {
-          use: QueryResolver,
-          options: ['lang'],
-        },
-        AcceptLanguageResolver,
-        new HeaderResolver(['x-lang']),
-      ],
     }),
     TelegramModule,
     DatabaseModule,

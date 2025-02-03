@@ -18,7 +18,7 @@ import { UserRepositoryService } from '@database/user-repository/user-repository
 import { TelegramConfig } from '@configuration/configuration.models';
 import { LanguageService } from '@language/language.service';
 import { I18nTranslations } from '@i18n/i18n.generated';
-import { I18N_KEYS } from '@i18n/i18nKeys';
+import { I18nKeys } from '@i18n/i18nKeys';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 
 @Update()
@@ -45,7 +45,7 @@ export class BotUpdate {
           { language_code },
         );
         await this.bot.telegram.setMyName(
-          this.i18n.translate(I18N_KEYS.i18n.metadata.bot_name, {
+          this.i18n.translate(I18nKeys.i18n.metadata.bot_name, {
             lang: language_code,
           }),
           language_code,

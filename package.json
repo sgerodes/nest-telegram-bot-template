@@ -18,11 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config test/jest-e2e.json",
-    "generate:i18n": "node configuration/i18n/generate-i18n-keys.ts",
-    "prisma:migrate:postres": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",
-    "prisma:generate:postres": "npx prisma generate --schema=prisma/schema.postgresql.prisma",
+    "i18n:generate": "node configuration/i18n/generate-i18n-keys.ts",
     "prisma:create:schemas": "ts-node prisma/createSchemas.ts",
-    "prisma:regenerate:sqlite": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma"
+    "prisma:sqlite:regenerate": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma",
+    "prisma:postres:migrate": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",
+    "prisma:postres:generate": "npx prisma generate --schema=prisma/schema.postgresql.prisma"
   },
   "engines": {
     "node": ">=20.10.0",
@@ -40,7 +40,7 @@
     "nest-typed-config": "^2.9.3",
     "nestjs-i18n": "^10.5.0",
     "nestjs-telegraf": "^2.8.1",
-    "nestjs-telegraf-i18n": "^0.2.0",
+    "nestjs-telegraf-i18n": "^0.4.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "telegraf": "^4.16.3"

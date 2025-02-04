@@ -1,4 +1,4 @@
-export const I18nKeys = {
+export const i18nKeys = {
   "i18n": {
     "metadata": {
       "bot_name": "i18n.metadata.bot_name",

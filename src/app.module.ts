@@ -3,9 +3,7 @@ import { TelegramModule } from '@telegram/telegram.module';
 import { ConfigModule } from '@nestjs/config';
 import {
   AcceptLanguageResolver,
-  HeaderResolver,
   I18nModule,
-  QueryResolver,
 } from 'nestjs-i18n';
 import { configuration } from '@configuration/configuration';
 import { TypedConfigModule } from 'nest-typed-config';

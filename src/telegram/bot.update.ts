@@ -1,4 +1,7 @@
-import { Scenes, Telegraf, Context as TelegrafContext } from 'telegraf';
+import { Scenes,
+  Telegraf,
+  // Context as TelegrafContext
+} from 'telegraf';
 import {
   Action,
   Command,

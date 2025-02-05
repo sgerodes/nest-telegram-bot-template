@@ -20,6 +20,7 @@ export const configuration = (): RootConfig => ({
         'fr-*': 'fr',
         'pt-*': 'pt',
       },
+      logging: false,
       i18nFolderPath: getAbsolutePathForProjectDirectory('configuration/i18n/'),
       typesOutputPath: getAbsolutePathForProjectDirectory('configuration/i18n/') + 'i18n.generated.ts',
       enabledLanguages: ['en'],

@@ -55,6 +55,9 @@ export class TelegramI18nConfig {
   @IsOptional()
   fallbacks!: Record<string, string>;
 
+  @IsBoolean()
+  logging: boolean;
+
   @IsString()
   i18nFolderPath!: string;
 

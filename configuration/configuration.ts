@@ -15,6 +15,11 @@ export const configuration = (): RootConfig => ({
     },
     i18n: {
       fallbackLanguage: 'en',
+      fallbacks: {
+        'en-*': 'en',
+        'fr-*': 'fr',
+        'pt-*': 'pt',
+      },
       i18nFolderPath: getAbsolutePathForProjectDirectory('configuration/i18n/'),
       typesOutputPath: getAbsolutePathForProjectDirectory('configuration/i18n/') + 'i18n.generated.ts',
       enabledLanguages: ['en'],

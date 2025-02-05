@@ -6,7 +6,7 @@ import {
   IsBoolean,
   IsArray,
   Min,
-  Max,
+  Max, IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -50,6 +50,10 @@ export class TelegramBotConfig {
 export class TelegramI18nConfig {
   @IsString()
   fallbackLanguage!: string;
+
+  @IsObject()
+  @IsOptional()
+  fallbacks!: Record<string, string>;
 
   @IsString()
   i18nFolderPath!: string;

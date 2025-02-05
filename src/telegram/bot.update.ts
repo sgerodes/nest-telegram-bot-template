@@ -2,7 +2,7 @@ import { Scenes, Telegraf, Context as TelegrafContext } from 'telegraf';
 import {
   Action,
   Command,
-  Context as NestjsTelegrafContext,
+  // Context as NestjsTelegrafContext,
   Ctx,
   InjectBot,
   Start,
@@ -29,7 +29,7 @@ export class BotUpdate {
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
-    @InjectBot() private readonly bot: Telegraf<TelegrafContext>,
+    @InjectBot() private readonly bot: Telegraf<TelegrafI18nContext<I18nTranslations>>,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly userRepositoryService: UserRepositoryService,
     private readonly telegramConfig: TelegramConfig,
@@ -115,7 +115,7 @@ export class BotUpdate {
         },
       ],
     ];
-    const message = this.i18n.translate('i18n.menus.hello.message');
+    const message = ctx.i18n.translate('i18n.menus.hello.message');
     await ctx.reply(message, {
       reply_markup: { inline_keyboard: buttons },
     });

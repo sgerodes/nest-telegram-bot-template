@@ -115,7 +115,7 @@ export class BotUpdate {
         },
       ],
     ];
-    const message = ctx.i18n.translate('i18n.menus.hello.message');
+    const message = ctx.i18n.translate(i18nKeys.i18n.menus.hello.message);
     await ctx.reply(message, {
       reply_markup: { inline_keyboard: buttons },
     });

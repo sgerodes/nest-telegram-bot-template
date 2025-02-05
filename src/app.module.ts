@@ -39,6 +39,9 @@ import {
         loaderOptions: { path: telegramI18Config.i18nFolderPath },
         typesOutputPath: telegramI18Config.typesOutputPath,
       }),
+      resolvers: [
+        AcceptLanguageResolver,
+      ]
     }),
     TelegramModule,
     DatabaseModule,

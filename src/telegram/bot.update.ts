@@ -19,7 +19,7 @@ import {
 import { I18nService, logger } from 'nestjs-i18n';
 import { InlineKeyboardButton } from '@telegraf/types';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
-import { TelegramConfig } from '@configuration/configuration.models';
+import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { LanguageService } from '@language/language.service';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { i18nKeys } from '@i18n/i18n.keys';

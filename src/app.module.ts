@@ -7,13 +7,13 @@ import { TypedConfigModule } from 'nest-typed-config';
 import {
   RootConfig,
   TelegramI18nConfig,
-} from '@configuration/configuration.models';
+} from '@configuration/validation/configuration.validators';
 import { DatabaseModule } from '@database/database.module';
 import { LanguageModule } from '@language/language.module';
 import {
   validateConfiguration,
   validateEnvironmentVariables,
-} from '@configuration/validation';
+} from '@configuration/validation/validation';
 
 @Module({
   imports: [

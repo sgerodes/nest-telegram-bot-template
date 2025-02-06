@@ -1,41 +1,13 @@
 import {
   IsString,
-  IsNumber,
   IsNotEmpty,
   IsOptional,
   IsBoolean,
   IsArray,
-  Min,
-  Max, IsObject,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-
-export class EnvironmentVariables {
-  @IsNumber()
-  @Min(1)
-  @Max(65535)
-  @IsOptional()
-  PORT?: number;
-
-  @IsString()
-  @IsNotEmpty()
-  TELEGRAM_BOT_TOKEN: string;
-
-  @IsString()
-  @IsNotEmpty()
-  DATABASE_URL: string;
-
-  @IsBoolean()
-  @IsOptional()
-  UPDATE_METADATA?: boolean;
-}
-
-export class ApplicationConfig {
-  @IsNumber()
-  @IsOptional()
-  port: number;
-}
 
 export class TelegramBotConfig {
   @IsString()
@@ -86,10 +58,6 @@ export class DatabaseConfig {
 }
 
 export class RootConfig {
-  @Type(() => ApplicationConfig)
-  @ValidateNested()
-  application!: ApplicationConfig;
-
   @Type(() => TelegramConfig)
   @ValidateNested()
   telegram!: TelegramConfig;

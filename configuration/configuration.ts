@@ -1,11 +1,8 @@
 import * as process from 'node:process';
 import { getAbsolutePathForProjectDirectory } from '@configuration/configUtils';
-import { RootConfig } from '@configuration/configuration.models';
+import { RootConfig } from '@configuration/validation/configuration.validators';
 
 export const configuration = (): RootConfig => ({
-  application: {
-    port: Number(process.env.PORT) || 3000,
-  },
   telegram: {
     bot: {
       token: process.env.TELEGRAM_BOT_TOKEN,

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import { TelegramConfig } from '@configuration/configuration.models';
+import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { BOT_COMMANDS } from '@configuration/telegramConstants';
 import * as tg from 'telegraf/src/core/types/typegram';
 import { I18nTranslations } from '@i18n/i18n.generated';

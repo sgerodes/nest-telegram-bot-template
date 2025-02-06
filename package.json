@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config test/jest-e2e.json",
-    "i18n:generate": "node configuration/i18n/generate-i18n-keys.ts",
+    "i18n:generate": "node configuration/i18n/generate.i18n.keys.ts",
     "prisma:create:schemas": "ts-node prisma/createSchemas.ts",
     "prisma:sqlite:regenerate": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma",
     "prisma:postres:migrate": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",

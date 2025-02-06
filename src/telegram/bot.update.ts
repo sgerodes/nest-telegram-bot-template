@@ -23,7 +23,7 @@ import { UserRepositoryService } from '@database/user-repository/user-repository
 import { TelegramConfig } from '@configuration/configuration.models';
 import { LanguageService } from '@language/language.service';
 import { I18nTranslations } from '@i18n/i18n.generated';
-import { i18nKeys } from '@i18n/i18nKeys';
+import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 
 type WizardI18nContext = Scenes.WizardContext &

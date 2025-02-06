@@ -21,7 +21,11 @@
       }
     },
     "hello": {
-      "message": "Hello"
+      "message": "Hello, entering scene",
+      "scene": {
+        "first_message": "first hello scene step",
+        "second_message": "last hello scene step"
+      }
     }
   }
 }

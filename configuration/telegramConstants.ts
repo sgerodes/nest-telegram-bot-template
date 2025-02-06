@@ -1,4 +1,4 @@
-export enum BotCommands {
+export enum BOT_COMMANDS {
   START = 'start',
   HELLO = 'hello',
 }
@@ -8,5 +8,5 @@ export const TELEGRAM_BTN_ACTIONS = {
 };
 
 export const SCENES = {
-  START: 'startScene',
+  SCENE_HELLO: 'scene_hello',
 };

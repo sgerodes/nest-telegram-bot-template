@@ -30,6 +30,10 @@ export type I18nTranslations = {
             };
             "hello": {
                 "message": string;
+                "scene": {
+                    "first_message": string;
+                    "second_message": string;
+                };
             };
         };
     };

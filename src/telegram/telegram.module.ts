@@ -10,6 +10,7 @@ import {
   TelegrafI18nMiddleware,
 } from 'nestjs-telegraf-i18n';
 import { session } from 'telegraf';
+import { SceneHello } from '../scenes/hello.scene';
 
 @Module({
   imports: [
@@ -20,13 +21,15 @@ import { session } from 'telegraf';
         options: {
           contextType: TelegrafI18nContext,
         },
-        middlewares: [session()],
+        middlewares: [
+          session()
+        ],
       }),
     }),
     DatabaseModule,
     LanguageModule,
   ],
-  providers: [BotUpdate, UserRepositoryService, TelegrafI18nMiddleware],
+  providers: [BotUpdate, UserRepositoryService, TelegrafI18nMiddleware, SceneHello],
 })
 export class TelegramModule {}
 

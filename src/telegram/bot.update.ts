@@ -1,7 +1,6 @@
 import {
-  Scenes,
   Telegraf,
-  // Context as TelegrafContext
+  Context as TelegrafContext,
 } from 'telegraf';
 import {
   Action,
@@ -14,7 +13,7 @@ import {
 } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import {
-  BotCommands,
+  BOT_COMMANDS, SCENES,
   TELEGRAM_BTN_ACTIONS,
 } from '@configuration/telegramConstants';
 import { I18nService, logger } from 'nestjs-i18n';
@@ -25,9 +24,8 @@ import { LanguageService } from '@language/language.service';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
+import { WizardI18nContext } from '@telegram/types';
 
-type WizardI18nContext = Scenes.WizardContext &
-  TelegrafI18nContext<I18nTranslations>;
 
 @Update()
 export class BotUpdate {
@@ -54,19 +52,19 @@ export class BotUpdate {
           { language_code },
         );
         await this.bot.telegram.setMyName(
-          this.i18n.translate(i18nKeys.i18n.metadata.bot_name, {
+          this.i18n.t(i18nKeys.i18n.metadata.bot_name, {
             lang: language_code,
           }),
           language_code,
         );
         await this.bot.telegram.setMyShortDescription(
-          this.i18n.translate(i18nKeys.i18n.metadata.description, {
+          this.i18n.t(i18nKeys.i18n.metadata.description, {
             lang: language_code,
           }),
           language_code,
         );
         await this.bot.telegram.setMyDescription(
-          this.i18n.translate(i18nKeys.i18n.metadata.short_description, {
+          this.i18n.t(i18nKeys.i18n.metadata.short_description, {
             lang: language_code,
           }),
           language_code,
@@ -90,21 +88,18 @@ export class BotUpdate {
         telegramFirstName: ctx.from.first_name,
       });
     }
-    const message = ctx.i18n.translate(i18nKeys.i18n.menus.start.message);
+    const message = ctx.i18n.t(i18nKeys.i18n.menus.start.message);
     const buttons: InlineKeyboardButton[][] = [
       [
         {
-          text: ctx.i18n.translate(
+          text: ctx.i18n.t(
             i18nKeys.i18n.menus.start.buttons.welcome_button,
           ),
           url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
         },
       ],
       [
-        {
-          text: ctx.i18n.translate(i18nKeys.i18n.shared.buttons.close),
-          callback_data: TELEGRAM_BTN_ACTIONS.CLOSE,
-        },
+        this.getDeleteButton(ctx),
       ],
     ];
 
@@ -113,24 +108,22 @@ export class BotUpdate {
     });
   }
 
-  @Command(BotCommands.HELLO)
+  @Command(BOT_COMMANDS.HELLO)
   async helloCommand(@Ctx() ctx: WizardI18nContext) {
-    const buttons: InlineKeyboardButton[][] = [
-      [
-        {
-          text: ctx.i18n.translate(i18nKeys.i18n.shared.buttons.close),
-          callback_data: TELEGRAM_BTN_ACTIONS.CLOSE,
-        },
-      ],
-    ];
-    const message = ctx.i18n.translate(i18nKeys.i18n.menus.hello.message);
-    await ctx.reply(message, {
-      reply_markup: { inline_keyboard: buttons },
-    });
+    const message = ctx.i18n.t(i18nKeys.i18n.menus.hello.message);
+    await ctx.reply(message);
+    await ctx.scene.enter(SCENES.SCENE_HELLO)
+  }
+
+  getDeleteButton(ctx: WizardI18nContext): InlineKeyboardButton {
+    return {
+      text: ctx.i18n.t(i18nKeys.i18n.shared.buttons.close),
+      callback_data: TELEGRAM_BTN_ACTIONS.CLOSE,
+    }
   }
 
   @Action(TELEGRAM_BTN_ACTIONS.CLOSE)
-  async close(@Ctx() ctx: TelegrafI18nContext) {
+  async close(@Ctx() ctx: TelegrafContext) {
     await ctx.deleteMessage();
   }
 }

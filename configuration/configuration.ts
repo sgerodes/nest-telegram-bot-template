@@ -11,7 +11,7 @@ export const configuration = (): RootConfig => ({
       token: process.env.TELEGRAM_BOT_TOKEN,
       updateMetadata: process.env.UPDATE_METADATA
         ? process.env.UPDATE_METADATA.toLowerCase() === 'true'
-        : true,
+        : false,
     },
     i18n: {
       fallbackLanguage: 'en',

@@ -23,13 +23,13 @@ export class LanguageService {
     return [
       {
         command: '/' + BOT_COMMANDS.START,
-        description: this.i18n.translate('i18n.command_descriptions.start', {
+        description: this.i18n.t('i18n.command_descriptions.start', {
           lang,
         }),
       },
       {
         command: '/' + BOT_COMMANDS.HELLO,
-        description: this.i18n.translate('i18n.command_descriptions.hello', {
+        description: this.i18n.t('i18n.command_descriptions.hello', {
           lang,
         }),
       },

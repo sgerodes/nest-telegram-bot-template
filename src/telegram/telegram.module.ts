@@ -9,6 +9,7 @@ import {
   TelegrafI18nContext,
   TelegrafI18nMiddleware,
 } from 'nestjs-telegraf-i18n';
+import { session } from 'telegraf';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import {
         options: {
           contextType: TelegrafI18nContext,
         },
+        middlewares: [session()],
       }),
     }),
     DatabaseModule,
@@ -27,3 +29,4 @@ import {
   providers: [BotUpdate, UserRepositoryService, TelegrafI18nMiddleware],
 })
 export class TelegramModule {}
+

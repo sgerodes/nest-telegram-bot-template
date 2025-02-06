@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TelegramModule } from '@telegram/telegram.module';
 import { ConfigModule } from '@nestjs/config';
-import {
-  AcceptLanguageResolver,
-  I18nModule,
-} from 'nestjs-i18n';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
 import { configuration } from '@configuration/configuration';
 import { TypedConfigModule } from 'nest-typed-config';
 import {
@@ -38,9 +35,7 @@ import {
         typesOutputPath: telegramI18Config.typesOutputPath,
         logging: telegramI18Config.logging,
       }),
-      resolvers: [
-        AcceptLanguageResolver,
-      ]
+      resolvers: [AcceptLanguageResolver],
     }),
     TelegramModule,
     DatabaseModule,

@@ -5,7 +5,10 @@ import { TelegramConfig } from '@configuration/configuration.models';
 import { DatabaseModule } from '@database/database.module';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { LanguageModule } from '@language/language.module';
-import { TelegrafI18nContext, TelegrafI18nMiddleware } from 'nestjs-telegraf-i18n';
+import {
+  TelegrafI18nContext,
+  TelegrafI18nMiddleware,
+} from 'nestjs-telegraf-i18n';
 
 @Module({
   imports: [

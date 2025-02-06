@@ -1,4 +1,5 @@
-import { Scenes,
+import {
+  Scenes,
   Telegraf,
   // Context as TelegrafContext
 } from 'telegraf';
@@ -25,14 +26,16 @@ import { I18nTranslations } from '@i18n/i18n.generated';
 import { i18nKeys } from '@i18n/i18nKeys';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 
-type WizardI18nContext = Scenes.WizardContext & TelegrafI18nContext<I18nTranslations>;
+type WizardI18nContext = Scenes.WizardContext &
+  TelegrafI18nContext<I18nTranslations>;
 
 @Update()
 export class BotUpdate {
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
-    @InjectBot() private readonly bot: Telegraf<TelegrafI18nContext<I18nTranslations>>,
+    @InjectBot()
+    private readonly bot: Telegraf<TelegrafI18nContext<I18nTranslations>>,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly userRepositoryService: UserRepositoryService,
     private readonly telegramConfig: TelegramConfig,
@@ -91,7 +94,9 @@ export class BotUpdate {
     const buttons: InlineKeyboardButton[][] = [
       [
         {
-          text: ctx.i18n.translate(i18nKeys.i18n.menus.start.buttons.welcome_button),
+          text: ctx.i18n.translate(
+            i18nKeys.i18n.menus.start.buttons.welcome_button,
+          ),
           url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
         },
       ],

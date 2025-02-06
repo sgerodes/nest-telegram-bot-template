@@ -21,15 +21,17 @@ import { SceneHello } from '../scenes/hello.scene';
         options: {
           contextType: TelegrafI18nContext,
         },
-        middlewares: [
-          session()
-        ],
+        middlewares: [session()],
       }),
     }),
     DatabaseModule,
     LanguageModule,
   ],
-  providers: [BotUpdate, UserRepositoryService, TelegrafI18nMiddleware, SceneHello],
+  providers: [
+    BotUpdate,
+    UserRepositoryService,
+    TelegrafI18nMiddleware,
+    SceneHello,
+  ],
 })
 export class TelegramModule {}
-

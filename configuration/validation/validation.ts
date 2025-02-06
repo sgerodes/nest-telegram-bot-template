@@ -1,9 +1,7 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { TypedConfigModule } from 'nest-typed-config';
-import {
-  RootConfig,
-} from '@configuration/validation/configuration.validators';
+import { RootConfig } from '@configuration/validation/configuration.validators';
 import { EnvironmentVariables } from '@configuration/validation/environment.validators';
 
 export const validateConfiguration = (

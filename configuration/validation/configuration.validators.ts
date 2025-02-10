@@ -41,6 +41,20 @@ export class TelegramI18nConfig {
   enabledLanguages: string[];
 }
 
+export class TelegramIdsConfig {
+  @IsString()
+  playgroundChannelId!: string;
+
+  @IsString()
+  playgroundGroupId!: string;
+
+  @IsString()
+  ownerTelegramId!: string;
+
+  @IsArray()
+  adminTelegramIds!: string[];
+}
+
 export class TelegramConfig {
   @Type(() => TelegramBotConfig)
   @ValidateNested()
@@ -49,6 +63,10 @@ export class TelegramConfig {
   @Type(() => TelegramI18nConfig)
   @ValidateNested()
   i18n!: TelegramI18nConfig;
+
+  @Type(() => TelegramIdsConfig)
+  @ValidateNested()
+  telegramIds!: TelegramIdsConfig;
 }
 
 export class DatabaseConfig {

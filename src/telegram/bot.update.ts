@@ -139,12 +139,30 @@ export class BotUpdate {
       chatId: number | string,
       question: string,
       options: string[],
-      correctOptionIndex: number
+      correctOptionIndex: number,
+      is_anonymous: boolean,
   ) {
     try {
       this.logger.log('Sending the quiz');
       await this.bot.telegram.sendQuiz(chatId, question, options, {
         correct_option_id: correctOptionIndex,
+        is_anonymous: is_anonymous,
+        explanation: 'Choose the correct answer',
+      });
+      this.logger.log('Quiz sent successfully');
+    } catch (error) {
+      this.logger.error('Failed to send quiz: ' + error.message, error.stack);
+    }
+  }
+
+  async sendPollToChatId(
+      chatId: number | string,
+      question: string,
+      options: string[],
+  ) {
+    try {
+      this.logger.log('Sending the quiz');
+      await this.bot.telegram.sendPoll(chatId, question, options, {
         is_anonymous: true,
         explanation: 'Choose the correct answer',
       });
@@ -156,10 +174,18 @@ export class BotUpdate {
 
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
-    await this.sendQuizToChatId('-1002377415957',
+    await this.sendQuizToChatId(this.telegramConfig.telegramIds.playgroundChannelId,
         "Who is the best?",
         ["Me", "You", "All"],
-        2);
+        2,
+        true
+    );
+    await this.sendQuizToChatId(this.telegramConfig.telegramIds.playgroundGroupId,
+        "Who is the best?",
+        ["Me", "You", "All"],
+        0,
+        false
+    );
   }
 
   @Command(BOT_COMMANDS.HELLO)

@@ -22,6 +22,12 @@ export const configuration = (): RootConfig => ({
       typesOutputPath: getAbsolutePathForProjectDirectory('configuration/i18n/') + 'i18n.generated.ts',
       enabledLanguages: ['en'],
     },
+    telegramIds: {
+      playgroundChannelId: '-1002377415957',
+      playgroundGroupId: '-1001864900132',
+      ownerTelegramId: '41459859', //sg
+      adminTelegramIds: ['41459859'], // others
+    }
   },
   database: {
     url: process.env.DATABASE_URL,

@@ -122,6 +122,46 @@ export class BotUpdate {
     });
   }
 
+  async sendMessageToChatId(chatId:  number | string, text: string) {
+    try {
+      this.logger.log('Trying to send');
+      await this.bot.telegram.sendMessage(
+          chatId,
+          text,
+      );
+      this.logger.log('News posted successfully');
+    } catch (error) {
+      this.logger.error('Failed to post news: ' + error.message, error.stack);
+    }
+  }
+
+  async sendQuizToChatId(
+      chatId: number | string,
+      question: string,
+      options: string[],
+      correctOptionIndex: number
+  ) {
+    try {
+      this.logger.log('Sending the quiz');
+      await this.bot.telegram.sendQuiz(chatId, question, options, {
+        correct_option_id: correctOptionIndex,
+        is_anonymous: true,
+        explanation: 'Choose the correct answer',
+      });
+      this.logger.log('Quiz sent successfully');
+    } catch (error) {
+      this.logger.error('Failed to send quiz: ' + error.message, error.stack);
+    }
+  }
+
+  @Command(BOT_COMMANDS.QUIZ)
+  async quizCommand(@Ctx() ctx: WizardI18nContext) {
+    await this.sendQuizToChatId('-1002377415957',
+        "Who is the best?",
+        ["Me", "You", "All"],
+        2);
+  }
+
   @Command(BOT_COMMANDS.HELLO)
   async helloCommand(@Ctx() ctx: WizardI18nContext) {
     const message = ctx.i18n.t(i18nKeys.i18n.menus.hello.message);

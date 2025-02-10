@@ -1,6 +1,7 @@
 export enum BOT_COMMANDS {
   START = 'start',
   HELLO = 'hello',
+  QUIZ = 'quiz',
 }
 
 export const TELEGRAM_BTN_ACTIONS = {

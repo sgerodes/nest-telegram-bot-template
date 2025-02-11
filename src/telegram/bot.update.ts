@@ -61,13 +61,15 @@ export class BotUpdate {
 
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
-    await this.telegrafService.sendQuizToChatId(this.telegramConfig.telegramIds.playgroundChannelId,
+    await this.telegrafService.sendQuizToChatId(
+        this.telegramConfig.telegramIds.playgroundChannelId,
         "Who is the best?",
         ["Me", "You", "All"],
         2,
-        true
+        true,
     );
-    await this.telegrafService.sendQuizToChatId(this.telegramConfig.telegramIds.playgroundGroupId,
+    await this.telegrafService.sendQuizToChatId(
+        this.telegramConfig.telegramIds.playgroundGroupId,
         "Who is the best?",
         ["Me", "You", "All"],
         0,

@@ -24,7 +24,8 @@ export class TelegrafService {
     }
 
     async updateMetadata() {
-        const default_language_code = ''; // Will default to the fallback language of i18n
+        // Will default to the fallback language of i18n and will update the default lang of the telegram bot
+        const default_language_code = '';
         const enabledLanguages = [
             default_language_code,
             ...this.telegramConfig.i18n.enabledLanguages,
@@ -97,16 +98,18 @@ export class TelegrafService {
         question: string,
         options: string[],
         correctOptionIndex: number,
-        is_anonymous: boolean,
+        is_anonymous?: boolean,
+        explanation?: string,
     ) {
+        // Non-anonymous cant be send to channels
         try {
             this.logger.log('Sending the quiz');
-            await this.bot.telegram.sendQuiz(chatId, question, options, {
+            const response = await this.bot.telegram.sendQuiz(chatId, question, options, {
                 correct_option_id: correctOptionIndex,
                 is_anonymous: is_anonymous,
-                explanation: 'Choose the correct answer',
+                explanation: explanation,
             });
-            this.logger.log('Quiz sent successfully');
+            this.logger.log(`Quiz sent successfully ${response.poll.id}`);
         } catch (error) {
             this.logger.error('Failed to send quiz: ' + error.message, error.stack);
         }
@@ -116,14 +119,17 @@ export class TelegrafService {
         chatId: number | string,
         question: string,
         options: string[],
+        is_anonymous?: boolean,
+        explanation?: string,
     ) {
+        // Non-anonymous cant be send to channels
         try {
             this.logger.log('Sending the quiz');
-            await this.bot.telegram.sendPoll(chatId, question, options, {
-                is_anonymous: true,
-                explanation: 'Choose the correct answer',
+            const response = await this.bot.telegram.sendPoll(chatId, question, options, {
+                is_anonymous: is_anonymous,
+                explanation: explanation,
             });
-            this.logger.log('Quiz sent successfully');
+            this.logger.log(`Poll sent successfully ${response.poll.id}`);
         } catch (error) {
             this.logger.error('Failed to send quiz: ' + error.message, error.stack);
         }

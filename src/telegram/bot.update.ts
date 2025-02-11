@@ -18,7 +18,7 @@ import { UserRepositoryService } from '@database/user-repository/user-repository
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { WizardI18nContext } from '@telegram/types';
-import {TelegrafService} from "@telegram/telegraf/telegraf.service";
+import { TelegrafService } from '@telegram/telegraf/telegraf.service';
 
 @Update()
 export class BotUpdate {
@@ -62,18 +62,18 @@ export class BotUpdate {
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
     await this.telegrafService.sendQuizToChatId(
-        this.telegramConfig.telegramIds.playgroundChannelId,
-        "Who is the best?",
-        ["Me", "You", "All"],
-        2,
-        true,
+      this.telegramConfig.telegramIds.playgroundChannelId,
+      'Who is the best?',
+      ['Me', 'You', 'All'],
+      2,
+      true,
     );
     await this.telegrafService.sendQuizToChatId(
-        this.telegramConfig.telegramIds.playgroundGroupId,
-        "Who is the best?",
-        ["Me", "You", "All"],
-        0,
-        false
+      this.telegramConfig.telegramIds.playgroundGroupId,
+      'Who is the best?',
+      ['Me', 'You', 'All'],
+      0,
+      false,
     );
   }
 

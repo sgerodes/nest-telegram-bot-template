@@ -12,8 +12,8 @@ import {
 } from 'nestjs-telegraf-i18n';
 import { session } from 'telegraf';
 import { SceneHello } from '../scenes/hello.scene';
-import { TelegrafService } from "@telegram/telegraf/telegraf.service";
-import { loggingMiddleware } from "@telegram/logging.telegraf.middleware";
+import { TelegrafService } from '@telegram/telegraf/telegraf.service';
+import { loggingMiddleware } from '@telegram/logging.telegraf.middleware';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { loggingMiddleware } from "@telegram/logging.telegraf.middleware";
         middlewares: [
           session(),
           telegrafI18nMiddlewareProvider.telegrafI18nMiddleware,
-          loggingMiddleware
+          loggingMiddleware,
         ],
       }),
     }),

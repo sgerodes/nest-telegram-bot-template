@@ -11,9 +11,9 @@ import {
   TelegrafI18nContext,
 } from 'nestjs-telegraf-i18n';
 import { session } from 'telegraf';
-import { SceneHello } from '../scenes/hello.scene';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { loggingMiddleware } from '@telegram/logging.telegraf.middleware';
+import {SceneHello} from "@telegram/scenes/hello.scene";
 
 @Module({
   imports: [

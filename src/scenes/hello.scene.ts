@@ -10,13 +10,13 @@ export class SceneHello {
 
   @WizardStep(1)
   async step1(@Ctx() ctx: WizardI18nContext) {
-    await ctx.reply(ctx.i18n.t(i18nKeys.i18n.menus.hello.scene.first_message));
+    await ctx.reply(ctx.t(i18nKeys.i18n.menus.hello.scene.first_message));
     ctx.wizard.next();
   }
 
   @WizardStep(2)
   async step2(@Ctx() ctx: WizardI18nContext) {
-    await ctx.reply(ctx.i18n.t(i18nKeys.i18n.menus.hello.scene.second_message));
+    await ctx.reply(ctx.t(i18nKeys.i18n.menus.hello.scene.second_message));
     await ctx.scene.leave();
   }
 }

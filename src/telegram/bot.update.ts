@@ -106,11 +106,11 @@ export class BotUpdate {
         telegramFirstName: ctx.from.first_name,
       });
     }
-    const message = ctx.i18n.t(i18nKeys.i18n.menus.start.message);
+    const message = ctx.t(i18nKeys.i18n.menus.start.message);
     const buttons: InlineKeyboardButton[][] = [
       [
         {
-          text: ctx.i18n.t(i18nKeys.i18n.menus.start.buttons.welcome_button),
+          text: ctx.t(i18nKeys.i18n.menus.start.buttons.welcome_button),
           url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
         },
       ],
@@ -190,14 +190,14 @@ export class BotUpdate {
 
   @Command(BOT_COMMANDS.HELLO)
   async helloCommand(@Ctx() ctx: WizardI18nContext) {
-    const message = ctx.i18n.t(i18nKeys.i18n.menus.hello.message);
+    const message = ctx.t(i18nKeys.i18n.menus.hello.message);
     await ctx.reply(message);
     await ctx.scene.enter(SCENES.SCENE_HELLO);
   }
 
   getDeleteButton(ctx: WizardI18nContext): InlineKeyboardButton {
     return {
-      text: ctx.i18n.t(i18nKeys.i18n.shared.buttons.close),
+      text: ctx.t(i18nKeys.i18n.shared.buttons.close),
       callback_data: TELEGRAM_BTN_ACTIONS.CLOSE,
     };
   }

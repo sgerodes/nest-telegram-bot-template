@@ -7,7 +7,6 @@ const WHITELISTED_USERS: number[] = [123456789, 987654321]; // Replace with actu
 const logger = new Logger('LoggingMiddleware');
 
 export const loggingMiddleware: Middleware<TelegrafI18nContext> = async (ctx: TelegrafI18nContext, next) => {
-    logger.debug(`Received message from ${ctx.from.id}`)
-    let f = ctx.t('errors.userNotWhitedMessage');
+    logger.debug(`Received message from ${ctx.from.id}`);
     await next();
 };

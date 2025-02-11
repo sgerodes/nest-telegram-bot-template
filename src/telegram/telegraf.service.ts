@@ -81,14 +81,11 @@ export class TelegrafService {
     }
   }
 
+  @CatchErrors
   async sendMessageToChatId(chatId: number | string, text: string) {
-    try {
-      this.logger.log('Trying to send');
-      await this.bot.telegram.sendMessage(chatId, text);
-      this.logger.log('News posted successfully');
-    } catch (error) {
-      this.logger.error('Failed to post news: ' + error.message, error.stack);
-    }
+    this.logger.debug('Trying to send');
+    const response = await this.bot.telegram.sendMessage(chatId, text);
+    this.logger.debug(`Message sent successfully id=${response.message_id}`);
   }
 
   @CatchErrors
@@ -101,7 +98,7 @@ export class TelegrafService {
     explanation?: string,
   ) {
     // Non-anonymous cant be send to channels
-    this.logger.log('Sending the quiz');
+    this.logger.debug('Sending the quiz');
     const response = await this.bot.telegram.sendQuiz(
         chatId,
         question,
@@ -112,7 +109,7 @@ export class TelegrafService {
           explanation: explanation,
         },
     );
-    this.logger.log(`Quiz sent successfully ${response.poll.id}`);
+    this.logger.debug(`Quiz sent successfully id=${response.poll.id}`);
   }
 
   @CatchErrors
@@ -124,7 +121,7 @@ export class TelegrafService {
     explanation?: string,
   ) {
     // Non-anonymous cant be send to channels
-    this.logger.log('Sending the quiz');
+    this.logger.debug('Sending the poll');
     const response = await this.bot.telegram.sendPoll(
         chatId,
         question,
@@ -134,6 +131,6 @@ export class TelegrafService {
           explanation: explanation,
         },
     );
-    this.logger.log(`Poll sent successfully ${response.poll.id}`);
+    this.logger.debug(`Poll sent successfully id=${response.poll.id}`);
   }
 }

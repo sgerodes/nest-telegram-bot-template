@@ -18,68 +18,7 @@ export class TelegrafService {
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly telegramConfig: TelegramConfig,
     private readonly languageService: LanguageService,
-  ) {
-    if (this.telegramConfig.bot.updateMetadata) {
-      this.updateMetadata(); // TODO update on metadata change and respect the time to update the metadata
-    }
-  }
-
-  async updateMetadata() {
-    // Will default to the fallback language of i18n and will update the default lang of the telegram bot
-    const default_language_code = '';
-    const enabledLanguages = [
-      default_language_code,
-      ...this.telegramConfig.i18n.enabledLanguages,
-    ];
-    for (const language_code of enabledLanguages) {
-      try {
-        const commandDescriptions =
-          this.languageService.getCommandDescriptions(language_code);
-        this.logger.debug(`Setting commandDescriptions for '${language_code}'`);
-        await this.bot.telegram.setMyCommands(commandDescriptions, {
-          language_code,
-        });
-
-        const myName = this.i18n.t(i18nKeys.i18n.metadata.bot_name, {
-          lang: language_code,
-        });
-        this.logger.debug(
-          `Setting myName for '${language_code}' to: '${myName}'`,
-        );
-        await this.bot.telegram.setMyName(myName, language_code);
-
-        const description = this.i18n.t(i18nKeys.i18n.metadata.description, {
-          lang: language_code,
-        });
-        this.logger.debug(
-          `Setting description for '${language_code}' to: '${description}'`,
-        );
-        await this.bot.telegram.setMyShortDescription(
-          description,
-          language_code,
-        );
-
-        const short_description = this.i18n.t(
-          i18nKeys.i18n.metadata.description,
-          { lang: language_code },
-        );
-        this.logger.debug(
-          `Setting short_description for '${language_code}' to: '${short_description}'`,
-        );
-        await this.bot.telegram.setMyDescription(
-          short_description,
-          language_code,
-        );
-
-        this.logger.log(`Language '${language_code}' updated successfully.`);
-      } catch (error) {
-        this.logger.error(
-          `Failed to update bot metadata for language '${language_code}': ${error.message}`,
-          error.stack,
-        );
-      }
-    }
-  }
+  ) {}
 
   @CatchErrors
   async sendMessageToChatId(chatId: number | string, text: string) {
@@ -133,4 +72,62 @@ export class TelegrafService {
     );
     this.logger.debug(`Poll sent successfully id=${response.poll.id}`);
   }
+
+  async updateMetadata() {
+    // Will default to the fallback language of i18n and will update the default lang of the telegram bot
+    const default_language_code = '';
+    const enabledLanguages = [
+      default_language_code,
+      ...this.telegramConfig.i18n.enabledLanguages,
+    ];
+    for (const language_code of enabledLanguages) {
+      try {
+        const commandDescriptions =
+            this.languageService.getCommandDescriptions(language_code);
+        this.logger.debug(`Setting commandDescriptions for '${language_code}'`);
+        await this.bot.telegram.setMyCommands(commandDescriptions, {
+          language_code,
+        });
+
+        const myName = this.i18n.t(i18nKeys.i18n.metadata.bot_name, {
+          lang: language_code,
+        });
+        this.logger.debug(
+            `Setting myName for '${language_code}' to: '${myName}'`,
+        );
+        await this.bot.telegram.setMyName(myName, language_code);
+
+        const description = this.i18n.t(i18nKeys.i18n.metadata.description, {
+          lang: language_code,
+        });
+        this.logger.debug(
+            `Setting description for '${language_code}' to: '${description}'`,
+        );
+        await this.bot.telegram.setMyShortDescription(
+            description,
+            language_code,
+        );
+
+        const short_description = this.i18n.t(
+            i18nKeys.i18n.metadata.description,
+            { lang: language_code },
+        );
+        this.logger.debug(
+            `Setting short_description for '${language_code}' to: '${short_description}'`,
+        );
+        await this.bot.telegram.setMyDescription(
+            short_description,
+            language_code,
+        );
+
+        this.logger.log(`Language '${language_code}' updated successfully.`);
+      } catch (error) {
+        this.logger.error(
+            `Failed to update bot metadata for language '${language_code}': ${error.message}`,
+            error.stack,
+        );
+      }
+    }
+  }
+
 }

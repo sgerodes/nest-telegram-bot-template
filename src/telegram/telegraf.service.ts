@@ -7,6 +7,7 @@ import { I18nService } from 'nestjs-i18n';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
+import {CatchErrors} from "@telegram/decorators";
 
 @Injectable()
 export class TelegrafService {
@@ -90,6 +91,7 @@ export class TelegrafService {
     }
   }
 
+  @CatchErrors
   async sendQuizToChatId(
     chatId: number | string,
     question: string,
@@ -99,9 +101,8 @@ export class TelegrafService {
     explanation?: string,
   ) {
     // Non-anonymous cant be send to channels
-    try {
-      this.logger.log('Sending the quiz');
-      const response = await this.bot.telegram.sendQuiz(
+    this.logger.log('Sending the quiz');
+    const response = await this.bot.telegram.sendQuiz(
         chatId,
         question,
         options,
@@ -110,13 +111,11 @@ export class TelegrafService {
           is_anonymous: is_anonymous,
           explanation: explanation,
         },
-      );
-      this.logger.log(`Quiz sent successfully ${response.poll.id}`);
-    } catch (error) {
-      this.logger.error('Failed to send quiz: ' + error.message, error.stack);
-    }
+    );
+    this.logger.log(`Quiz sent successfully ${response.poll.id}`);
   }
 
+  @CatchErrors
   async sendPollToChatId(
     chatId: number | string,
     question: string,
@@ -125,9 +124,8 @@ export class TelegrafService {
     explanation?: string,
   ) {
     // Non-anonymous cant be send to channels
-    try {
-      this.logger.log('Sending the quiz');
-      const response = await this.bot.telegram.sendPoll(
+    this.logger.log('Sending the quiz');
+    const response = await this.bot.telegram.sendPoll(
         chatId,
         question,
         options,
@@ -135,10 +133,7 @@ export class TelegrafService {
           is_anonymous: is_anonymous,
           explanation: explanation,
         },
-      );
-      this.logger.log(`Poll sent successfully ${response.poll.id}`);
-    } catch (error) {
-      this.logger.error('Failed to send quiz: ' + error.message, error.stack);
-    }
+    );
+    this.logger.log(`Poll sent successfully ${response.poll.id}`);
   }
 }

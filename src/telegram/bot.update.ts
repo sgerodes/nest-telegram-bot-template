@@ -18,7 +18,7 @@ import { UserRepositoryService } from '@database/user-repository/user-repository
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { WizardI18nContext } from '@telegram/types';
-import { TelegrafService } from '@telegram/telegraf/telegraf.service';
+import { TelegrafService } from '@telegram/telegraf.service';
 
 @Update()
 export class BotUpdate {

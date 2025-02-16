@@ -1,5 +1,14 @@
 import { Context as TelegrafContext } from 'telegraf';
-import { SetMetadata, UseGuards, Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+    SetMetadata,
+    UseGuards,
+    Injectable,
+    CanActivate,
+    ExecutionContext,
+    applyDecorators,
+    Logger
+} from '@nestjs/common';
+import {TelegrafI18nContext} from "nestjs-telegraf-i18n";
 
 
 export function CatchErrors(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
@@ -21,37 +30,38 @@ export function CatchErrors(target: any, propertyKey: string, descriptor: Proper
 }
 
 
-// Define admin Telegram IDs here (Replace with actual IDs)
-const ADMIN_IDS = [123456789, 987654321];
-
-export const AdminOnly = () => SetMetadata('adminOnly', true);
-
 @Injectable()
-export class AdminGuard implements CanActivate {
-    canActivate(context: ExecutionContext): boolean {
-        const ctx = context.switchToRpc().getContext<TelegrafContext>();
-        const userId = ctx.from?.id;
+export class TelegrafIdGuard implements CanActivate {
+    private readonly logger = new Logger(this.constructor.name);
 
-        if (!userId) return false; // Prevent execution if no user ID is found
-        return ADMIN_IDS.includes(userId);
+    constructor(private readonly allowedIds: Set<number>) {}
+
+    canActivate(executionContext: ExecutionContext): boolean {
+        const contextType = executionContext?.getType<string>() ?? undefined;
+        const args = executionContext.getArgs();
+        let telegrafContext: TelegrafContext;
+        let earlyBreak: boolean = false;
+        if (!contextType || contextType !== 'telegraf' || args.length === 0) {
+            earlyBreak = true;
+        } else {
+            telegrafContext = executionContext.getArgs()[0];
+        }
+        if (earlyBreak || !(telegrafContext instanceof TelegrafContext)) {
+            this.logger.warn(`Telegraf Guard used on non-telegraf context: contextType=${contextType}, detectedType=${telegrafContext?.constructor?.name}`);
+            return false;
+        }
+
+        const userId = telegrafContext?.from?.id;
+        const canActivate =  userId ? this.allowedIds.has(userId) : false;
+        if (!canActivate) {
+            this.logger.log(`A function was called from a non allowed id ${userId}`);
+        }
+        return canActivate;
     }
 }
 
-
-// Custom decorator to pass allowed IDs dynamically
-export const AllowOnly = (ids: number[]) => SetMetadata('allowedIds', ids);
-
-@Injectable()
-export class IdGuard implements CanActivate {
-    canActivate(context: ExecutionContext): boolean {
-        const ctx = context.switchToRpc().getContext<TelegrafContext>();
-        const userId = ctx.from?.id;
-        const allowedIds = this.getAllowedIds(context);
-
-        return userId ? allowedIds.includes(userId) : false;
-    }
-
-    private getAllowedIds(context: ExecutionContext): number[] {
-        return context.getHandler().constructor['allowedIds'] || [];
-    }
+export function RestrictToTelegramIds(allowedIds: Iterable<number>) {
+    return applyDecorators(
+        UseGuards(new TelegrafIdGuard(new Set<number>(allowedIds)))
+    );
 }

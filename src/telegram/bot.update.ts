@@ -19,6 +19,7 @@ import { TelegramConfig } from '@configuration/validation/configuration.validato
 import { i18nKeys } from '@i18n/i18n.keys';
 import { WizardI18nContext } from '@telegram/types';
 import { TelegrafService } from '@telegram/telegraf.service';
+import {RestrictToTelegramIds} from "@telegram/decorators";
 
 @Update()
 export class BotUpdate {
@@ -35,6 +36,7 @@ export class BotUpdate {
   }
 
   @Start()
+  @RestrictToTelegramIds([41459859])
   async startCommand(@Ctx() ctx: WizardI18nContext) {
     if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
       const _user = await this.userRepositoryService.createData({

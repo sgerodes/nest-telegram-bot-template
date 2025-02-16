@@ -4,10 +4,11 @@ import {
   IsOptional,
   IsBoolean,
   IsArray,
-  IsObject,
+  IsObject, Max, IsInt,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
+import {IsTelegramId} from "@configuration/validation/utils";
 
 export class TelegramBotConfig {
   @IsString()
@@ -42,17 +43,18 @@ export class TelegramI18nConfig {
 }
 
 export class TelegramIdsConfig {
-  @IsString()
-  playgroundChannelId!: string;
+  @IsTelegramId()
+  playgroundChannelId!: number;
 
-  @IsString()
-  playgroundGroupId!: string;
+  @IsTelegramId()
+  playgroundGroupId!: number;
 
-  @IsString()
-  ownerTelegramId!: string;
+  @IsTelegramId()
+  ownerTelegramId!: number;
 
   @IsArray()
-  adminTelegramIds!: string[];
+  @IsTelegramId({ each: true })
+  adminTelegramIds!: number[];
 }
 
 export class TelegramConfig {

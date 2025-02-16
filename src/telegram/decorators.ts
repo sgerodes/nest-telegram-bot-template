@@ -1,14 +1,12 @@
 import { Context as TelegrafContext } from 'telegraf';
 import {
-    SetMetadata,
     UseGuards,
     Injectable,
     CanActivate,
     ExecutionContext,
     applyDecorators,
-    Logger
+    Logger, SetMetadata
 } from '@nestjs/common';
-import {TelegrafI18nContext} from "nestjs-telegraf-i18n";
 
 
 export function CatchErrors(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
@@ -33,8 +31,14 @@ export function CatchErrors(target: any, propertyKey: string, descriptor: Proper
 @Injectable()
 export class TelegrafIdGuard implements CanActivate {
     private readonly logger = new Logger(this.constructor.name);
+    private readonly allowedIdsString: string ;
 
-    constructor(private readonly allowedIds: Set<number>) {}
+    constructor(private readonly allowedIds: Set<number>,
+                private readonly functionName: string | undefined = undefined
+    ) {
+        this.allowedIdsString = JSON.stringify([...allowedIds]);
+        this.logger.debug(`TelegrafIdGuard initialized for function "${this.functionName}" with allowed IDs: ${this.allowedIdsString}`);
+    }
 
     canActivate(executionContext: ExecutionContext): boolean {
         const contextType = executionContext?.getType<string>() ?? undefined;
@@ -54,14 +58,21 @@ export class TelegrafIdGuard implements CanActivate {
         const userId = telegrafContext?.from?.id;
         const canActivate =  userId ? this.allowedIds.has(userId) : false;
         if (!canActivate) {
-            this.logger.log(`A function was called from a non allowed id ${userId}`);
+            // const functionName = executionContext.getHandler().name;
+            this.logger.debug(`Function "${this.functionName}" was called from a non-allowed ID ${userId}. Allowed are ${this.allowedIdsString}`);
         }
         return canActivate;
     }
 }
 
+
 export function RestrictToTelegramIds(allowedIds: Iterable<number>) {
-    return applyDecorators(
-        UseGuards(new TelegrafIdGuard(new Set<number>(allowedIds)))
-    );
+    return function (target: any, key: string | symbol, descriptor: PropertyDescriptor) {
+        const functionName = key.toString();
+
+        return applyDecorators(
+            SetMetadata('functionName', functionName),
+            UseGuards(new TelegrafIdGuard(new Set<number>(allowedIds), functionName))
+        )(target, key, descriptor);
+    };
 }

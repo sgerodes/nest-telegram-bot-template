@@ -1,8 +1,8 @@
-import { WizardI18nContext } from '@telegram/types';
 import { SCENES } from '@configuration/telegramConstants';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { Ctx, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
+import {WizardI18nContext} from "@telegram/utils";
 
 @Wizard(SCENES.SCENE_HELLO)
 export class SceneHello {

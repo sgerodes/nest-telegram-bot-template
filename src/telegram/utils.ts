@@ -8,7 +8,11 @@ import {applyDecorators} from "@nestjs/common";
 export type WizardI18nContext = Scenes.WizardContext &
     TelegrafI18nContext<I18nTranslations>;
 
-export function AdminOnly() {
+
+/**
+ * Generic function to create role-based decorators.
+ */
+function RestrictToIds(getIds: (config: any) => Set<number>) {
     return function (target: any, key: string | symbol, descriptor: PropertyDescriptor) {
         const config = configuration();
 
@@ -16,13 +20,28 @@ export function AdminOnly() {
             throw new Error('Telegram configuration is missing or invalid');
         }
 
-        const adminIds = new Set<number>([
-            ...config.telegram.telegramIds.adminTelegramIds,
-            config.telegram.telegramIds.ownerTelegramId,
-        ]);
+        const allowedIds = getIds(config); // Get the specific role-based IDs
 
-        applyDecorators(RestrictToTelegramIds(adminIds))(target, key, descriptor);
+        applyDecorators(RestrictToTelegramIds(allowedIds))(target, key, descriptor);
 
         return descriptor;
     };
+}
+
+/**
+ * Allows access to both admins and the owner.
+ */
+export function AdminOnly() {
+    return RestrictToIds(config =>
+        new Set<number>([...config.telegram.telegramIds.adminTelegramIds, config.telegram.telegramIds.ownerTelegramId])
+    );
+}
+
+/**
+ * Allows access only to the owner.
+ */
+export function OwnerOnly() {
+    return RestrictToIds(config =>
+        new Set<number>([config.telegram.telegramIds.ownerTelegramId])
+    );
 }

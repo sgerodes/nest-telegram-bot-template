@@ -25,8 +25,8 @@ export const configuration = (): RootConfig => ({
     telegramIds: {
       playgroundChannelId: -1002377415957,
       playgroundGroupId: -1001864900132,
-      ownerTelegramId: 41459859, //sg
-      // ownerTelegramId: 334342, // test non existing
+      // ownerTelegramId: 41459859, //sg
+      ownerTelegramId: 334342, // test non existing
 
       adminTelegramIds: [], // others
     }

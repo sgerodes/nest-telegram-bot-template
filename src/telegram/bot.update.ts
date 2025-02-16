@@ -19,6 +19,7 @@ import { TelegramConfig } from '@configuration/validation/configuration.validato
 import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { AdminOnly, WizardI18nContext } from '@telegram/utils';
+import {GroupChatOnly, PrivateChatOnly} from "@telegram/decorators";
 
 @Update()
 export class BotUpdate {
@@ -36,6 +37,7 @@ export class BotUpdate {
 
   @Start()
   @AdminOnly()
+  @PrivateChatOnly()
   async startCommand(@Ctx() ctx: WizardI18nContext) {
     if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
       const _user = await this.userRepositoryService.createData({
@@ -52,7 +54,7 @@ export class BotUpdate {
           url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
         },
       ],
-      [this.getDeleteButton(ctx)],
+      [this.getCloseButton(ctx)],
     ];
 
     await ctx.reply(message, {
@@ -85,7 +87,7 @@ export class BotUpdate {
     await ctx.scene.enter(SCENES.SCENE_HELLO);
   }
 
-  getDeleteButton(ctx: WizardI18nContext): InlineKeyboardButton {
+  getCloseButton(ctx: WizardI18nContext): InlineKeyboardButton {
     return {
       text: ctx.t(i18nKeys.i18n.shared.buttons.close),
       callback_data: TELEGRAM_BTN_ACTIONS.CLOSE,

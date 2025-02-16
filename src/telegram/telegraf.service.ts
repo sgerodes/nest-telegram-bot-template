@@ -7,7 +7,7 @@ import { I18nService } from 'nestjs-i18n';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
-import {CatchErrors} from "@telegram/decorators";
+import { CatchErrors } from '@telegram/decorators';
 
 @Injectable()
 export class TelegrafService {
@@ -39,14 +39,14 @@ export class TelegrafService {
     // Non-anonymous cant be send to channels
     this.logger.debug('Sending the quiz');
     const response = await this.bot.telegram.sendQuiz(
-        chatId,
-        question,
-        options,
-        {
-          correct_option_id: correctOptionIndex,
-          is_anonymous: is_anonymous,
-          explanation: explanation,
-        },
+      chatId,
+      question,
+      options,
+      {
+        correct_option_id: correctOptionIndex,
+        is_anonymous: is_anonymous,
+        explanation: explanation,
+      },
     );
     this.logger.debug(`Quiz sent successfully id=${response.poll.id}`);
   }
@@ -62,13 +62,13 @@ export class TelegrafService {
     // Non-anonymous cant be send to channels
     this.logger.debug('Sending the poll');
     const response = await this.bot.telegram.sendPoll(
-        chatId,
-        question,
-        options,
-        {
-          is_anonymous: is_anonymous,
-          explanation: explanation,
-        },
+      chatId,
+      question,
+      options,
+      {
+        is_anonymous: is_anonymous,
+        explanation: explanation,
+      },
     );
     this.logger.debug(`Poll sent successfully id=${response.poll.id}`);
   }
@@ -83,7 +83,7 @@ export class TelegrafService {
     for (const language_code of enabledLanguages) {
       try {
         const commandDescriptions =
-            this.languageService.getCommandDescriptions(language_code);
+          this.languageService.getCommandDescriptions(language_code);
         this.logger.debug(`Setting commandDescriptions for '${language_code}'`);
         await this.bot.telegram.setMyCommands(commandDescriptions, {
           language_code,
@@ -93,7 +93,7 @@ export class TelegrafService {
           lang: language_code,
         });
         this.logger.debug(
-            `Setting myName for '${language_code}' to: '${myName}'`,
+          `Setting myName for '${language_code}' to: '${myName}'`,
         );
         await this.bot.telegram.setMyName(myName, language_code);
 
@@ -101,33 +101,32 @@ export class TelegrafService {
           lang: language_code,
         });
         this.logger.debug(
-            `Setting description for '${language_code}' to: '${description}'`,
+          `Setting description for '${language_code}' to: '${description}'`,
         );
         await this.bot.telegram.setMyShortDescription(
-            description,
-            language_code,
+          description,
+          language_code,
         );
 
         const short_description = this.i18n.t(
-            i18nKeys.i18n.metadata.description,
-            { lang: language_code },
+          i18nKeys.i18n.metadata.description,
+          { lang: language_code },
         );
         this.logger.debug(
-            `Setting short_description for '${language_code}' to: '${short_description}'`,
+          `Setting short_description for '${language_code}' to: '${short_description}'`,
         );
         await this.bot.telegram.setMyDescription(
-            short_description,
-            language_code,
+          short_description,
+          language_code,
         );
 
         this.logger.log(`Language '${language_code}' updated successfully.`);
       } catch (error) {
         this.logger.error(
-            `Failed to update bot metadata for language '${language_code}': ${error.message}`,
-            error.stack,
+          `Failed to update bot metadata for language '${language_code}': ${error.message}`,
+          error.stack,
         );
       }
     }
   }
-
 }

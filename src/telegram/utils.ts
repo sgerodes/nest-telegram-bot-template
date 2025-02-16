@@ -3,45 +3,48 @@ import { configuration } from '@configuration/configuration'; // Import the func
 import { Scenes } from 'telegraf';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 import { I18nTranslations } from '@i18n/i18n.generated';
-import {applyDecorators} from "@nestjs/common";
+import { applyDecorators } from '@nestjs/common';
 
 export type WizardI18nContext = Scenes.WizardContext &
-    TelegrafI18nContext<I18nTranslations>;
-
+  TelegrafI18nContext<I18nTranslations>;
 
 /**
  * Generic function to create role-based decorators.
  */
 function RestrictToIds(getIds: (config: any) => Set<number>) {
-    return function (target: any, key: string | symbol, descriptor: PropertyDescriptor) {
-        const config = configuration();
-
-        if (!config?.telegram?.telegramIds) {
-            throw new Error('Telegram configuration is missing or invalid');
-        }
-
-        const allowedIds = getIds(config); // Get the specific role-based IDs
-
-        applyDecorators(RestrictToTelegramIds(allowedIds))(target, key, descriptor);
-
-        return descriptor;
-    };
+  return function (
+    target: any,
+    key: string | symbol,
+    descriptor: PropertyDescriptor,
+  ) {
+    const config = configuration();
+    if (!config?.telegram?.telegramIds) {
+      throw new Error('Telegram configuration is missing or invalid');
+    }
+    const allowedIds = getIds(config); // Get the specific role-based IDs
+    applyDecorators(RestrictToTelegramIds(allowedIds))(target, key, descriptor);
+    return descriptor;
+  };
 }
 
 /**
  * Allows access to both admins and the owner.
  */
 export function AdminOnly() {
-    return RestrictToIds(config =>
-        new Set<number>([...config.telegram.telegramIds.adminTelegramIds, config.telegram.telegramIds.ownerTelegramId])
-    );
+  return RestrictToIds(
+    (config) =>
+      new Set<number>([
+        ...config.telegram.telegramIds.adminTelegramIds,
+        config.telegram.telegramIds.ownerTelegramId,
+      ]),
+  );
 }
 
 /**
  * Allows access only to the owner.
  */
 export function OwnerOnly() {
-    return RestrictToIds(config =>
-        new Set<number>([config.telegram.telegramIds.ownerTelegramId])
-    );
+  return RestrictToIds(
+    (config) => new Set<number>([config.telegram.telegramIds.ownerTelegramId]),
+  );
 }

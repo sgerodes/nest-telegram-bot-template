@@ -4,11 +4,13 @@ import {
   IsOptional,
   IsBoolean,
   IsArray,
-  IsObject, Max, IsInt,
+  IsObject,
+  Max,
+  IsInt,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import {IsTelegramId} from "@configuration/validation/utils";
+import { IsTelegramId } from '@configuration/validation/utils';
 
 export class TelegramBotConfig {
   @IsString()

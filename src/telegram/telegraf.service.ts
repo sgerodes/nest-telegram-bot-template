@@ -73,6 +73,12 @@ export class TelegrafService {
     this.logger.debug(`Poll sent successfully id=${response.poll.id}`);
   }
 
+  @CatchErrors
+  async getBotName(): Promise<string> {
+    const botInfo = await this.bot.telegram.getMe();
+    return botInfo.username;
+  }
+
   async updateMetadata() {
     // Will default to the fallback language of i18n and will update the default lang of the telegram bot
     const default_language_code = '';

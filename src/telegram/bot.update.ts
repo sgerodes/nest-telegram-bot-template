@@ -33,6 +33,9 @@ export class BotUpdate {
     if (this.telegramConfig.bot.updateMetadata) {
       telegrafService.updateMetadata(); // TODO update on metadata change and respect the time to update the metadata
     }
+    telegrafService.getBotName().then(botName => {
+      this.logger.log(`Starting bot '${botName}'`);
+    })
   }
 
   @Start()

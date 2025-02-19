@@ -3,17 +3,17 @@ import {
   Action,
   Command,
   // Context as NestjsTelegrafContext,
-  Ctx,
+  Ctx, Hears, On,
   Start,
   Update,
 } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import {
-  BOT_COMMANDS,
+  BOT_COMMANDS, BOT_ON,
   SCENES,
   TELEGRAM_BTN_ACTIONS,
 } from '@configuration/telegramConstants';
-import { InlineKeyboardButton } from '@telegraf/types';
+import {InlineKeyboardButton, PollAnswer} from '@telegraf/types';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { i18nKeys } from '@i18n/i18n.keys';
@@ -65,6 +65,7 @@ export class BotUpdate {
     });
   }
 
+
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
     await this.telegrafService.sendQuizToChatId(
@@ -88,6 +89,40 @@ export class BotUpdate {
     const message = ctx.t(i18nKeys.i18n.menus.hello.message);
     await ctx.reply(message);
     await ctx.scene.enter(SCENES.SCENE_HELLO);
+  }
+
+
+  @On(BOT_ON.POLL_ANSWER)
+  async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
+    // const pollAnswer: PollAnswer = ctx.update.poll_answer;
+    const pollAnswer: PollAnswer = ctx.pollAnswer;
+
+
+    const userId = pollAnswer.user.id;
+    const pollId = pollAnswer.poll_id;
+    const selectedOption = pollAnswer.option_ids[0];
+    this.logger.log(
+        `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
+    );
+  }
+
+  @Hears(new RegExp('^getById (-?\\d+)$'))
+  async hearsHi(@Ctx() ctx: WizardI18nContext) {
+
+    const match = ctx.text.match(/^getById (-?\d+)$/);
+    if (!match) {
+      await ctx.reply('❌ Invalid format! Use: getById <chat_id>');
+      return;
+    }
+
+    const chatId = parseInt(match[1], 10);
+    const chatName = await this.telegrafService.getChatNameById(chatId);
+
+    if (chatName) {
+      await ctx.reply(`✅ Chat Name: ${chatName}`);
+    } else {
+      await ctx.reply('❌ Unable to retrieve chat name. The bot might not have access.');
+    }
   }
 
   getCloseButton(ctx: WizardI18nContext): InlineKeyboardButton {

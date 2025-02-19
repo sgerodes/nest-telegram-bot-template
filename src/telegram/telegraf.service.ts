@@ -8,6 +8,8 @@ import { TelegramConfig } from '@configuration/validation/configuration.validato
 import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { CatchErrors } from '@telegram/decorators';
+import {PollAnswer} from "@telegraf/types";
+import {Cacheable} from "typescript-cacheable";
 
 @Injectable()
 export class TelegrafService {
@@ -18,7 +20,9 @@ export class TelegrafService {
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly telegramConfig: TelegramConfig,
     private readonly languageService: LanguageService,
-  ) {}
+  ) {
+    // this.setupListeners();
+  }
 
   @CatchErrors
   async sendMessageToChatId(chatId: number | string, text: string) {
@@ -48,7 +52,7 @@ export class TelegrafService {
         explanation: explanation,
       },
     );
-    this.logger.debug(`Quiz sent successfully id=${response.poll.id}`);
+    this.logger.debug(`Quiz sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`);
   }
 
   @CatchErrors
@@ -70,13 +74,30 @@ export class TelegrafService {
         explanation: explanation,
       },
     );
-    this.logger.debug(`Poll sent successfully id=${response.poll.id}`);
+    this.logger.debug(`Poll sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`);
   }
 
   @CatchErrors
   async getBotName(): Promise<string> {
     const botInfo = await this.bot.telegram.getMe();
     return botInfo.username;
+  }
+
+  @CatchErrors
+  @Cacheable({ ttl: 5 * 60 * 1000 , cacheUndefined: false}) // ttl milliseconds
+  async getChatNameById(chatId: number | string): Promise<string | null> {
+    const chat = await this.bot.telegram.getChat(chatId);
+
+    if ('title' in chat) {
+      return chat.title; // For groups, supergroups, and channels
+    }
+    if ('username' in chat) {
+      return `@${chat.username}`; // For public users or channels with usernames
+    }
+    if ('first_name' in chat) {
+      return chat.first_name; // For private chats
+    }
+    return null;
   }
 
   async updateMetadata() {

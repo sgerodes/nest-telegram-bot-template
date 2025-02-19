@@ -107,7 +107,7 @@ export class BotUpdate {
   }
 
   @Hears(new RegExp('^getById (-?\\d+)$'))
-  async hearsHi(@Ctx() ctx: WizardI18nContext) {
+  async hearsGetById(@Ctx() ctx: WizardI18nContext) {
 
     const match = ctx.text.match(/^getById (-?\d+)$/);
     if (!match) {

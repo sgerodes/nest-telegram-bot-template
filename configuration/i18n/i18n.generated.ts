@@ -20,6 +20,30 @@ export type I18nTranslations = {
                 "close": string;
             };
         };
+        "command": {
+            "start": {
+                "message": string;
+                "buttons": {
+                    "welcome_button": string;
+                };
+            };
+            "help": {
+                "message": string;
+            };
+            "hello": {
+                "message": string;
+                "scene": {
+                    "first_message": string;
+                    "second_message": string;
+                };
+            };
+            "helloPrivate": {
+                "message": string;
+            };
+            "helloGroup": {
+                "message": string;
+            };
+        };
         "menus": {
             "start": {
                 "message": string;
@@ -32,7 +56,6 @@ export type I18nTranslations = {
                 "message": string;
                 "scene": {
                     "first_message": string;
-                    "second_message": string;
                 };
             };
         };

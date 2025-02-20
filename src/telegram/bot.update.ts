@@ -3,7 +3,7 @@ import {
   Action,
   Command,
   // Context as NestjsTelegrafContext,
-  Ctx, Hears, On,
+  Ctx, Hears, Help, On,
   Start,
   Update,
 } from 'nestjs-telegraf';
@@ -20,6 +20,8 @@ import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { AdminOnly, WizardI18nContext } from '@telegram/utils';
 import {GroupChatOnly, PrivateChatOnly} from "@telegram/decorators";
+import {I18nTranslations} from "@i18n/i18n.generated";
+import {TelegrafI18nContext} from "nestjs-telegraf-i18n";
 
 @Update()
 export class BotUpdate {
@@ -49,11 +51,11 @@ export class BotUpdate {
         telegramFirstName: ctx.from.first_name,
       });
     }
-    const message = ctx.t(i18nKeys.i18n.menus.start.message);
+    const message = ctx.t(i18nKeys.i18n.command.start.message);
     const buttons: InlineKeyboardButton[][] = [
       [
         {
-          text: ctx.t(i18nKeys.i18n.menus.start.buttons.welcome_button),
+          text: ctx.t(i18nKeys.i18n.command.start.buttons.welcome_button),
           url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
         },
       ],
@@ -69,13 +71,6 @@ export class BotUpdate {
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
     await this.telegrafService.sendQuizToChatId(
-      this.telegramConfig.telegramIds.playgroundChannelId,
-      'Who is the best?',
-      ['Me', 'You', 'All'],
-      2,
-      true,
-    );
-    await this.telegrafService.sendQuizToChatId(
       this.telegramConfig.telegramIds.playgroundGroupId,
       'Who is the best?',
       ['Me', 'You', 'All'],
@@ -85,16 +80,40 @@ export class BotUpdate {
   }
 
   @Command(BOT_COMMANDS.HELLO)
+  @PrivateChatOnly()
   async helloCommand(@Ctx() ctx: WizardI18nContext) {
-    const message = ctx.t(i18nKeys.i18n.menus.hello.message);
+    const message = ctx.t(i18nKeys.i18n.command.hello.message);
     await ctx.reply(message);
     await ctx.scene.enter(SCENES.SCENE_HELLO);
   }
 
 
+
+  @Command(BOT_COMMANDS.HELLO_PRIVATE)
+  @PrivateChatOnly()
+  async helloPrivate(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
+    const message = ctx.t(i18nKeys.i18n.command.helloPrivate.message);
+    await ctx.reply(message);
+  }
+
+
+  @Command(BOT_COMMANDS.HELLO_GROUP)
+  @GroupChatOnly()
+  async helloGroup(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
+    const message = ctx.t(i18nKeys.i18n.command.helloGroup.message);
+    await ctx.reply(message);
+  }
+
+
+  @Command(BOT_COMMANDS.HELLO_RESTRICTED)
+  @PrivateChatOnly()
+  async helloRestrictedPrivate(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
+    const message = ctx.t(i18nKeys.i18n.command.helloPrivate.message);
+    await ctx.reply(message);
+  }
+
   @On(BOT_ON.POLL_ANSWER)
   async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
-    // const pollAnswer: PollAnswer = ctx.update.poll_answer;
     const pollAnswer: PollAnswer = ctx.pollAnswer;
 
 
@@ -135,5 +154,10 @@ export class BotUpdate {
   @Action(TELEGRAM_BTN_ACTIONS.CLOSE)
   async close(@Ctx() ctx: TelegrafContext) {
     await ctx.deleteMessage();
+  }
+
+  @Help()
+  async help(@Ctx() ctx: TelegrafContext) {
+    await ctx.reply('Send me a sticker');
   }
 }

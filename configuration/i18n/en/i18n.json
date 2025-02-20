@@ -13,12 +13,15 @@
       "close": "❌ Close"
     }
   },
-  "menus": {
+  "command": {
     "start": {
       "message": "Welcome",
       "buttons": {
         "welcome_button": "Lets do it"
       }
+    },
+    "help": {
+      "message": "Welcome"
     },
     "hello": {
       "message": "Hello, entering scene",
@@ -26,6 +29,12 @@
         "first_message": "first hello scene step",
         "second_message": "last hello scene step"
       }
+    },
+    "helloPrivate": {
+      "message": "Hello private chat"
+    },
+    "helloGroup": {
+      "message": "Hello group"
     }
   }
 }

@@ -2,6 +2,9 @@ export enum BOT_COMMANDS {
   START = 'start',
   HELLO = 'hello',
   QUIZ = 'quiz',
+  HELLO_PRIVATE = 'hello_private',
+  HELLO_GROUP = 'hello_group',
+  HELLO_RESTRICTED = 'hello_restricted',
 }
 
 export const TELEGRAM_BTN_ACTIONS = {

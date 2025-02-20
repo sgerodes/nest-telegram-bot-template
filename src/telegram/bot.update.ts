@@ -88,30 +88,6 @@ export class BotUpdate {
   }
 
 
-
-  @Command(BOT_COMMANDS.HELLO_PRIVATE)
-  @PrivateChatOnly()
-  async helloPrivate(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
-    const message = ctx.t(i18nKeys.i18n.command.helloPrivate.message);
-    await ctx.reply(message);
-  }
-
-
-  @Command(BOT_COMMANDS.HELLO_GROUP)
-  @GroupChatOnly()
-  async helloGroup(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
-    const message = ctx.t(i18nKeys.i18n.command.helloGroup.message);
-    await ctx.reply(message);
-  }
-
-
-  @Command(BOT_COMMANDS.HELLO_RESTRICTED)
-  @PrivateChatOnly()
-  async helloRestrictedPrivate(@Ctx() ctx: TelegrafI18nContext<I18nTranslations>) {
-    const message = ctx.t(i18nKeys.i18n.command.helloPrivate.message);
-    await ctx.reply(message);
-  }
-
   @On(BOT_ON.POLL_ANSWER)
   async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
     const pollAnswer: PollAnswer = ctx.pollAnswer;

@@ -130,7 +130,7 @@ class ChatTypeGuard implements CanActivate {
     if (!isAllowed) {
       const calledFrom = `id=${telegrafContext?.from?.id}, first_name=${telegrafContext?.from?.first_name}, last_name=${telegrafContext?.from?.last_name}, username=${telegrafContext?.from?.username}`;
       this.logger.debug(
-          `Function "${this.functionName}" was called from chat type "${chatType}" (${calledFrom}) but is restricted to: ${this.allowedChatTypesString}`
+          `Function "${this.functionName}" was called from chat type "${chatType}" but is restricted to [${this.allowedChatTypesString}]. Caller: (${calledFrom})`
       );
     }
 

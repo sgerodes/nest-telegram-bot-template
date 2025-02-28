@@ -14,6 +14,7 @@ import { session } from 'telegraf';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { loggingMiddleware } from '@telegram/logging.telegraf.middleware';
 import { SceneHello } from '@telegram/scenes/hello.scene';
+import {I18nLoggerInterceptor} from "@telegram/I18nLoggerInterceptor";
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { SceneHello } from '@telegram/scenes/hello.scene';
     DatabaseModule,
     LanguageModule,
   ],
-  providers: [UserRepositoryService, BotUpdate, SceneHello, TelegrafService],
+  providers: [UserRepositoryService, BotUpdate, SceneHello, TelegrafService, I18nLoggerInterceptor],
 })
 export class TelegramModule {}

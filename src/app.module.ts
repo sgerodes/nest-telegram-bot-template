@@ -33,7 +33,7 @@ import {
         fallbacks: telegramI18Config.fallbacks,
         loaderOptions: { path: telegramI18Config.i18nFolderPath },
         typesOutputPath: telegramI18Config.typesOutputPath,
-        logging: telegramI18Config.logging,
+        // logging: telegramI18Config.logging,
       }),
       resolvers: [AcceptLanguageResolver],
     }),

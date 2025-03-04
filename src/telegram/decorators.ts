@@ -34,7 +34,9 @@ export function CatchErrors(
   return descriptor;
 }
 
-function getTelegrafContextFromExecutionContext(executionContext: ExecutionContext): TelegrafContext | null {
+function getTelegrafContextFromExecutionContext(
+  executionContext: ExecutionContext,
+): TelegrafContext | null {
   const contextType = executionContext?.getType<string>() ?? undefined;
   const args = executionContext.getArgs();
   let telegrafContext: TelegrafContext;
@@ -47,7 +49,7 @@ function getTelegrafContextFromExecutionContext(executionContext: ExecutionConte
   if (earlyBreak || !(telegrafContext instanceof TelegrafContext)) {
     return null;
   }
-  return telegrafContext
+  return telegrafContext;
 }
 
 @Injectable()
@@ -66,9 +68,12 @@ export class TelegrafIdGuard implements CanActivate {
   }
 
   canActivate(executionContext: ExecutionContext): boolean {
-    let telegrafContext = getTelegrafContextFromExecutionContext(executionContext);
+    let telegrafContext =
+      getTelegrafContextFromExecutionContext(executionContext);
     if (!telegrafContext) {
-      this.logger.warn(`Telegraf Guard ${this.constructor.name} was used on non-telegraf context}`);
+      this.logger.warn(
+        `Telegraf Guard ${this.constructor.name} was used on non-telegraf context}`,
+      );
       return false;
     }
 
@@ -100,7 +105,6 @@ export function RestrictToTelegramIds(allowedIds: Iterable<number>) {
   };
 }
 
-
 /**
  * Generic guard to restrict access based on chat type.
  */
@@ -109,16 +113,20 @@ class ChatTypeGuard implements CanActivate {
   private readonly logger = new Logger(ChatTypeGuard.name);
   private readonly allowedChatTypesString: string;
 
-  constructor(private readonly allowedChatTypes: Set<string>, private readonly functionName: string) {
+  constructor(
+    private readonly allowedChatTypes: Set<string>,
+    private readonly functionName: string,
+  ) {
     this.allowedChatTypesString = JSON.stringify([...allowedChatTypes]);
 
     this.logger.debug(
-        `ChatTypeGuard initialized for function "${this.functionName}" with allowed chat types: ${this.allowedChatTypesString}`
+      `ChatTypeGuard initialized for function "${this.functionName}" with allowed chat types: ${this.allowedChatTypesString}`,
     );
   }
 
   canActivate(executionContext: ExecutionContext): boolean {
-    let telegrafContext = getTelegrafContextFromExecutionContext(executionContext);
+    let telegrafContext =
+      getTelegrafContextFromExecutionContext(executionContext);
     if (!telegrafContext) {
       this.logger.warn(`ChatTypeGuard was used on a non-Telegraf context`);
       return false;
@@ -130,7 +138,7 @@ class ChatTypeGuard implements CanActivate {
     if (!isAllowed) {
       const calledFrom = `id=${telegrafContext?.from?.id}, first_name=${telegrafContext?.from?.first_name}, last_name=${telegrafContext?.from?.last_name}, username=${telegrafContext?.from?.username}`;
       this.logger.debug(
-          `Function "${this.functionName}" was called from chat type "${chatType}" but is restricted to [${this.allowedChatTypesString}]. Caller: (${calledFrom})`
+        `Function "${this.functionName}" was called from chat type "${chatType}" but is restricted to [${this.allowedChatTypesString}]. Caller: (${calledFrom})`,
       );
     }
 
@@ -142,12 +150,16 @@ class ChatTypeGuard implements CanActivate {
  * Generic decorator factory for chat type restrictions.
  */
 function RestrictToChatType(...allowedTypes: string[]) {
-  return function (target: any, key: string | symbol, descriptor: PropertyDescriptor) {
+  return function (
+    target: any,
+    key: string | symbol,
+    descriptor: PropertyDescriptor,
+  ) {
     const functionName = key.toString();
 
     return applyDecorators(
-        SetMetadata('functionName', functionName),
-        UseGuards(new ChatTypeGuard(new Set(allowedTypes), functionName))
+      SetMetadata('functionName', functionName),
+      UseGuards(new ChatTypeGuard(new Set(allowedTypes), functionName)),
     )(target, key, descriptor);
   };
 }

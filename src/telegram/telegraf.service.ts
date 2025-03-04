@@ -8,8 +8,8 @@ import { TelegramConfig } from '@configuration/validation/configuration.validato
 import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { CatchErrors } from '@telegram/decorators';
-import {PollAnswer} from "@telegraf/types";
-import {Cacheable} from "typescript-cacheable";
+import { PollAnswer } from '@telegraf/types';
+import { Cacheable } from 'typescript-cacheable';
 
 @Injectable()
 export class TelegrafService {
@@ -52,7 +52,9 @@ export class TelegrafService {
         explanation: explanation,
       },
     );
-    this.logger.debug(`Quiz sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`);
+    this.logger.debug(
+      `Quiz sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`,
+    );
   }
 
   @CatchErrors
@@ -74,7 +76,9 @@ export class TelegrafService {
         explanation: explanation,
       },
     );
-    this.logger.debug(`Poll sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`);
+    this.logger.debug(
+      `Poll sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`,
+    );
   }
 
   @CatchErrors
@@ -84,7 +88,7 @@ export class TelegrafService {
   }
 
   @CatchErrors
-  @Cacheable({ ttl: 5 * 60 * 1000 , cacheUndefined: false}) // ttl milliseconds
+  @Cacheable({ ttl: 5 * 60 * 1000, cacheUndefined: false }) // ttl milliseconds
   async getChatNameById(chatId: number | string): Promise<string | null> {
     const chat = await this.bot.telegram.getChat(chatId);
 

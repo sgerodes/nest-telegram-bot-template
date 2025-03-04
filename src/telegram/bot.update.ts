@@ -3,25 +3,29 @@ import {
   Action,
   Command,
   // Context as NestjsTelegrafContext,
-  Ctx, Hears, Help, On,
+  Ctx,
+  Hears,
+  Help,
+  On,
   Start,
   Update,
 } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import {
-  BOT_COMMANDS, BOT_ON,
+  BOT_COMMANDS,
+  BOT_ON,
   SCENES,
   TELEGRAM_BTN_ACTIONS,
 } from '@configuration/telegramConstants';
-import {InlineKeyboardButton, PollAnswer} from '@telegraf/types';
+import { InlineKeyboardButton, PollAnswer } from '@telegraf/types';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { AdminOnly, WizardI18nContext } from '@telegram/utils';
-import {GroupChatOnly, PrivateChatOnly} from "@telegram/decorators";
-import {I18nTranslations} from "@i18n/i18n.generated";
-import {TelegrafI18nContext} from "nestjs-telegraf-i18n";
+import { GroupChatOnly, PrivateChatOnly } from '@telegram/decorators';
+import { I18nTranslations } from '@i18n/i18n.generated';
+import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 
 @Update()
 export class BotUpdate {
@@ -35,9 +39,9 @@ export class BotUpdate {
     if (this.telegramConfig.bot.updateMetadata) {
       telegrafService.updateMetadata(); // TODO update on metadata change and respect the time to update the metadata
     }
-    telegrafService.getBotName().then(botName => {
+    telegrafService.getBotName().then((botName) => {
       this.logger.log(`Starting bot '${botName}'`);
-    })
+    });
   }
 
   @Start()
@@ -67,7 +71,6 @@ export class BotUpdate {
     });
   }
 
-
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
     await this.telegrafService.sendQuizToChatId(
@@ -87,23 +90,20 @@ export class BotUpdate {
     await ctx.scene.enter(SCENES.SCENE_HELLO);
   }
 
-
   @On(BOT_ON.POLL_ANSWER)
   async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
     const pollAnswer: PollAnswer = ctx.pollAnswer;
-
 
     const userId = pollAnswer.user.id;
     const pollId = pollAnswer.poll_id;
     const selectedOption = pollAnswer.option_ids[0];
     this.logger.log(
-        `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
+      `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
     );
   }
 
   @Hears(new RegExp('^getById (-?\\d+)$'))
   async hearsGetById(@Ctx() ctx: WizardI18nContext) {
-
     const match = ctx.text.match(/^getById (-?\d+)$/);
     if (!match) {
       await ctx.reply('❌ Invalid format! Use: getById <chat_id>');
@@ -116,7 +116,9 @@ export class BotUpdate {
     if (chatName) {
       await ctx.reply(`✅ Chat Name: ${chatName}`);
     } else {
-      await ctx.reply('❌ Unable to retrieve chat name. The bot might not have access.');
+      await ctx.reply(
+        '❌ Unable to retrieve chat name. The bot might not have access.',
+      );
     }
   }
 

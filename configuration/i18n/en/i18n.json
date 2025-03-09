@@ -6,7 +6,8 @@
   },
   "command_descriptions": {
     "start": "▶️ Start Bot",
-    "hello": "\uD83D\uDC4B Hello world"
+    "hello": "\uD83D\uDC4B Hello world",
+    "quiz": "\uD83E\uDDE0 test your skills \uD83D\uDE0F"
   },
   "shared": {
     "buttons": {

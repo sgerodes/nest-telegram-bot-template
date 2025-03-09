@@ -14,6 +14,7 @@ export type I18nTranslations = {
         "command_descriptions": {
             "start": string;
             "hello": string;
+            "quiz": string;
         };
         "shared": {
             "buttons": {

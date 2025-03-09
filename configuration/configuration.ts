@@ -26,8 +26,11 @@ export const configuration = (): RootConfig => ({
       playgroundChannelId: -1002377415957,
       playgroundGroupId: -1001864900132,
       ownerTelegramId: 41459859, //sg
-      adminTelegramIds: [],
-    }
+      adminTelegramIds: [219327518, 399103080, 49576483, 7304566667],
+    },
+    quiz: {
+      quizQuestionDirectory: getAbsolutePathForProjectDirectory('resources/quiz/'),
+    },
   },
   database: {
     url: process.env.DATABASE_URL,

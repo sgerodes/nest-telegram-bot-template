@@ -73,13 +73,9 @@ export class BotUpdate {
 
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
-    await this.telegrafService.sendQuizToChatId(
-      this.telegramConfig.telegramIds.playgroundGroupId,
-      'Who is the best?',
-      ['Me', 'You', 'All'],
-      0,
-      false,
-    );
+    const message = ctx.t(i18nKeys.i18n.command.hello.message);
+    await ctx.reply(message);
+    await ctx.scene.enter(SCENES.SCENE_QUIZ);
   }
 
   @Command(BOT_COMMANDS.HELLO)

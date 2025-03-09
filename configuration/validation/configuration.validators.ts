@@ -59,6 +59,11 @@ export class TelegramIdsConfig {
   adminTelegramIds!: number[];
 }
 
+export class QuizConfig {
+  @IsString()
+  quizQuestionDirectory!: string;
+}
+
 export class TelegramConfig {
   @Type(() => TelegramBotConfig)
   @ValidateNested()
@@ -71,6 +76,10 @@ export class TelegramConfig {
   @Type(() => TelegramIdsConfig)
   @ValidateNested()
   telegramIds!: TelegramIdsConfig;
+
+  @Type(() => QuizConfig)
+  @ValidateNested()
+  quiz: QuizConfig;
 }
 
 export class DatabaseConfig {

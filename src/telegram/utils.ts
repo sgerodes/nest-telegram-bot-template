@@ -51,3 +51,10 @@ export function OwnerOnly() {
     (config) => new Set<number>([config.telegram.telegramIds.ownerTelegramId]),
   );
 }
+
+export function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map(value => ({ value, sort: Math.random() })) // Assign random sort key
+    .sort((a, b) => a.sort - b.sort) // Sort based on the key
+    .map(({ value }) => value); // Extract values
+}

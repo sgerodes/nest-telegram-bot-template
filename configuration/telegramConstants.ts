@@ -13,6 +13,7 @@ export const TELEGRAM_BTN_ACTIONS = {
 
 export const SCENES = {
   SCENE_HELLO: 'scene_hello',
+  SCENE_QUIZ: 'scene_quiz',
 };
 
 export enum BOT_ON {

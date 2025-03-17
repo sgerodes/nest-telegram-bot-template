@@ -1,62 +1,21 @@
-import { SCENES } from '@configuration/telegramConstants';
-import { Ctx, SceneEnter, Wizard } from 'nestjs-telegraf';
+import { BOT_ON, SCENES } from '@configuration/telegramConstants';
+import { Action, Ctx, SceneEnter, Wizard } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import { Scenes } from 'telegraf';
-import { ITelegrafI18nContext } from '@telegram/interface';
+import { ITelegrafI18nContext } from '@telegram/interfaces';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { TelegrafService } from '@telegram/telegraf.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import { shuffleArray } from '@telegram/utils';
-
-
-export class QuizQuestion {
-  question: string;
-  answers: string[];
-  correctAnswer: number;
-  advice: string;
-
-  constructor(
-    question: string,
-    answers: string[],
-    correctAnswer: number,
-    advice: string
-  ) {
-    this.question = question;
-    this.answers = answers;
-    this.correctAnswer = correctAnswer;
-    this.advice = advice;
-  }
-
-  static fromJSON(json: any): QuizQuestion {
-    return new QuizQuestion(
-      json.question,
-      json.answers,
-      json.correct_answer,
-      json.advice
-    );
-  }
-}
-
-export class Quiz {
-  questions: QuizQuestion[];
-
-  constructor(questions: QuizQuestion[]) {
-    this.questions = questions;
-  }
-
-  static fromJSON(jsonArray: any[]): Quiz {
-    const questions = jsonArray.map(QuizQuestion.fromJSON);
-    return new Quiz(questions);
-  }
-}
+import { Quiz, QuizQuestion } from '@telegram/models';
 
 @Wizard(SCENES.SCENE_QUIZ)
 export class SceneQuiz {
   private readonly logger = new Logger(this.constructor.name);
   private readonly quizzes: Quiz[] = [];
-
+  private readonly userAnsweredQuestions: Record<string, Set<string>> = {};
 
   constructor(
     private readonly telegramConfig: TelegramConfig,
@@ -101,9 +60,9 @@ export class SceneQuiz {
   }
 
   @SceneEnter()
-  async onEnter(
-    @Ctx() ctx: Scenes.WizardContext & ITelegrafI18nContext<I18nTranslations>,
-  ) {
+  async onEnter(@Ctx() ctx: Scenes.WizardContext & ITelegrafI18nContext<I18nTranslations>) {
+    const userId = ctx.from.id.toString();
+
     if (this.quizzes.length === 0) {
       this.logger.warn('No quizzes loaded.');
       await ctx.reply('No quizzes available.');
@@ -111,30 +70,68 @@ export class SceneQuiz {
       return;
     }
 
-    const randomQuiz = this.quizzes[Math.floor(Math.random() * this.quizzes.length)];
+    // let availableQuestions: QuizQuestion[] = [];
+    // this.quizzes.forEach(quiz => {
+    //   quiz.questions.forEach(question => {
+    //     if (!this.userAnsweredQuestions[userId]?.has(question.question)) {
+    //       availableQuestions.push(question);
+    //     }
+    //   });
+    // });
+    //
+    // if (availableQuestions.length === 0) {
+    //   await ctx.reply("You've answered all available questions! 🎉");
+    //   await ctx.scene.leave();
+    //   return;
+    // }
 
-    if (randomQuiz.questions.length === 0) {
-      this.logger.warn('Selected quiz has no questions.');
-      await ctx.reply('Selected quiz has no questions.');
-      await ctx.scene.leave();
-      return;
-    }
+    // const randomQuestion: Quiz = this.quizzes[Math.floor(Math.random() * this.quizzes.length)];
+    //
+    // const correctAnswerText: string = randomQuestion.questions.answers[randomQuestion.correctAnswer];
+    // const shuffledAnswers = shuffleArray([...randomQuestion.answers]);
+    // const newCorrectAnswerIndex = shuffledAnswers.indexOf(correctAnswerText);
+    //
+    // // if (!this.userAnsweredQuestions[userId]) {
+    // //   this.userAnsweredQuestions[userId] = new Set();
+    // // }
+    // // this.userAnsweredQuestions[userId].add(randomQuestion.question);
+    //
+    // await this.telegrafService.sendQuizToChatId(
+    //   ctx.from.id.toString(),
+    //   randomQuestion.question,
+    //   shuffledAnswers,
+    //   newCorrectAnswerIndex,
+    //   false,
+    // );
 
-    const randomQuestion = randomQuiz.questions[Math.floor(Math.random() * randomQuiz.questions.length)];
-
-    const correctAnswerText = randomQuestion.answers[randomQuestion.correctAnswer];
-    const shuffledAnswers = shuffleArray([...randomQuestion.answers]);
-    const newCorrectAnswerIndex = shuffledAnswers.indexOf(correctAnswerText);
-
-    // Send the randomized quiz question
-    await this.telegrafService.sendQuizToChatId(
-      ctx.from.id.toString(),
-      randomQuestion.question,
-      shuffledAnswers,
-      newCorrectAnswerIndex,
-      false,
-    );
-
-    await ctx.scene.leave();
+    // if (!ctx.wizard.state) {
+    //   (ctx.wizard.state as Record<string, any>) = {};
+    // }
+    //
+    // (ctx.wizard.state as Record<string, any>).quizData = {
+    //   question: randomQuestion.question,
+    //   correctAnswerIndex: newCorrectAnswerIndex,
+    // };
   }
+  //
+  // @Action(BOT_ON.POLL_ANSWER)
+  // async onAnswer(@Ctx() ctx: Scenes.WizardContext & ITelegrafI18nContext<I18nTranslations>) {
+  //   const userId = ctx.from.id.toString();
+  //   const callbackQuery = ctx.callbackQuery as { data?: string };
+  //   const answerIndex = parseInt(callbackQuery.data || '-1', 10);
+  //
+  //   const quizData = (ctx.wizard.state as Record<string, any>).quizData;
+  //
+  //   if (!quizData) {
+  //     return;
+  //   }
+  //
+  //   const { question, correctAnswerIndex } = quizData;
+  //
+  //   if (answerIndex === correctAnswerIndex) {
+  //     this.userAnsweredQuestions[userId].delete(question);
+  //   }
+  //
+  //   // await this.onEnter(ctx);
+  // }
 }

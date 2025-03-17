@@ -4,7 +4,7 @@ import { Ctx, SceneEnter, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import { WizardI18nContext } from '@telegram/utils';
 import { Scenes } from 'telegraf';
-import { ITelegrafI18nContext } from '@telegram/interface';
+import { ITelegrafI18nContext } from '@telegram/interfaces';
 import { I18nTranslations } from '@i18n/i18n.generated';
 
 @Wizard(SCENES.SCENE_HELLO)

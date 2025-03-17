@@ -73,8 +73,6 @@ export class BotUpdate {
 
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
-    const message = ctx.t(i18nKeys.i18n.command.hello.message);
-    await ctx.reply(message);
     await ctx.scene.enter(SCENES.SCENE_QUIZ);
   }
 

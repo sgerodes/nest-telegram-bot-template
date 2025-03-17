@@ -4,7 +4,7 @@ import { Scenes } from 'telegraf';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { applyDecorators } from '@nestjs/common';
-import { ITelegrafI18nContext } from '@telegram/interface';
+import { ITelegrafI18nContext } from '@telegram/interfaces';
 
 // export type WizardI18nContext = Scenes.WizardContext &
 //     TelegrafI18nContext<I18nTranslations>;

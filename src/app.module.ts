@@ -14,6 +14,9 @@ import {
   validateConfiguration,
   validateEnvironmentVariables,
 } from '@configuration/validation/validation';
+import {
+  I18nKeysValidationServiceService
+} from '@language/i18n-keys-validation-service/i18n-keys-validation-service.service';
 
 @Module({
   imports: [
@@ -40,5 +43,6 @@ import {
     DatabaseModule,
     LanguageModule,
   ],
+  providers: [I18nKeysValidationServiceService]
 })
 export class AppModule {}

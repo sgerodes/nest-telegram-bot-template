@@ -5,6 +5,7 @@ const outputFileName = 'i18n.keys.ts';
 const outputFilePath = `./configuration/i18n/${outputFileName}`;
 const outputObjectName = `i18nKeys`;
 
+
 function generateKeys(obj, path = []) {
   return Object.keys(obj).reduce((acc, key) => {
     const fullPath = [...path, key].join('.');
@@ -16,6 +17,7 @@ function generateKeys(obj, path = []) {
     return acc;
   }, {});
 }
+
 
 const i18nJson = JSON.parse(fs.readFileSync(i18nFilePath, 'utf8'));
 const keysObject = generateKeys({ i18n: i18nJson });

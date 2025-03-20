@@ -42,3 +42,50 @@ export function listFilesInFolder(folderPath: string): string[] {
     return [];
   }
 }
+
+export function readLangKeys(i18nPath: string, languagesToCheck: string[]): object {
+  const langKeys = {};
+
+  for (const lang of languagesToCheck) {
+    const langFolder = path.join(i18nPath, lang);
+    const langFiles = listFilesInFolder(langFolder);
+    let langKeysSet = new Set<string>();
+    for (const f of langFiles) {
+      const fullPath = path.join(i18nPath, lang, f);
+      const jsonObject = readJson(fullPath);
+      const keys = extractJsonKeys(jsonObject);
+      langKeysSet = addSets(langKeysSet, prefixKeysWithFileName(f, keys));
+    }
+    langKeys[lang] = langKeysSet;
+  }
+  return langKeys;
+}
+
+
+export function combinedKeys(langKeys: object): Set<string> {
+  let keys = new Set<string>();
+
+  for (const lang in langKeys) {
+    keys = addSets(keys, langKeys[lang]);
+  }
+
+  return keys;
+}
+
+function prefixKeysWithFileName(fileName: string, keys: Iterable<string>): Set<string> {
+  fileName = path.basename(fileName);
+  const prefix = fileName.replace('.json', '');
+  const prefixedKeys = new Set<string>();
+  for (const key of keys) {
+  prefixedKeys.add(`${prefix}.${key}`);
+}
+return prefixedKeys;
+}
+
+function subtractSets(setA: Set<string>, setB: Set<string>): Set<string> {
+  return new Set([...setA].filter(item => !setB.has(item)));
+}
+
+function addSets(setA: Set<string>, setB: Set<string>): Set<string> {
+  return new Set([...setA, ...setB]);
+}

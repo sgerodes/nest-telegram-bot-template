@@ -3,7 +3,7 @@ import { I18nOptions, I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import * as path from 'path';
 import * as fs from 'fs';
-import { extractJsonKeys, listFilesInFolder, readJson } from '@i18n/i18nUtils';
+import { combinedKeys, extractJsonKeys, listFilesInFolder, readJson, readLangKeys } from '@i18n/i18nUtils';
 
 @Injectable()
 export class I18nKeysValidationServiceService {
@@ -26,8 +26,8 @@ export class I18nKeysValidationServiceService {
 
     const languagesToCheck: string[] = supportedLanguages.filter(lang => !ignoreLanguages.includes(lang));
 
-    const langKeys = this.readLangKeys(i18nPath, languagesToCheck);
-    const allKeys = this.combinedKeys(langKeys);
+    const langKeys = readLangKeys(i18nPath, languagesToCheck);
+    const allKeys = combinedKeys(langKeys);
 
     for (const key of allKeys) {
       const missing: string[] = [];
@@ -46,49 +46,4 @@ export class I18nKeysValidationServiceService {
     }
   }
 
-  private combinedKeys(langKeys: object): Set<string> {
-    let keys = new Set<string>();
-
-    for (const lang in langKeys) {
-      keys = this.addSets(keys, langKeys[lang]);
-    }
-
-    return keys;
-  }
-
-  private readLangKeys(i18nPath: string, languagesToCheck: string[]): object {
-    const langKeys = {};
-
-    for (const lang of languagesToCheck) {
-      const langFolder = path.join(i18nPath, lang);
-      const langFiles = listFilesInFolder(langFolder);
-      let langKeysSet = new Set<string>();
-      for (const f of langFiles) {
-        const fullPath = path.join(i18nPath, lang, f);
-        const jsonObject = readJson(fullPath);
-        const keys = extractJsonKeys(jsonObject);
-        langKeysSet = this.addSets(langKeysSet, this.prefixKeysWithFileName(f, keys));
-      }
-      langKeys[lang] = langKeysSet;
-    }
-    return langKeys;
-  }
-
-  private prefixKeysWithFileName(fileName: string, keys: Iterable<string>): Set<string> {
-    fileName = path.basename(fileName);
-    const prefix = fileName.replace('.json', '');
-    const prefixedKeys = new Set<string>();
-    for (const key of keys) {
-      prefixedKeys.add(`${prefix}.${key}`);
-    }
-    return prefixedKeys;
-  }
-
-  private subtractSets(setA: Set<string>, setB: Set<string>): Set<string> {
-    return new Set([...setA].filter(item => !setB.has(item)));
-  }
-
-  private addSets(setA: Set<string>, setB: Set<string>): Set<string> {
-    return new Set([...setA, ...setB]);
-  }
 }

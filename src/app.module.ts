@@ -42,7 +42,6 @@ import {
     TelegramModule,
     DatabaseModule,
     LanguageModule,
-  ],
-  providers: [I18nKeysValidationServiceService]
+  ]
 })
 export class AppModule {}

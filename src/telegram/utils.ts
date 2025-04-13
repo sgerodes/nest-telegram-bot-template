@@ -9,7 +9,7 @@ import { ITelegrafI18nContext } from '@telegram/interfaces';
 // export type WizardI18nContext = Scenes.WizardContext &
 //     TelegrafI18nContext<I18nTranslations>;
 export type WizardI18nContext = Scenes.WizardContext &
-  ITelegrafI18nContext<I18nTranslations>;
+  TelegrafI18nContext;
 
 /**
  * Generic function to create role-based decorators.

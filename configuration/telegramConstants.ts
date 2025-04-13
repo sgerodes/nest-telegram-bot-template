@@ -5,15 +5,23 @@ export enum BOT_COMMANDS {
   HELLO_PRIVATE = 'hello_private',
   HELLO_GROUP = 'hello_group',
   HELLO_RESTRICTED = 'hello_restricted',
+  QUIZ_MANAGER = 'quiz_manager',
 }
 
 export const TELEGRAM_BTN_ACTIONS = {
   CLOSE: 'id_0_close',
+  QUIZ_ADMIN_CREATE: 'id_1_quiz_create',
+  QUIZ_ADMIN_UPDATE: 'id_2_quiz_update',
+  QUIZ_ADMIN_CREATE_EXAMPLE: 'id_3_quiz_create_example',
+  LEAVE: 'id_4_leave',
+  PREVIEW_QUIZ: 'id_5_preview_quiz',
+  SAVE_QUIZ: 'id_6_save',
 };
 
 export const SCENES = {
   SCENE_HELLO: 'scene_hello',
   SCENE_QUIZ: 'scene_quiz',
+  SCENE_QUIZ_MANAGER: 'scene_quiz_manager',
 };
 
 export enum BOT_ON {

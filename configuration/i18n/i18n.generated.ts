@@ -15,10 +15,12 @@ export type I18nTranslations = {
             "start": string;
             "hello": string;
             "quiz": string;
+            "quiz_manager": string;
         };
         "shared": {
             "buttons": {
                 "close": string;
+                "leave": string;
             };
         };
         "command": {
@@ -36,6 +38,24 @@ export type I18nTranslations = {
                 "scene": {
                     "first_message": string;
                     "second_message": string;
+                };
+            };
+            "quizAdmin": {
+                "scene": {
+                    "enter_message": string;
+                    "create_quiz_question_message": string;
+                    "create_quiz_question_message_example": string;
+                    "error_no_quiz_provided": string;
+                    "error_quiz_has_incorrect_structure": string;
+                    "error_quiz_has_correct_answer_does_not_exists": string;
+                    "create_quiz_can_be_accepted": string;
+                };
+                "buttons": {
+                    "enter_message_update": string;
+                    "enter_message_create": string;
+                    "create_quiz_example": string;
+                    "create_quiz_preview": string;
+                    "save_quiz": string;
                 };
             };
             "helloPrivate": {

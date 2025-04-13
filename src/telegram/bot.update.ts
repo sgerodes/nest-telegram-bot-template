@@ -26,16 +26,17 @@ import { AdminOnly, WizardI18nContext } from '@telegram/utils';
 import { GroupChatOnly, PrivateChatOnly } from '@telegram/decorators';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
+import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
 
 @Update()
-export class BotUpdate {
-  private readonly logger = new Logger(this.constructor.name);
+export class BotUpdate extends BaseTelegramHandler {
 
   constructor(
     private readonly userRepositoryService: UserRepositoryService,
     private readonly telegramConfig: TelegramConfig,
     private readonly telegrafService: TelegrafService,
   ) {
+    super();
     if (this.telegramConfig.bot.updateMetadata) {
       telegrafService.updateMetadata(); // TODO update on metadata change and respect the time to update the metadata
     }
@@ -84,6 +85,13 @@ export class BotUpdate {
     await ctx.scene.enter(SCENES.SCENE_HELLO);
   }
 
+  @Command(BOT_COMMANDS.QUIZ_MANAGER)
+  @PrivateChatOnly()
+  async quizManagerCommand(@Ctx() ctx: WizardI18nContext) {
+    await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER);
+    // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
+  }
+
   @On(BOT_ON.POLL_ANSWER)
   async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
     const pollAnswer: PollAnswer = ctx.pollAnswer;
@@ -114,18 +122,6 @@ export class BotUpdate {
         '❌ Unable to retrieve chat name. The bot might not have access.',
       );
     }
-  }
-
-  getCloseButton(ctx: WizardI18nContext): InlineKeyboardButton {
-    return {
-      text: ctx.t(i18nKeys.i18n.shared.buttons.close),
-      callback_data: TELEGRAM_BTN_ACTIONS.CLOSE,
-    };
-  }
-
-  @Action(TELEGRAM_BTN_ACTIONS.CLOSE)
-  async close(@Ctx() ctx: TelegrafContext) {
-    await ctx.deleteMessage();
   }
 
   @Help()

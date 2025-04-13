@@ -8,28 +8,46 @@ generator client {
   binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
-// Telegram
-
 model User {
   id                Int      @id @default(autoincrement())
   telegramId        BigInt   @unique
   telegramUsername  String?
   telegramFirstName String?
   createdAt         DateTime @default(now())
+
+  UserAnswer UserAnswer[]
 }
 
-// model User {
-//   id                Int      @id @default(autoincrement())
-//   telegramId        BigInt   @unique
-//   telegramUsername  String?
-//   telegramFirstName String?
-//   refLink           String   @unique
-//   inviterId         Int?
-//   createdAt         DateTime @default(now())
-//   updatedAt         DateTime @default(now())
-//
-//   invitedBy User?  @relation("UserInvites", fields: [inviterId], references: [id])
-//   referrals User[] @relation("UserInvites")
-//
-//   @@index([inviterId])
-// }
+model QuizQuestion {
+  id                 Int      @id @default(autoincrement())
+  quizTelegramId     BigInt?  @unique
+  question           String
+  options            String // Stored as json list
+  correctAnswerIndex Int
+  image              Bytes?
+  publishScheduledAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  UserAnswer UserAnswer[]
+
+  @@index([createdAt])
+}
+
+model UserAnswer {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  questionId  Int
+  selectedIdx Int
+  isCorrect   Boolean
+  createdAt   DateTime @default(now())
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([questionId])
+  @@index([questionId, isCorrect])
+  @@index([userId])
+}

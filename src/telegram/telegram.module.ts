@@ -15,6 +15,7 @@ import { TelegrafService } from '@telegram/telegraf.service';
 import { loggingMiddleware } from '@telegram/logging.telegraf.middleware';
 import { SceneHello } from '@telegram/scenes/hello.scene';
 import { SceneQuiz } from '@telegram/scenes/quiz.scene';
+import { SceneQuizManager } from '@telegram/scenes/quizManagerScene.scene';
 
 @Module({
   imports: [
@@ -39,6 +40,6 @@ import { SceneQuiz } from '@telegram/scenes/quiz.scene';
     DatabaseModule,
     LanguageModule,
   ],
-  providers: [UserRepositoryService, BotUpdate, SceneHello, SceneQuiz, TelegrafService],
+  providers: [UserRepositoryService, BotUpdate, SceneHello, SceneQuiz, SceneQuizManager, TelegrafService],
 })
 export class TelegramModule {}

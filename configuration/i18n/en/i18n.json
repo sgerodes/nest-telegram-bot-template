@@ -7,11 +7,13 @@
   "command_descriptions": {
     "start": "▶️ Start Bot",
     "hello": "\uD83D\uDC4B Hello world",
-    "quiz": "\uD83E\uDDE0 test your skills \uD83D\uDE0F"
+    "quiz": "\uD83E\uDDE0 test your skills \uD83D\uDE0F",
+    "quiz_manager": "\uD83D\uDEE0\uFE0F Manage Quizzes"
   },
   "shared": {
     "buttons": {
-      "close": "❌ Close"
+      "close": "❌ Close",
+      "leave": "❌ Leave"
     }
   },
   "command": {
@@ -29,6 +31,25 @@
       "scene": {
         "first_message": "first hello scene step",
         "second_message": "last hello scene step"
+      }
+    },
+    "quizAdmin": {
+      "scene": {
+        "enter_message": "Do you want to create a new quiz question?",
+        "create_quiz_question_message": "Please provide a quiz question",
+        "create_quiz_question_message_example": "Please provide a quiz question in form of:\n<question>\n<comma separated options>\n<correct answer> or <correct answer number>\n\nYou can attach a picture to the message.\n Example: What is the third planet in the solar system?\nEarth,Mercury,Pluto,Jupiter\nEarth (or 1)",
+        "error_no_quiz_provided": "You have not provided any text. Please repeat.",
+        "error_quiz_has_incorrect_structure": "The structure of your message is incorrect. Retry",
+        "error_quiz_has_correct_answer_does_not_exists": "The correct answer does not exists in the provided answers",
+        "create_quiz_can_be_accepted": "The Question is structured correctly",
+        "create_quiz_saving": "Saving quiz"
+      },
+      "buttons": {
+        "enter_message_update": "Update",
+        "enter_message_create": "Create",
+        "create_quiz_example": "Example",
+        "create_quiz_preview": "Preview",
+        "save_quiz": "Save quiz"
       }
     },
     "helloPrivate": {

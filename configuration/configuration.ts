@@ -35,4 +35,7 @@ export const configuration = (): RootConfig => ({
   database: {
     url: process.env.DATABASE_URL,
   },
+  ton: {
+    paymentAddress: process.env.TON_PAYMENT_ADDRESS,
+  },
 });

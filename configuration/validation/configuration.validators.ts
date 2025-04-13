@@ -88,6 +88,12 @@ export class DatabaseConfig {
   url!: string;
 }
 
+export class TonConfig {
+  @IsString()
+  @IsNotEmpty()
+  paymentAddress!: string;
+}
+
 export class RootConfig {
   @Type(() => TelegramConfig)
   @ValidateNested()
@@ -96,4 +102,8 @@ export class RootConfig {
   @Type(() => DatabaseConfig)
   @ValidateNested()
   database!: DatabaseConfig;
+
+  @Type(() => TonConfig)
+  @ValidateNested()
+  ton!: TonConfig;
 }

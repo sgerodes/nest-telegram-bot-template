@@ -14,6 +14,7 @@ import {
   validateConfiguration,
   validateEnvironmentVariables,
 } from '@configuration/validation/validation';
+import { TonModule } from './ton/ton.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import {
     TelegramModule,
     DatabaseModule,
     LanguageModule,
+    TonModule,
   ],
 })
 export class AppModule {}

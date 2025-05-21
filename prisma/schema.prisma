@@ -18,10 +18,10 @@ model QuizQuestion {
   question           String
   answers            String // Stored as json list
   correctAnswerIndex Int
+  image              Bytes?
 
   createdAt DateTime @default(now())
-
-  @@index([createdAt])
+  updatedAt DateTime @updatedAt
 }
 
 // model QuizQuestion {

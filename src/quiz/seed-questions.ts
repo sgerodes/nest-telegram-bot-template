@@ -33,27 +33,48 @@ async function loadJsonFiles(dir: string): Promise<RawQuiz[]> {
 
 async function seedAllQuestions() {
     const allQuestions = await loadJsonFiles(ROOT_DIR);
-    console.log(`Found ${allQuestions.length} questions`);
+    console.log(`Found ${allQuestions.length} raw questions`);
 
+    // Step 1: Fetch existing questions from DB
+    const existing = await prisma.quizQuestion.findMany({
+        select: { question: true },
+    });
+    const existingSet = new Set(existing.map((q) => q.question.trim()));
+
+    let inserted = 0;
+    let duplicates = 0;
 
     for (const q of allQuestions) {
-        const correctIdx = q.correct_answer;
+        const trimmed = q.question.trim();
 
+        // Guard: Already in DB
+        if (existingSet.has(trimmed)) {
+            console.log(`⏩ Already in DB: "${trimmed}"`);
+            duplicates++;
+            continue;
+        }
+
+        // Guard: invalid correct answer index
+        const correctIdx = q.correct_answer;
         if (correctIdx < 0 || correctIdx >= q.answers.length) {
             console.warn(`⚠️ Invalid index ${correctIdx} for question: "${q.question}. The questions has only ${q.answers.length} answers."`);
             continue;
         }
 
+        // Insert into DB
         await prisma.quizQuestion.create({
             data: {
-                question: q.question,
+                question: trimmed,
                 answers: JSON.stringify(q.answers),
                 correctAnswerIndex: q.correct_answer,
             },
         });
+
+        inserted++;
+        existingSet.add(trimmed); // also prevent reinsert in same batch
     }
 
-    console.log(`✅ Seeded ${allQuestions.length} quiz questions`);
+    console.log(`✅ Seeded ${inserted} new quiz questions. ${duplicates} were duplicates avoided.`);
 }
 
 seedAllQuestions()

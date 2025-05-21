@@ -15,6 +15,7 @@ import {
   validateEnvironmentVariables,
 } from '@configuration/validation/validation';
 import { TonModule } from './ton/ton.module';
+import { QuizModule } from './quiz/quiz.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { TonModule } from './ton/ton.module';
     DatabaseModule,
     LanguageModule,
     TonModule,
+    QuizModule,
   ],
 })
 export class AppModule {}

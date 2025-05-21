@@ -49,6 +49,7 @@ export type I18nTranslations = {
                     "error_quiz_has_incorrect_structure": string;
                     "error_quiz_has_correct_answer_does_not_exists": string;
                     "create_quiz_can_be_accepted": string;
+                    "create_quiz_saving": string;
                 };
                 "buttons": {
                     "enter_message_update": string;

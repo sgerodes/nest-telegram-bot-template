@@ -23,7 +23,8 @@
     "prisma:create:schemas": "ts-node prisma/createSchemas.ts",
     "prisma:sqlite:regenerate": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma",
     "prisma:postres:migrate": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",
-    "prisma:postres:generate": "npx prisma generate --schema=prisma/schema.postgresql.prisma"
+    "prisma:postres:generate": "npx prisma generate --schema=prisma/schema.postgresql.prisma",
+    "seed:quiz": "pnpm exec ts-node src/quiz/seed-questions.ts"
   },
   "engines": {
     "node": ">=20.10.0",

@@ -7,6 +7,11 @@ const postgresTargetSchema = path.join(__dirname, './schema.postgresql.prisma');
 
 let schema = fs.readFileSync(sourceSchema, 'utf-8');
 
+schema = schema
+  .split('\n')
+  .filter(line => !line.trim().startsWith('//'))
+  .join('\n');
+
 const dataSourceSqlite =
   'datasource db {\n' +
   '  provider = "sqlite"\n' +

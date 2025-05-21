@@ -10,39 +10,51 @@ model User {
   telegramFirstName String?
   createdAt         DateTime @default(now())
 
-  UserAnswer UserAnswer[]
+  // UserAnswer UserAnswer[]
 }
 
 model QuizQuestion {
-  id                 Int      @id @default(autoincrement())
-  quizTelegramId     BigInt?  @unique
+  id                 Int    @id @default(autoincrement())
   question           String
-  options            String // Stored as json list
+  answers            String // Stored as json list
   correctAnswerIndex Int
-  image              Bytes?
-  publishScheduledAt DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  UserAnswer UserAnswer[]
-
   @@index([createdAt])
 }
 
-model UserAnswer {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  questionId  Int
-  selectedIdx Int
-  isCorrect   Boolean
-  createdAt   DateTime @default(now())
-
-  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, questionId])
-  @@index([questionId])
-  @@index([questionId, isCorrect])
-  @@index([userId])
-}
+// model QuizQuestion {
+//   id                 Int      @id @default(autoincrement())
+//   quizTelegramId     BigInt?  @unique
+//   question           String
+//   options            String // Stored as json list
+//   correctAnswerIndex Int
+//   image              Bytes?
+//   publishScheduledAt DateTime
+//
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//
+//   UserAnswer UserAnswer[]
+//
+//   @@index([createdAt])
+// }
+//
+// model UserAnswer {
+//   id          Int      @id @default(autoincrement())
+//   userId      Int
+//   questionId  Int
+//   selectedIdx Int
+//   isCorrect   Boolean
+//   createdAt   DateTime @default(now())
+//
+//   user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+//
+//   @@unique([userId, questionId])
+//   @@index([questionId])
+//   @@index([questionId, isCorrect])
+//   @@index([userId])
+// }

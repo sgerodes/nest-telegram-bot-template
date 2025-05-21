@@ -35,7 +35,15 @@ async function seedAllQuestions() {
     const allQuestions = await loadJsonFiles(ROOT_DIR);
     console.log(`Found ${allQuestions.length} questions`);
 
+
     for (const q of allQuestions) {
+        const correctIdx = q.correct_answer;
+
+        if (correctIdx < 0 || correctIdx >= q.answers.length) {
+            console.warn(`⚠️ Invalid index ${correctIdx} for question: "${q.question}. The questions has only ${q.answers.length} answers."`);
+            continue;
+        }
+
         await prisma.quizQuestion.create({
             data: {
                 question: q.question,

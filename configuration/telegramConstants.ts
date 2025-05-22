@@ -27,6 +27,7 @@ export const SCENES = {
   SCENE_HELLO: 'scene_hello',
   SCENE_QUIZ: 'scene_quiz',
   SCENE_QUIZ_MANAGER: 'scene_quiz_manager',
+  SCENE_QUIZ_CREATE: 'scene_quiz_create',
 };
 
 export enum BOT_ON {

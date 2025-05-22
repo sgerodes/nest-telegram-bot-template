@@ -15,6 +15,7 @@ import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { AdminOnly, WizardI18nContext } from '@telegram/utils';
 import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
+import { BOT_ADMIN_CHAT_COMMANDS, SCENES } from '@configuration/telegramConstants';
 
 @Update()
 export class BotAdminUpdate extends BaseTelegramHandler {
@@ -36,5 +37,12 @@ export class BotAdminUpdate extends BaseTelegramHandler {
   @AdminOnly()
   async help(@Ctx() ctx: WizardI18nContext) {
     await ctx.reply(ctx.t(i18nKeys.i18n.command.help.message));
+  }
+
+  @Command(BOT_ADMIN_CHAT_COMMANDS.CREATE_QUIZ)
+  @AdminOnly()
+  async quizManagerCommand(@Ctx() ctx: WizardI18nContext) {
+    await ctx.scene.enter(SCENES.SCENE_QUIZ_CREATE);
+    // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
   }
 }

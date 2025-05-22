@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import { Scenes } from 'telegraf';
 import { ITelegrafI18nContext } from '@telegram/interfaces';
 import { I18nTranslations } from '@i18n/i18n.generated';
-import { TelegramConfig } from '@configuration/validation/configuration.validators';
+import { QuizConfig, TelegramConfig } from '@configuration/validation/configuration.validators';
 import { TelegrafService } from '@telegram/telegraf.service';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -19,15 +19,16 @@ export class SceneQuiz {
 
   constructor(
     private readonly telegramConfig: TelegramConfig,
+    private readonly quizConfig: QuizConfig,
     private readonly telegrafService: TelegrafService,
   ) {
     this.quizzes = this.readQuizzes();
   }
 
   readQuizzes(): Quiz[] {
-    this.logger.log(`Reading quizzes from ${this.telegramConfig.quiz.quizQuestionDirectory}`);
+    this.logger.log(`Reading quizzes from ${this.quizConfig.quizQuestionDirectory}`);
 
-    const quizDir = this.telegramConfig.quiz.quizQuestionDirectory;
+    const quizDir = this.quizConfig.quizQuestionDirectory;
     try {
       const files = fs.readdirSync(quizDir);
 

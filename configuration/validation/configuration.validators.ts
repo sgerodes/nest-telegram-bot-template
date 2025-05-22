@@ -6,11 +6,12 @@ import {
   IsArray,
   IsObject,
   Max,
-  IsInt,
+  IsInt, IsDate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { IsTelegramId } from '@configuration/validation/utils';
+import { IsTelegramId, IsTimeString } from '@configuration/validation/utils';
+
 
 export class TelegramBotConfig {
   @IsString()
@@ -62,6 +63,9 @@ export class TelegramIdsConfig {
 export class QuizConfig {
   @IsString()
   quizQuestionDirectory!: string;
+
+  @IsTimeString({ message: 'scheduledQuizDefaultPostTime must be in HH:mm format' })
+  dailyScheduledQuizPostTime!: string;
 }
 
 export class TelegramConfig {
@@ -76,10 +80,6 @@ export class TelegramConfig {
   @Type(() => TelegramIdsConfig)
   @ValidateNested()
   telegramIds!: TelegramIdsConfig;
-
-  @Type(() => QuizConfig)
-  @ValidateNested()
-  quiz: QuizConfig;
 }
 
 export class DatabaseConfig {
@@ -98,6 +98,10 @@ export class RootConfig {
   @Type(() => TelegramConfig)
   @ValidateNested()
   telegram!: TelegramConfig;
+
+  @Type(() => QuizConfig)
+  @ValidateNested()
+  quiz: QuizConfig;
 
   @Type(() => DatabaseConfig)
   @ValidateNested()

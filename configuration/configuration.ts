@@ -28,9 +28,10 @@ export const configuration = (): RootConfig => ({
       ownerTelegramId: 41459859, //sg
       adminTelegramIds: [219327518, 399103080, 49576483, 7304566667],
     },
-    quiz: {
-      quizQuestionDirectory: getAbsolutePathForProjectDirectory('resources/quiz/'),
-    },
+  },
+  quiz: {
+    quizQuestionDirectory: getAbsolutePathForProjectDirectory('resources/quiz/'),
+    dailyScheduledQuizPostTime: '07:00',
   },
   database: {
     url: process.env.DATABASE_URL,

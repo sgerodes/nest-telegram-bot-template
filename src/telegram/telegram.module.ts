@@ -27,7 +27,6 @@ import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middle
     DatabaseModule,
     MiddlewareModule,
     TelegrafModule.forRootAsync({
-      imports: [DatabaseModule, MiddlewareModule],
       inject: [
         TelegramConfig,
         TelegramMiddlewareFactory,

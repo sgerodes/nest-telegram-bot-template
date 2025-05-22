@@ -16,6 +16,7 @@ model TelegramUser {
   lastName    String?
   phoneNumber String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   userAnswers UserAnswer[]
 }
@@ -30,35 +31,8 @@ model QuizQuestion {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  templateLinks   TemplateQuestionLink[]
   postedQuestions PostedQuestion[]
-}
-
-model QuizTemplate {
-  id        Int                    @id @default(autoincrement())
-  title     String
-  createdAt DateTime               @default(now())
-  questions TemplateQuestionLink[]
-}
-
-model TemplateQuestionLink {
-  templateId Int
-  questionId Int
-
-  template QuizTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
-  @@id([templateId, questionId])
-}
-
-model QuizInstance {
-  id          Int       @id @default(autoincrement())
-  type        String    @default("DAILY") // Instead of enum
-  title       String?
-  scheduledAt DateTime?
-  createdAt   DateTime  @default(now())
-
-  postedQuestions PostedQuestion[]
+  SheduledQuiz    SheduledQuiz[]
 }
 
 model PostedQuestion {
@@ -69,9 +43,10 @@ model PostedQuestion {
   telegramMsgId  BigInt
   postedAt       DateTime @default(now())
 
-  quizInstance QuizInstance @relation(fields: [quizInstanceId], references: [id], onDelete: Cascade)
-  question     QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question     QuizQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
   userAnswers  UserAnswer[]
+  SheduledQuiz SheduledQuiz[]
 }
 
 model UserAnswer {
@@ -88,5 +63,18 @@ model UserAnswer {
   @@index([userId])
   @@index([postedQuestionId])
   @@index([userId, postedQuestionId])
+}
+
+model SheduledQuiz {
+  id               Int      @id @default(autoincrement())
+  scheduledAt      DateTime
+  questionId       Int
+  postedQuestionId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question       QuizQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  postedQuestion PostedQuestion @relation(fields: [postedQuestionId], references: [id], onDelete: Cascade)
 }
 

@@ -1,5 +1,5 @@
 
-export class QuizQuestion {
+export class TelegramQuizQuestion {
   question: string;
   answers: string[];
   correctAnswerIndex: number;
@@ -17,8 +17,8 @@ export class QuizQuestion {
     this.advice = advice;
   }
 
-  static fromJSON(json: any): QuizQuestion {
-    return new QuizQuestion(
+  static fromJSON(json: any): TelegramQuizQuestion {
+    return new TelegramQuizQuestion(
       json.question,
       json.answers,
       json.correct_answer,
@@ -28,18 +28,18 @@ export class QuizQuestion {
 }
 
 export class Quiz {
-  questions: QuizQuestion[];
+  questions: TelegramQuizQuestion[];
 
-  constructor(questions: QuizQuestion[]) {
+  constructor(questions: TelegramQuizQuestion[]) {
     this.questions = questions;
   }
 
   static fromJSON(jsonArray: any[]): Quiz {
-    const questions = jsonArray.map(QuizQuestion.fromJSON);
+    const questions = jsonArray.map(TelegramQuizQuestion.fromJSON);
     return new Quiz(questions);
   }
 }
 
 
-export type QuizType = 'DAILY' | 'TEMPLATE' | 'CUSTOM';
+export type QuizType = 'SCHEDULED' | 'SESSION';
 

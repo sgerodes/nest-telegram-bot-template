@@ -13,8 +13,8 @@ model TelegramUser {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  userAnswers    UserAnswer[]
-  sessionQuizSet SessionQuizSet[]
+  userAnswers  UserAnswer[]
+  quizSessions UserQuizSession[]
 }
 
 model QuizQuestion {
@@ -27,26 +27,25 @@ model QuizQuestion {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  postedQuestions     PostedQuestion[]
-  sheduledQuiz        SheduledQuiz[]
-  sessionQuizSet      SessionQuizSet[]
-  SessionQuizQuestion SessionQuizQuestion[]
+  postedQuestions  PostedQuestion[]
+  scheduledQuizzes ScheduledQuiz[]
+  quizSessionLinks UserQuizSessionQuestion[]
+
+  @@index([createdAt])
 }
 
 model PostedQuestion {
   id             Int      @id @default(autoincrement())
-  quizInstanceId Int
-  questionId     Int
   telegramChatId BigInt
   telegramMsgId  BigInt
+  questionId     Int
   postedAt       DateTime @default(now())
 
   question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  userAnswers         UserAnswer[]
-  sheduledQuiz        SheduledQuiz[]
-  sessionQuizSet      SessionQuizSet[]
-  SessionQuizQuestion SessionQuizQuestion[]
+  userAnswers     UserAnswer[]
+  scheduledQuiz   ScheduledQuiz?
+  sessionQuestion UserQuizSessionQuestion?
 
   @@index([questionId])
   @@index([telegramChatId])
@@ -70,41 +69,46 @@ model UserAnswer {
   @@index([userId, postedQuestionId])
 }
 
-model SheduledQuiz {
+model ScheduledQuiz {
   id               Int      @id @default(autoincrement())
   scheduledAt      DateTime
   questionId       Int
-  postedQuestionId Int?
+  postedQuestionId Int?     @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  question       QuizQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  postedQuestion PostedQuestion @relation(fields: [postedQuestionId], references: [id], onDelete: Cascade)
+  question       QuizQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  postedQuestion PostedQuestion? @relation(fields: [postedQuestionId], references: [id], onDelete: SetNull)
+
+  @@index([scheduledAt])
+  @@index([questionId])
 }
 
-model SessionQuizSet {
+model UserQuizSession {
   id          Int       @id @default(autoincrement())
   userId      Int
   startedAt   DateTime  @default(now())
   completedAt DateTime?
 
-  user             TelegramUser          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sessionQuestions SessionQuizQuestion[]
-  QuizQuestion     QuizQuestion?         @relation(fields: [quizQuestionId], references: [id])
-  quizQuestionId   Int?
-  PostedQuestion   PostedQuestion?       @relation(fields: [postedQuestionId], references: [id])
-  postedQuestionId Int?
+  user      TelegramUser              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions UserQuizSessionQuestion[]
+
+  @@index([userId])
+  @@index([startedAt])
 }
 
-model SessionQuizQuestion {
+model UserQuizSessionQuestion {
   id               Int  @id @default(autoincrement())
   sessionId        Int
   questionId       Int
-  order            Int // for preserving sequence
-  postedQuestionId Int?
+  order            Int
+  postedQuestionId Int? @unique
 
-  session        SessionQuizSet  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  quizQuestion   QuizQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  session        UserQuizSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question       QuizQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
   postedQuestion PostedQuestion? @relation(fields: [postedQuestionId], references: [id])
+
+  @@index([sessionId, order])
+  @@index([questionId])
 }

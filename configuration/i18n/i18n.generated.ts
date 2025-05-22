@@ -13,6 +13,7 @@ export type I18nTranslations = {
         };
         "command_descriptions": {
             "start": string;
+            "help": string;
             "hello": string;
             "quiz": string;
             "quiz_manager": string;

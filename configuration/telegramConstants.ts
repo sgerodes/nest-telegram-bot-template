@@ -8,6 +8,11 @@ export enum BOT_COMMANDS {
   QUIZ_MANAGER = 'quiz_manager',
 }
 
+export enum BOT_ADMIN_CHAT_COMMANDS {
+  CREATE_QUIZ = 'create_quiz',
+  HELP = 'help',
+}
+
 export const TELEGRAM_BTN_ACTIONS = {
   CLOSE: 'id_0_close',
   QUIZ_ADMIN_CREATE: 'id_1_quiz_create',

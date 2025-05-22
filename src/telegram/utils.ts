@@ -39,6 +39,7 @@ export function AdminOnly() {
       new Set<number>([
         ...config.telegram.telegramIds.adminTelegramIds,
         config.telegram.telegramIds.ownerTelegramId,
+        config.telegram.telegramIds.adminGroupId,
       ]),
   );
 }

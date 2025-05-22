@@ -12,6 +12,7 @@ import {
 } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import {
+  BOT_ADMIN_CHAT_COMMANDS,
   BOT_COMMANDS,
   BOT_ON,
   SCENES,
@@ -45,33 +46,33 @@ export class BotUpdate extends BaseTelegramHandler {
     });
   }
 
-  @Start()
-  @AdminOnly()
-  @PrivateChatOnly()
-  async startCommand(@Ctx() ctx: WizardI18nContext) {
-    if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
-      const _user = await this.userRepositoryService.createData({
-        telegramId: ctx.from.id,
-        username: ctx.from.username,
-        firstName: ctx.from.first_name,
-        lastName: ctx.from.last_name
-      });
-    }
-    const message = ctx.t(i18nKeys.i18n.command.start.message);
-    const buttons: InlineKeyboardButton[][] = [
-      [
-        {
-          text: ctx.t(i18nKeys.i18n.command.start.buttons.welcome_button),
-          url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
-        },
-      ],
-      [this.getCloseButton(ctx)],
-    ];
-
-    await ctx.reply(message, {
-      reply_markup: { inline_keyboard: buttons },
-    });
-  }
+  // @Start()
+  // @AdminOnly()
+  // @PrivateChatOnly()
+  // async startCommand(@Ctx() ctx: WizardI18nContext) {
+  //   if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
+  //     const _user = await this.userRepositoryService.createData({
+  //       telegramId: ctx.from.id,
+  //       username: ctx.from.username,
+  //       firstName: ctx.from.first_name,
+  //       lastName: ctx.from.last_name
+  //     });
+  //   }
+  //   const message = ctx.t(i18nKeys.i18n.command.start.message);
+  //   const buttons: InlineKeyboardButton[][] = [
+  //     [
+  //       {
+  //         text: ctx.t(i18nKeys.i18n.command.start.buttons.welcome_button),
+  //         url: 'https://t.me/addlist/v_Xq-yXm0yFjY2Ji',
+  //       },
+  //     ],
+  //     [this.getCloseButton(ctx)],
+  //   ];
+  //
+  //   await ctx.reply(message, {
+  //     reply_markup: { inline_keyboard: buttons },
+  //   });
+  // }
 
   @Command(BOT_COMMANDS.QUIZ)
   async quizCommand(@Ctx() ctx: WizardI18nContext) {
@@ -86,8 +87,8 @@ export class BotUpdate extends BaseTelegramHandler {
     await ctx.scene.enter(SCENES.SCENE_HELLO);
   }
 
-  @Command(BOT_COMMANDS.QUIZ_MANAGER)
-  @PrivateChatOnly()
+  @Command(BOT_ADMIN_CHAT_COMMANDS.CREATE_QUIZ)
+  @AdminOnly()
   async quizManagerCommand(@Ctx() ctx: WizardI18nContext) {
     await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER);
     // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
@@ -125,8 +126,4 @@ export class BotUpdate extends BaseTelegramHandler {
     }
   }
 
-  @Help()
-  async help(@Ctx() ctx: TelegrafContext) {
-    await ctx.reply('Send me a sticker');
-  }
 }

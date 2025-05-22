@@ -6,6 +6,7 @@
   },
   "command_descriptions": {
     "start": "▶️ Start Bot",
+    "help": "\uD83D\uDE4B Help",
     "hello": "\uD83D\uDC4B Hello world",
     "quiz": "\uD83E\uDDE0 test your skills \uD83D\uDE0F",
     "quiz_manager": "\uD83D\uDEE0\uFE0F Manage Quizzes"
@@ -18,13 +19,13 @@
   },
   "command": {
     "start": {
-      "message": "Welcome",
+      "message": "Welcome.\n/help - for command descriptions",
       "buttons": {
         "welcome_button": "Lets do it"
       }
     },
     "help": {
-      "message": "Welcome"
+      "message": "/help - for command descriptions.\n/create_question - create a new question"
     },
     "hello": {
       "message": "Hello, entering scene",

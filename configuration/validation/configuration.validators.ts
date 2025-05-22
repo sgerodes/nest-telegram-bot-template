@@ -53,7 +53,13 @@ export class TelegramIdsConfig {
   playgroundGroupId!: number;
 
   @IsTelegramId()
+  playgroundSuperGroupId!: number;
+
+  @IsTelegramId()
   ownerTelegramId!: number;
+
+  @IsTelegramId()
+  adminGroupId!: number;
 
   @IsArray()
   @IsTelegramId({ each: true })

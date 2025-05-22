@@ -1,0 +1,40 @@
+import { Context as TelegrafContext } from 'telegraf';
+import {
+  Action,
+  Command,
+  // Context as NestjsTelegrafContext,
+  Ctx,
+  Hears,
+  Help,
+  On,
+  Start,
+  Update,
+} from 'nestjs-telegraf';
+import { TelegramConfig } from '@configuration/validation/configuration.validators';
+import { i18nKeys } from '@i18n/i18n.keys';
+import { TelegrafService } from '@telegram/telegraf.service';
+import { AdminOnly, WizardI18nContext } from '@telegram/utils';
+import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
+
+@Update()
+export class BotAdminUpdate extends BaseTelegramHandler {
+
+  constructor(
+    private readonly telegramConfig: TelegramConfig,
+    private readonly telegrafService: TelegrafService,
+  ) {
+    super();
+  }
+
+  @Start()
+  @AdminOnly()
+  async startCommand(@Ctx() ctx: WizardI18nContext) {
+    await ctx.reply(ctx.t(i18nKeys.i18n.command.start.message));
+  }
+
+  @Help()
+  @AdminOnly()
+  async help(@Ctx() ctx: WizardI18nContext) {
+    await ctx.reply(ctx.t(i18nKeys.i18n.command.help.message));
+  }
+}

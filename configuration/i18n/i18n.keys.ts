@@ -7,6 +7,7 @@ export const i18nKeys = {
     },
     "command_descriptions": {
       "start": "i18n.command_descriptions.start",
+      "help": "i18n.command_descriptions.help",
       "hello": "i18n.command_descriptions.hello",
       "quiz": "i18n.command_descriptions.quiz",
       "quiz_manager": "i18n.command_descriptions.quiz_manager"

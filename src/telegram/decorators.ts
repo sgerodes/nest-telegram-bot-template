@@ -78,10 +78,11 @@ export class TelegrafIdGuard implements CanActivate {
     }
 
     const userId = telegrafContext?.from?.id;
-    const canActivate = userId ? this.allowedIds.has(userId) : false;
+    const chatId = telegrafContext?.chat?.id
+    const canActivate = userId ? this.allowedIds.has(userId) || this.allowedIds.has(chatId) : false;
     if (!canActivate) {
       // const functionName = executionContext.getHandler().name;
-      const calledFrom = `id=${userId}, first_name=${telegrafContext?.from?.first_name}, last_name=${telegrafContext?.from?.last_name}, username=${telegrafContext?.from?.username}`;
+      const calledFrom = `id=${userId}, username=${telegrafContext?.from?.username}, chatId=${chatId}`;
       this.logger.debug(
         `Function "${this.functionName}" was called from a non-allowed ID ${calledFrom}. Allowed ids are ${this.allowedIdsString}`,
       );

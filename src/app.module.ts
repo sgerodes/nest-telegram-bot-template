@@ -16,6 +16,7 @@ import {
 } from '@configuration/validation/validation';
 import { TonModule } from './ton/ton.module';
 import { QuizModule } from './quiz/quiz.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { QuizModule } from './quiz/quiz.module';
       }),
       resolvers: [AcceptLanguageResolver],
     }),
+    ScheduleModule.forRoot(),
     TelegramModule,
     DatabaseModule,
     LanguageModule,

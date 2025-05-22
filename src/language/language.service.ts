@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
-import { BOT_COMMANDS } from '@configuration/telegramConstants';
+import { BOT_ADMIN_CHAT_COMMANDS, BOT_COMMANDS } from '@configuration/telegramConstants';
 import * as tg from 'telegraf/src/core/types/typegram';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { i18nKeys } from '@i18n/i18n.keys';
@@ -28,15 +28,9 @@ export class LanguageService {
           lang,
         }),
       },
-      // {
-      //   command: '/' + BOT_COMMANDS.HELLO,
-      //   description: this.i18n.t('i18n.command_descriptions.hello', {
-      //     lang,
-      //   }),
-      // },
       {
-        command: '/' + BOT_COMMANDS.QUIZ_MANAGER,
-        description: this.i18n.t(i18nKeys.i18n.command_descriptions.quiz_manager, {
+        command: '/' + BOT_ADMIN_CHAT_COMMANDS.HELP,
+        description: this.i18n.t(i18nKeys.i18n.command_descriptions.help, {
           lang,
         }),
       },

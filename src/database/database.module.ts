@@ -7,6 +7,6 @@ import { QuizQuestionRepositoryService } from '@database/quiz-repository/quiz-qu
 @Module({
   imports: [ConfigModule.forRoot()],
   providers: [PrismaService, UserRepositoryService, QuizQuestionRepositoryService],
-  exports: [PrismaService],
+  exports: [PrismaService, UserRepositoryService],
 })
 export class DatabaseModule {}

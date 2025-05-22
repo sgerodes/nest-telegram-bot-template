@@ -12,34 +12,39 @@ import {
 } from 'nestjs-telegraf-i18n';
 import { session } from 'telegraf';
 import { TelegrafService } from '@telegram/telegraf.service';
-import { loggingMiddleware } from '@telegram/logging.telegraf.middleware';
+import { loggingMiddleware } from '@telegram/middlewares/logging.telegraf.middleware';
 import { SceneHello } from '@telegram/scenes/hello.scene';
 import { SceneQuiz } from '@telegram/scenes/quiz.scene';
 import { SceneQuizManager } from '@telegram/scenes/quizManagerScene.scene';
+import { SaveUserMiddleware } from '@telegram/middlewares/save-user.middleware';
+import { BotAdminUpdate } from '@telegram/bot.admin.update';
+import { MiddlewareModule } from '@telegram/middlewares/middleware.module';
+import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middleware.factory';
 
 @Module({
   imports: [
     TelegrafI18nModule,
+    DatabaseModule,
+    MiddlewareModule,
     TelegrafModule.forRootAsync({
-      inject: [TelegramConfig, TelegrafI18nMiddlewareProvider],
+      imports: [DatabaseModule, MiddlewareModule],
+      inject: [
+        TelegramConfig,
+        TelegramMiddlewareFactory,
+      ],
       useFactory: (
         telegramConfig: TelegramConfig,
-        telegrafI18nMiddlewareProvider: TelegrafI18nMiddlewareProvider,
+        middlewareFactory: TelegramMiddlewareFactory,
       ) => ({
         token: telegramConfig.bot.token,
         options: {
           contextType: TelegrafI18nContext,
         },
-        middlewares: [
-          session(),
-          telegrafI18nMiddlewareProvider.telegrafI18nMiddleware,
-          loggingMiddleware,
-        ],
+        middlewares: middlewareFactory.createMiddlewares(),
       }),
     }),
-    DatabaseModule,
     LanguageModule,
   ],
-  providers: [UserRepositoryService, BotUpdate, SceneHello, SceneQuiz, SceneQuizManager, TelegrafService],
+  providers: [UserRepositoryService, BotUpdate, SceneHello, SceneQuiz, SceneQuizManager, TelegrafService, BotAdminUpdate],
 })
 export class TelegramModule {}

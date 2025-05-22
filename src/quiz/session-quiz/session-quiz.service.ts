@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
-export class QuizService {
+export class SessionQuizService {
   protected readonly logger = new Logger(this.constructor.name);
-
 }

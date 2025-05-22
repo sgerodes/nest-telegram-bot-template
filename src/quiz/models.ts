@@ -40,6 +40,3 @@ export class Quiz {
   }
 }
 
-
-export type QuizType = 'SCHEDULED' | 'SESSION';
-

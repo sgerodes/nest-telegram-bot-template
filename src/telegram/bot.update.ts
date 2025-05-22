@@ -52,8 +52,9 @@ export class BotUpdate extends BaseTelegramHandler {
     if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
       const _user = await this.userRepositoryService.createData({
         telegramId: ctx.from.id,
-        telegramUsername: ctx.from.username,
-        telegramFirstName: ctx.from.first_name,
+        username: ctx.from.username,
+        firstName: ctx.from.first_name,
+        lastName: ctx.from.last_name
       });
     }
     const message = ctx.t(i18nKeys.i18n.command.start.message);

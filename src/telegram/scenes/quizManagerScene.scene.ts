@@ -162,7 +162,7 @@ export class SceneQuizManager extends BaseTelegramHandler {
     await this.telegrafService.sendQuizToChatId(
       ctx.chat.id,
       quiz.question,
-      JSON.parse(quiz.options),
+      JSON.parse(quiz.answers),
       quiz.correctAnswerIndex,
     );
   }

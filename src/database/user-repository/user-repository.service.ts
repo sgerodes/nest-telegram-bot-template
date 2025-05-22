@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@database/prisma.service';
-import { AbstractRepository } from '@database/abstractRepository';
-import { Prisma, User } from '@prisma/client';
+import { AbstractRepository } from '@database/abstract.repository';
+import { Prisma, TelegramUser } from '@prisma/client';
 
 @Injectable()
 export class UserRepositoryService extends AbstractRepository<
-  User,
-  Prisma.UserDelegate,
-  Prisma.UserCreateInput
+  TelegramUser,
+  Prisma.TelegramUserDelegate,
+  Prisma.TelegramUserCreateInput
 > {
   constructor(private readonly prisma: PrismaService) {
-    super(prisma.user);
+    super(prisma.telegramUser);
   }
 
-  async readByTelegramId(telegramId: number): Promise<User | null> {
+  async readByTelegramId(telegramId: number): Promise<TelegramUser | null> {
     return this.readByUnique('telegramId', telegramId);
   }
 

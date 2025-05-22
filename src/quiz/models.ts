@@ -39,3 +39,7 @@ export class Quiz {
     return new Quiz(questions);
   }
 }
+
+
+export type QuizType = 'DAILY' | 'TEMPLATE' | 'CUSTOM';
+

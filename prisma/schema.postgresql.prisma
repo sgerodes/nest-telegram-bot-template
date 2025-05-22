@@ -8,23 +8,85 @@ generator client {
   binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
-model User {
-  id                Int      @id @default(autoincrement())
-  telegramId        BigInt   @unique
-  telegramUsername  String?
-  telegramFirstName String?
-  createdAt         DateTime @default(now())
+model TelegramUser {
+  id          Int      @id @default(autoincrement())
+  telegramId  BigInt   @unique
+  username    String?
+  firstName   String?
+  lastName    String?
+  phoneNumber String?
+  createdAt   DateTime @default(now())
 
+  userAnswers UserAnswer[]
 }
 
 model QuizQuestion {
-  id                 Int    @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
   question           String
-  answers            String // Stored as json list
+  answers            String // JSON list of strings
   correctAnswerIndex Int
   image              Bytes?
+  advice             String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  templateLinks   TemplateQuestionLink[]
+  postedQuestions PostedQuestion[]
+}
+
+model QuizTemplate {
+  id        Int                    @id @default(autoincrement())
+  title     String
+  createdAt DateTime               @default(now())
+  questions TemplateQuestionLink[]
+}
+
+model TemplateQuestionLink {
+  templateId Int
+  questionId Int
+
+  template QuizTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([templateId, questionId])
+}
+
+model QuizInstance {
+  id          Int       @id @default(autoincrement())
+  type        String    @default("DAILY") // Instead of enum
+  title       String?
+  scheduledAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  postedQuestions PostedQuestion[]
+}
+
+model PostedQuestion {
+  id             Int      @id @default(autoincrement())
+  quizInstanceId Int
+  questionId     Int
+  telegramChatId BigInt
+  telegramMsgId  BigInt
+  postedAt       DateTime @default(now())
+
+  quizInstance QuizInstance @relation(fields: [quizInstanceId], references: [id], onDelete: Cascade)
+  question     QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userAnswers  UserAnswer[]
+}
+
+model UserAnswer {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  postedQuestionId Int
+  selectedIdx      Int
+  isCorrect        Boolean
+  answeredAt       DateTime @default(now())
+
+  user           TelegramUser   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postedQuestion PostedQuestion @relation(fields: [postedQuestionId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([postedQuestionId])
+  @@index([userId, postedQuestionId])
 }
 

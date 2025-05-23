@@ -6,11 +6,14 @@ import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
 import { Message } from 'telegraf/typings/core/types/typegram';
 import { QuizQuestion } from '@telegram/models';
 import { TelegrafService } from '@telegram/telegraf.service';
+import { parse, isValid, format } from 'date-fns';
+import { RootConfig, TelegramConfig } from '@configuration/validation/configuration.validators';
 
 @Wizard(SCENES.SCENE_QUESTION_CREATE)
 export class SceneQuizCreate extends BaseTelegramHandler {
   constructor(
-    private readonly telegrafService: TelegrafService
+    private readonly telegrafService: TelegrafService,
+    private readonly rootConfig: RootConfig,
     ) {
     super();
   }
@@ -93,12 +96,13 @@ export class SceneQuizCreate extends BaseTelegramHandler {
   }
 
   async previewQuestion(ctx: WizardI18nContext, quizQuestion: QuizQuestion, photo: Buffer) {
-    await ctx.reply(`Preview of the quiz. Correct answer "${quizQuestion.answers[quizQuestion.correctAnswerIndex]}"`)
+
+    await ctx.reply(`Preview of the quiz. Will be published on ${format(quizQuestion.date, 'dd.MM.yyyy')} at ${this.rootConfig.quiz.dailyScheduledQuizPostTime}. Correct answer is "${quizQuestion.answers[quizQuestion.correctAnswerIndex]}"`)
     await this.telegrafService.sendQuizToChatId(ctx.chat.id,
-      quizQuestion.question,
-      quizQuestion.answers,
-      quizQuestion.correctAnswerIndex,
-      photo,
+        quizQuestion.question,
+        quizQuestion.answers,
+        quizQuestion.correctAnswerIndex,
+        photo,
       )
   }
 
@@ -108,7 +112,7 @@ export class SceneQuizCreate extends BaseTelegramHandler {
     photo: Buffer,
   ): Promise<QuizQuestion | null> {
     const lines = text.trim().split('\n');
-    if (lines.length < 3) {
+    if (lines.length < 4) {
       await ctx.reply(
         ctx.t(
           i18nKeys.i18n.command.quizAdmin.scene
@@ -121,9 +125,21 @@ export class SceneQuizCreate extends BaseTelegramHandler {
       ctx.wizard.selectStep(1);
     }
 
-    const question = lines[0].trim();
-    const answers = lines[1].split(',').map((ans) => ans.trim());
-    const correctAnswer = lines[2].trim();
+    const dateString = lines[0].trim();
+    const date = parse(dateString, 'dd.MM.yyyy', new Date());
+    if (!isValid(date)) {
+      await ctx.reply(
+        ctx.t(i18nKeys.i18n.command.quizAdmin.scene.error_invalid_date_format),
+        {
+          reply_markup: { inline_keyboard: [[this.getLeaveButton(ctx)]] },
+        },
+      );
+      return null;
+    }
+
+    const question = lines[1].trim();
+    const answers = lines[2].split(',').map((ans) => ans.trim());
+    const correctAnswer = lines[3].trim();
     let correctIndex: number;
     if (/^\d+$/.test(correctAnswer)) {
       correctIndex = parseInt(correctAnswer, 10) - 1;
@@ -142,6 +158,6 @@ export class SceneQuizCreate extends BaseTelegramHandler {
         return null;
       }
     }
-    return new QuizQuestion(question, answers, correctIndex, photo);
+    return new QuizQuestion(question, answers, correctIndex, photo, date);
   }
 }

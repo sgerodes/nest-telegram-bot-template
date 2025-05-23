@@ -38,8 +38,9 @@
       "scene": {
         "enter_message": "Do you want to create a new quiz question?",
         "create_quiz_question_message": "Please provide a quiz question",
-        "create_quiz_question_message_example": "Please provide a quiz question in form of:\n<question>\n<comma separated options>\n<correct answer> or <correct answer number>\n\nYou can attach a picture to the message.\nExample: What is the third planet in the solar system?\nEarth,Mercury,Pluto,Jupiter\nEarth (or 1)",
+        "create_quiz_question_message_example": "Please provide a quiz question in form of:\n<date>\n<question>\n<comma separated options>\n<correct answer> or <correct answer number>\n\nYou can attach a picture to the message.\nExample:\n10.06.2024\nWhat is the third planet in the solar system?\nEarth,Mercury,Pluto,Jupiter\nEarth (or 1)",
         "error_no_quiz_provided": "You have not provided any text. Please repeat.",
+        "error_invalid_date_format": "The date is not present or has an incorrect format.",
         "error_quiz_has_incorrect_structure": "The structure of your message is incorrect. Retry",
         "error_quiz_has_correct_answer_does_not_exists": "The correct answer does not exists in the provided answers",
         "create_quiz_can_be_accepted": "The Question is structured correctly",

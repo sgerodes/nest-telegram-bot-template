@@ -4,6 +4,7 @@ export class QuizQuestion {
   answers: string[];
   correctAnswerIndex: number;
   photo?: Buffer;
+  date?: Date;
   advice?: string;
 
   constructor(
@@ -11,9 +12,11 @@ export class QuizQuestion {
     answers: string[],
     correctAnswer: number,
     photo?: Buffer,
+    date?: Date,
     advice?: string,
   ) {
     this.question = question;
+    this.date = date;
     this.answers = answers;
     this.correctAnswerIndex = correctAnswer;
     this.photo = photo;

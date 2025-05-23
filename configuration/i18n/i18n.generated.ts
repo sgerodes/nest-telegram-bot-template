@@ -47,6 +47,7 @@ export type I18nTranslations = {
                     "create_quiz_question_message": string;
                     "create_quiz_question_message_example": string;
                     "error_no_quiz_provided": string;
+                    "error_invalid_date_format": string;
                     "error_quiz_has_incorrect_structure": string;
                     "error_quiz_has_correct_answer_does_not_exists": string;
                     "create_quiz_can_be_accepted": string;

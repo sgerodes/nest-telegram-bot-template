@@ -41,6 +41,7 @@ export const i18nKeys = {
           "create_quiz_question_message": "i18n.command.quizAdmin.scene.create_quiz_question_message",
           "create_quiz_question_message_example": "i18n.command.quizAdmin.scene.create_quiz_question_message_example",
           "error_no_quiz_provided": "i18n.command.quizAdmin.scene.error_no_quiz_provided",
+          "error_invalid_date_format": "i18n.command.quizAdmin.scene.error_invalid_date_format",
           "error_quiz_has_incorrect_structure": "i18n.command.quizAdmin.scene.error_quiz_has_incorrect_structure",
           "error_quiz_has_correct_answer_does_not_exists": "i18n.command.quizAdmin.scene.error_quiz_has_correct_answer_does_not_exists",
           "create_quiz_can_be_accepted": "i18n.command.quizAdmin.scene.create_quiz_can_be_accepted",

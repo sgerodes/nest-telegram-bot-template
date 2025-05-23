@@ -21,6 +21,10 @@ export class TelegrafService {
     private readonly languageService: LanguageService,
   ) {
     // this.setupListeners();
+    this.setupOnErrorLogging()
+  }
+
+  setupOnErrorLogging(){
     this.bot.catch((err, ctx) => {
       const username = ctx?.botInfo?.username ?? 'unknown';
       console.error('🔴 Telegraf caught error:', {

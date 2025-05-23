@@ -74,56 +74,56 @@ export class BotUpdate extends BaseTelegramHandler {
   //   });
   // }
 
-  @Command(BOT_COMMANDS.QUIZ)
-  async quizCommand(@Ctx() ctx: WizardI18nContext) {
-    await ctx.scene.enter(SCENES.SCENE_QUIZ);
-  }
+  // @Command(BOT_COMMANDS.QUIZ)
+  // async quizCommand(@Ctx() ctx: WizardI18nContext) {
+  //   await ctx.scene.enter(SCENES.SCENE_QUIZ);
+  // }
+  //
+  // @Command(BOT_COMMANDS.HELLO)
+  // @PrivateChatOnly()
+  // async helloCommand(@Ctx() ctx: WizardI18nContext) {
+  //   const message = ctx.t(i18nKeys.i18n.command.hello.message);
+  //   await ctx.reply(message);
+  //   await ctx.scene.enter(SCENES.SCENE_HELLO);
+  // }
 
-  @Command(BOT_COMMANDS.HELLO)
-  @PrivateChatOnly()
-  async helloCommand(@Ctx() ctx: WizardI18nContext) {
-    const message = ctx.t(i18nKeys.i18n.command.hello.message);
-    await ctx.reply(message);
-    await ctx.scene.enter(SCENES.SCENE_HELLO);
-  }
+  // @Command(BOT_ADMIN_CHAT_COMMANDS.CREATE_QUIZ)
+  // @AdminOnly()
+  // async quizManagerCommand(@Ctx() ctx: WizardI18nContext) {
+  //   await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER);
+  //   // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
+  // }
 
-  @Command(BOT_ADMIN_CHAT_COMMANDS.CREATE_QUIZ)
-  @AdminOnly()
-  async quizManagerCommand(@Ctx() ctx: WizardI18nContext) {
-    await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER);
-    // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
-  }
-
-  @On(BOT_ON.POLL_ANSWER)
-  async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
-    const pollAnswer: PollAnswer = ctx.pollAnswer;
-
-    const userId = pollAnswer.user.id;
-    const pollId = pollAnswer.poll_id;
-    const selectedOption = pollAnswer.option_ids[0];
-    this.logger.log(
-      `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
-    );
-  }
-
-  @Hears(new RegExp('^getById (-?\\d+)$'))
-  async hearsGetById(@Ctx() ctx: WizardI18nContext) {
-    const match = ctx.text.match(/^getById (-?\d+)$/);
-    if (!match) {
-      await ctx.reply('❌ Invalid format! Use: getById <chat_id>');
-      return;
-    }
-
-    const chatId = parseInt(match[1], 10);
-    const chatName = await this.telegrafService.getChatNameById(chatId);
-
-    if (chatName) {
-      await ctx.reply(`✅ Chat Name: ${chatName}`);
-    } else {
-      await ctx.reply(
-        '❌ Unable to retrieve chat name. The bot might not have access.',
-      );
-    }
-  }
+  // @On(BOT_ON.POLL_ANSWER)
+  // async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
+  //   const pollAnswer: PollAnswer = ctx.pollAnswer;
+  //
+  //   const userId = pollAnswer.user.id;
+  //   const pollId = pollAnswer.poll_id;
+  //   const selectedOption = pollAnswer.option_ids[0];
+  //   this.logger.log(
+  //     `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
+  //   );
+  // }
+  //
+  // @Hears(new RegExp('^getById (-?\\d+)$'))
+  // async hearsGetById(@Ctx() ctx: WizardI18nContext) {
+  //   const match = ctx.text.match(/^getById (-?\d+)$/);
+  //   if (!match) {
+  //     await ctx.reply('❌ Invalid format! Use: getById <chat_id>');
+  //     return;
+  //   }
+  //
+  //   const chatId = parseInt(match[1], 10);
+  //   const chatName = await this.telegrafService.getChatNameById(chatId);
+  //
+  //   if (chatName) {
+  //     await ctx.reply(`✅ Chat Name: ${chatName}`);
+  //   } else {
+  //     await ctx.reply(
+  //       '❌ Unable to retrieve chat name. The bot might not have access.',
+  //     );
+  //   }
+  // }
 
 }

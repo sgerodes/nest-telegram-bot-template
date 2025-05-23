@@ -11,7 +11,7 @@ export class SaveUserMiddleware{
   }
 
   async saveUserMiddleware(ctx: Context, next: () => Promise<void>) {
-    if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
+    if (!(await this.userRepositoryService.existsByTelegramId(ctx?.from?.id))) {
       const _user = await this.userRepositoryService.createData({
         telegramId: ctx.from.id,
         username: ctx.from.username,

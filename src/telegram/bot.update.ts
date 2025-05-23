@@ -96,18 +96,18 @@ export class BotUpdate extends BaseTelegramHandler {
   //   // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
   // }
 
-  // @On(BOT_ON.POLL_ANSWER)
-  // async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
-  //   const pollAnswer: PollAnswer = ctx.pollAnswer;
-  //
-  //   const userId = pollAnswer.user.id;
-  //   const pollId = pollAnswer.poll_id;
-  //   const selectedOption = pollAnswer.option_ids[0];
-  //   this.logger.log(
-  //     `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
-  //   );
-  // }
-  //
+  @On(BOT_ON.POLL_ANSWER)
+  async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
+    const pollAnswer: PollAnswer = ctx.pollAnswer;
+
+    const userId = pollAnswer.user.id;
+    const pollId = pollAnswer.poll_id;
+    const selectedOption = pollAnswer.option_ids[0];
+    this.logger.log(
+      `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
+    );
+  }
+
   // @Hears(new RegExp('^getById (-?\\d+)$'))
   // async hearsGetById(@Ctx() ctx: WizardI18nContext) {
   //   const match = ctx.text.match(/^getById (-?\d+)$/);

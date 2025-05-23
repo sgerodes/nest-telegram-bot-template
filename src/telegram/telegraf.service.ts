@@ -48,6 +48,9 @@ export class TelegrafService {
     explanation?: string,
   ) {
     // Non-anonymous cant be send to channels
+    if (is_anonymous === null || is_anonymous === undefined) {
+      is_anonymous = false;
+    }
     if (photo) {
       await this.bot.telegram.sendPhoto(chatId, { source: photo });
     }

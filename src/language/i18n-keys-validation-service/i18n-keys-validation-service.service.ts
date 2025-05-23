@@ -20,11 +20,13 @@ export class I18nKeysValidationServiceService {
     const ignoreLanguages = ['pt'];
     // const checkLanguages = ['en', 'ru'];
 
-    let supportedLanguages = this.i18n.getSupportedLanguages();
+    let supportedLanguages = this.i18n.getSupportedLanguages() || [];
     const i18nOptions: I18nOptions = (this.i18n as any)['i18nOptions'];
     const i18nPath: string = i18nOptions.loaderOptions?.path;
 
-    const languagesToCheck: string[] = supportedLanguages.filter(lang => !ignoreLanguages.includes(lang));
+    const languagesToCheck: string[] = Array.isArray(supportedLanguages)
+      ? supportedLanguages.filter(lang => !ignoreLanguages.includes(lang))
+      : [];
 
     const langKeys = readLangKeys(i18nPath, languagesToCheck);
     const allKeys = combinedKeys(langKeys);

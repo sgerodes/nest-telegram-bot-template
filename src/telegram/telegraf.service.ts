@@ -21,6 +21,16 @@ export class TelegrafService {
     private readonly languageService: LanguageService,
   ) {
     // this.setupListeners();
+    this.bot.catch((err, ctx) => {
+      const username = ctx?.botInfo?.username ?? 'unknown';
+      console.error('🔴 Telegraf caught error:', {
+        error: err,
+        stack: err instanceof Error ? err.stack : undefined,
+        ctxType: ctx?.updateType,
+        chat: ctx?.chat?.id,
+        user: ctx?.from?.id,
+      });
+    });
   }
 
   @CatchErrors

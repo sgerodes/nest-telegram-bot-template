@@ -9,25 +9,14 @@ export const loggingMiddleware: Middleware<TelegrafI18nContext> = async (
   next,
 ) => {
   const chat = ctx?.chat;
-  const from = ctx?.from;
 
-  let chatType = chat?.type;
-  let isPublic = false;
-  let chatName = '(no title)';
-  let id = ctx && ctx.chat && 'id' in ctx.chat? ctx.chat?.id : null;
-
-  if (chat?.type === 'private' && 'username' in chat) {
-    isPublic = !!chat.username;
-  }
-  if (
-    (chat?.type === 'group' || chat?.type === 'supergroup' || chat?.type === 'channel') &&
-    'title' in chat
-  ) {
-    chatName = chat.title;
-  }
+  const chatType = chat?.type;
+  const chatName = chat && 'title' in chat ? chat?.title : null;
+  const chatId = ctx?.chat?.id ?? null;
+  const isPublic = !!(ctx.chat && 'username' in ctx.chat && ctx.chat.username);
 
   logger.debug(
-    `Message from username=${ctx?.from?.username} (${ctx.from.id}) in chat '${chatName}' (${id}), Type: ${chatType}, Public: ${isPublic}`,
+    `Message from username=${ctx?.from?.username} (${ctx?.from?.id}) in chat '${chatName}' (${chatId}), Type: ${chatType}, Public: ${isPublic}`,
   );
   await next();
 };

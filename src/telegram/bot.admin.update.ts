@@ -43,6 +43,6 @@ export class BotAdminUpdate extends BaseTelegramHandler {
   @AdminOnly()
   async quizManagerCommand(@Ctx() ctx: WizardI18nContext) {
     this.logger.debug(`${BOT_ADMIN_CHAT_COMMANDS.CREATE_QUESTION} command received`);
-    await ctx.scene.enter(SCENES.SCENE_QUIZ_CREATE);
+    await ctx.scene.enter(SCENES.SCENE_QUESTION_CREATE);
   }
 }

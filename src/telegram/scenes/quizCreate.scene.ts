@@ -9,7 +9,7 @@ import { PrismaService } from '@database/prisma.service';
 import { QuizQuestion } from '@prisma/client';
 import { TelegrafService } from '@telegram/telegraf.service';
 
-@Wizard(SCENES.SCENE_QUIZ_CREATE)
+@Wizard(SCENES.SCENE_QUESTION_CREATE)
 export class SceneQuizManager extends BaseTelegramHandler {
 
   constructor(

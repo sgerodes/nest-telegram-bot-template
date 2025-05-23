@@ -11,7 +11,6 @@ export class SaveUserMiddleware{
   }
 
   async saveUserMiddleware(ctx: Context, next: () => Promise<void>) {
-    this.logger.debug(`SaveUserMiddleware called`);
     if (!(await this.userRepositoryService.existsByTelegramId(ctx.from.id))) {
       const _user = await this.userRepositoryService.createData({
         telegramId: ctx.from.id,
@@ -19,9 +18,6 @@ export class SaveUserMiddleware{
         firstName: ctx.from.first_name,
         lastName: ctx.from.last_name
       });
-      this.logger.debug(`Saved user middleware for telegram id=${ctx.from.id}, ${_user}`);
-    } else {
-      this.logger.debug(`User already exists telegram id=${ctx.from.id}`);
     }
     await next();
   }

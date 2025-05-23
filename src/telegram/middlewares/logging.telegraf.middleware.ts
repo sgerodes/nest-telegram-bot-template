@@ -12,7 +12,7 @@ export const loggingMiddleware: Middleware<TelegrafI18nContext> = async (
   const isPublic = 'username' in ctx.chat ? !!ctx.chat.username : false;
   const chatName = 'title' in ctx.chat ? ctx.chat.title : '(no title)';
   logger.debug(
-    `Received message from ${ctx.from.id}, username=${ctx?.from?.username} in Chat ID: ${ctx.chat?.id}, Chat Name '${chatName}', Type: ${chatType}, Public: ${isPublic}`,
+    `Message from username=${ctx?.from?.username} (${ctx.from.id}) in chat '${chatName}' (${ctx.chat?.id}), Type: ${chatType}, Public: ${isPublic}`,
   );
   await next();
 };

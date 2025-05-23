@@ -2,18 +2,21 @@
 export class QuizQuestion {
   question: string;
   answers: string[];
-  correctAnswer: number;
-  advice: string;
+  correctAnswerIndex: number;
+  photo?: Buffer;
+  advice?: string;
 
   constructor(
     question: string,
     answers: string[],
     correctAnswer: number,
-    advice: string
+    photo?: Buffer,
+    advice?: string,
   ) {
     this.question = question;
     this.answers = answers;
-    this.correctAnswer = correctAnswer;
+    this.correctAnswerIndex = correctAnswer;
+    this.photo = photo;
     this.advice = advice;
   }
 

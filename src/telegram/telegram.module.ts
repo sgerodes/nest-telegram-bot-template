@@ -11,6 +11,8 @@ import { SceneQuizManager } from '@telegram/scenes/quizManagerScene.scene';
 import { BotAdminUpdate } from '@telegram/bot.admin.update';
 import { MiddlewareModule } from '@telegram/middlewares/middleware.module';
 import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middleware.factory';
+import { SceneQuiz } from '@telegram/scenes/quiz.scene';
+import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
 
 @Module({
   imports: [
@@ -35,6 +37,6 @@ import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middle
     }),
     LanguageModule,
   ],
-  providers: [UserRepositoryService, BotUpdate, TelegrafService, BotAdminUpdate, SceneQuizManager],
+  providers: [UserRepositoryService, BotUpdate, TelegrafService, BotAdminUpdate, SceneQuizCreate],
 })
 export class TelegramModule {}

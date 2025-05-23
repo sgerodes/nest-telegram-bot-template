@@ -62,6 +62,7 @@ export class SceneQuiz {
 
   @SceneEnter()
   async onEnter(@Ctx() ctx: Scenes.WizardContext & ITelegrafI18nContext<I18nTranslations>) {
+    this.logger.debug('SceneQuiz onEnter');
     const userId = ctx.from.id.toString();
 
     if (this.quizzes.length === 0) {

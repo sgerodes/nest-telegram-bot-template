@@ -74,10 +74,12 @@ export class BotUpdate extends BaseTelegramHandler {
   //   });
   // }
 
-  // @Command(BOT_COMMANDS.QUIZ)
-  // async quizCommand(@Ctx() ctx: WizardI18nContext) {
-  //   await ctx.scene.enter(SCENES.SCENE_QUIZ);
-  // }
+  @Command(BOT_COMMANDS.QUIZ)
+  async quizCommand(@Ctx() ctx: WizardI18nContext) {
+    await ctx.scene.enter(SCENES.SCENE_QUIZ);
+  }
+
+
   //
   // @Command(BOT_COMMANDS.HELLO)
   // @PrivateChatOnly()

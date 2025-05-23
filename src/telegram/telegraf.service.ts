@@ -8,7 +8,6 @@ import { TelegramConfig } from '@configuration/validation/configuration.validato
 import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { CatchErrors } from '@telegram/decorators';
-import { PollAnswer } from '@telegraf/types';
 import { Cacheable } from 'typescript-cacheable';
 
 @Injectable()
@@ -32,16 +31,26 @@ export class TelegrafService {
   }
 
   @CatchErrors
+  async getFileByFileId(fileId: string): Promise<Buffer> {
+    const fileLink = await this.bot.telegram.getFileLink(fileId);
+    const res = await fetch(fileLink.href);
+    return Buffer.from(await res.arrayBuffer());
+  }
+
+  @CatchErrors
   async sendQuizToChatId(
     chatId: number | string,
     question: string,
     options: string[],
     correctOptionIndex: number,
+    photo?: Buffer,
     is_anonymous?: boolean,
     explanation?: string,
   ) {
     // Non-anonymous cant be send to channels
-    this.logger.debug('Sending the quiz');
+    if (photo) {
+      await this.bot.telegram.sendPhoto(chatId, { source: photo });
+    }
     const response = await this.bot.telegram.sendQuiz(
       chatId,
       question,

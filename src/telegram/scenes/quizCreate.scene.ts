@@ -4,11 +4,13 @@ import { Action, Ctx, SceneEnter, Wizard, WizardStep } from 'nestjs-telegraf';
 import { WizardI18nContext } from '@telegram/utils';
 import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
 import { Message } from 'telegraf/typings/core/types/typegram';
-import { QuizQuestion } from '@telegram/models';
+import { QuizQuestionCreationDto } from '@telegram/models';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { parse, isValid, format } from 'date-fns';
 import { RootConfig, TelegramConfig } from '@configuration/validation/configuration.validators';
 import { QuizQuestionRepositoryService } from '@database/quiz-repository/quiz-question-repository.service';
+import { QuizQuestion } from '@prisma/client';
+import { ScheduledQuizRepositoryService } from '@database/quiz-repository/schedule-quiz-question-repository.service';
 
 @Wizard(SCENES.SCENE_QUESTION_CREATE)
 export class SceneQuizCreate extends BaseTelegramHandler {
@@ -18,6 +20,7 @@ export class SceneQuizCreate extends BaseTelegramHandler {
     private readonly telegrafService: TelegrafService,
     private readonly rootConfig: RootConfig,
     private readonly quizQuestionRepository: QuizQuestionRepositoryService,
+    private readonly scheduledQuizRepositoryService: ScheduledQuizRepositoryService,
     ) {
     super();
   }
@@ -34,7 +37,6 @@ export class SceneQuizCreate extends BaseTelegramHandler {
 
   @WizardStep(1)
   async handleQuizQuestionInput(@Ctx() ctx: WizardI18nContext) {
-    this.logger.log(`Entering step 1`);
     const message = ctx.message as Message.TextMessage  | Message.PhotoMessage;
 
     const text = 'text' in message ? message.text
@@ -61,8 +63,6 @@ export class SceneQuizCreate extends BaseTelegramHandler {
       this.logger.debug("Photo was provided to the question");
     }
 
-
-    this.logger.log(`Question received ${text}. Will try to parse`);
     const quizQuestion = await this.parseQuestionInput(ctx, text, photo);
     if (quizQuestion == null) {
       ctx.wizard.selectStep(1);
@@ -90,14 +90,36 @@ export class SceneQuizCreate extends BaseTelegramHandler {
 
   @Action(TELEGRAM_BTN_ACTIONS.SAVE_QUIZ)
   async saveQuiz(@Ctx() ctx: WizardI18nContext) {
-    const quiz = ctx.wizard.state[this.quizStateSessionKey];
+    const quiz: QuizQuestionCreationDto = ctx.wizard.state[this.quizStateSessionKey];
     if (!quiz) {
       this.logger.warn(`While saving the quiz, the object was not found.`);
       await ctx.reply(`Error saving quiz. Please try again`);
       await ctx.scene.leave();
     }
+    const responseQuizQuestion: QuizQuestion  = await this.quizQuestionRepository.createData(
+      {
+        question: quiz.question,
+        answers: JSON.stringify(quiz.answers),
+        correctAnswerIndex: quiz.correctAnswerIndex,
+        image: quiz.photo,
+      }
+    )
+    if (!responseQuizQuestion) {
+      this.logger.error('Could not save quiz into the database');
+      await ctx.reply(`Could not save the object into the database`);
+    }
+    const responseScheduledQuiz = await this.scheduledQuizRepositoryService.createData(
+      {
+        scheduledAt: quiz.date,
+        question: { connect: { id: responseQuizQuestion.id } },
+      }
+    )
+    if (!responseScheduledQuiz) {
+      this.logger.error('Could not save scheduledQuiz into the database');
+      await ctx.reply(`Could schedule the question`);
+    }
 
-    await ctx.reply(`Saving quiz ${quiz.question}`);
+    await ctx.reply(`Question was saved successfully.`);
   }
 
   @Action(TELEGRAM_BTN_ACTIONS.NOT_SAVE_QUIZ)
@@ -106,7 +128,7 @@ export class SceneQuizCreate extends BaseTelegramHandler {
     await ctx.scene.leave();
   }
 
-  async previewQuestion(ctx: WizardI18nContext, quizQuestion: QuizQuestion, photo: Buffer) {
+  async previewQuestion(ctx: WizardI18nContext, quizQuestion: QuizQuestionCreationDto, photo: Buffer) {
 
     await ctx.reply(`Preview of the quiz. Will be published on ${format(quizQuestion.date, 'dd.MM.yyyy')} at ${this.rootConfig.quiz.dailyScheduledQuizPostTime}. Correct answer is "${quizQuestion.answers[quizQuestion.correctAnswerIndex]}"`)
     await this.telegrafService.sendQuizToChatId(ctx.chat.id,
@@ -121,7 +143,7 @@ export class SceneQuizCreate extends BaseTelegramHandler {
     @Ctx() ctx: WizardI18nContext,
     text: string,
     photo: Buffer,
-  ): Promise<QuizQuestion | null> {
+  ): Promise<QuizQuestionCreationDto | null> {
     const lines = text.trim().split('\n');
     if (lines.length < 4) {
       await ctx.reply(
@@ -169,6 +191,6 @@ export class SceneQuizCreate extends BaseTelegramHandler {
         return null;
       }
     }
-    return new QuizQuestion(question, answers, correctIndex, photo, date);
+    return new QuizQuestionCreationDto(question, answers, correctIndex, photo, date);
   }
 }

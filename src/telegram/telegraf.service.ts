@@ -9,6 +9,8 @@ import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { CatchErrors } from '@telegram/decorators';
 import { Cacheable } from 'typescript-cacheable';
+import { Message } from '@telegraf/types';
+import PollMessage = Message.PollMessage;
 
 @Injectable()
 export class TelegrafService {
@@ -62,7 +64,8 @@ export class TelegrafService {
     photo?: Buffer,
     is_anonymous?: boolean,
     explanation?: string,
-  ) {
+    open_period?: Date
+  ): Promise<PollMessage> {
     // Non-anonymous cant be send to channels
     if (is_anonymous === null || is_anonymous === undefined) {
       is_anonymous = false;
@@ -72,7 +75,7 @@ export class TelegrafService {
     }
     if (question.length > this.quizConfig.maxQuestionLength) {
       const longQuestion: string = question;
-      question = "What's the correct answer?"
+      question = "🤔"
       const _responseLongQuestion = await this.sendMessageToChatId(chatId, longQuestion);
     }
     const response = await this.bot.telegram.sendQuiz(
@@ -83,11 +86,13 @@ export class TelegrafService {
         correct_option_id: correctOptionIndex,
         is_anonymous: is_anonymous,
         explanation: explanation,
+        open_period: open_period?.getDate() ?? null,
       },
     );
     this.logger.debug(
       `Quiz sent successfully id=${response.poll.id}, name=${await this.getChatNameById(chatId)}`,
     );
+    return response;
   }
 
   @CatchErrors

@@ -28,6 +28,11 @@ import { GroupChatOnly, PrivateChatOnly } from '@telegram/decorators';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
+import {
+  PostedQuestionRepositoryService,
+} from '@database/quiz-repository/posted-question-repository.service';
+import { PostedQuestion } from '@prisma/client';
+import { UserAnswerRepositoryService } from '@database/quiz-repository/user-answer-repository.service';
 
 @Update()
 export class BotUpdate extends BaseTelegramHandler {
@@ -36,6 +41,8 @@ export class BotUpdate extends BaseTelegramHandler {
     private readonly userRepositoryService: UserRepositoryService,
     private readonly telegramConfig: TelegramConfig,
     private readonly telegrafService: TelegrafService,
+    private readonly postedQuestionRepositoryService: PostedQuestionRepositoryService,
+    private readonly userAnswerRepositoryService: UserAnswerRepositoryService,
   ) {
     super();
     if (this.telegramConfig.bot.updateMetadata) {
@@ -45,6 +52,43 @@ export class BotUpdate extends BaseTelegramHandler {
       this.logger.log(`Starting bot '${botName}'`);
     });
   }
+
+  @On(BOT_ON.POLL_ANSWER)
+  async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
+    const pollAnswer: PollAnswer = ctx.pollAnswer;
+    const pollId = pollAnswer?.poll_id;
+    const pollIdInt = Number.parseInt(pollId, 10);
+    if (isNaN(pollIdInt)) {
+      this.logger.warn(`Invalid poll ID: ${pollId}`);
+      return;
+    }
+
+    let postedQuestion = await this.postedQuestionRepositoryService.readByIdIncludeQuestion(pollIdInt);
+    if (!postedQuestion) {
+      this.logger.warn(`Posted question with id '${pollId}' not found in the db`);
+      return;
+    }
+    const userId = pollAnswer?.user?.id;
+    const selectedOption = pollAnswer?.option_ids[0];
+    const isCorrect = selectedOption === postedQuestion.question.correctAnswerIndex;
+
+
+    const userAnswerResponse = await this.userAnswerRepositoryService.createData({
+      user: { connect: { id: userId } },
+      postedQuestion: { connect: { id: postedQuestion.id } },
+      selectedIdx: selectedOption,
+      isCorrect,
+    })
+    if (!userAnswerResponse) {
+      this.logger.warn(`Could not save user answer of user ${userId} to poll ${pollId}`)
+      return;
+    }
+    this.logger.debug(
+      `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
+    );
+  }
+
+
 
   // @Start()
   // @AdminOnly()
@@ -95,18 +139,6 @@ export class BotUpdate extends BaseTelegramHandler {
   //   await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER);
   //   // await ctx.scene.enter(SCENES.SCENE_QUIZ_MANAGER, {}, true);
   // }
-
-  @On(BOT_ON.POLL_ANSWER)
-  async onPollAnswer(@Ctx() ctx: WizardI18nContext) {
-    const pollAnswer: PollAnswer = ctx.pollAnswer;
-
-    const userId = pollAnswer?.user?.id;
-    const pollId = pollAnswer?.poll_id;
-    const selectedOption = pollAnswer?.option_ids[0];
-    this.logger.log(
-      `User ${userId} answered poll ${pollId} with option ${selectedOption}`,
-    );
-  }
 
   // @Hears(new RegExp('^getById (-?\\d+)$'))
   // async hearsGetById(@Ctx() ctx: WizardI18nContext) {

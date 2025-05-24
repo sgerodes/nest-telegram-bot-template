@@ -39,19 +39,19 @@ model QuizQuestion {
 }
 
 model PostedQuestion {
-  id             Int      @id @default(autoincrement())
-  telegramChatId BigInt
-  telegramMsgId  BigInt
-  questionId     Int
-  postedAt       DateTime @default(now())
+  id                 Int      @id @default(autoincrement())
+  telegramChatId     BigInt
+  telegramMsgId      BigInt
+  questionTelegramId Int
+  postedAt           DateTime @default(now())
 
-  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question QuizQuestion @relation(fields: [questionTelegramId], references: [id], onDelete: Cascade)
 
   userAnswers     UserAnswer[]
   scheduledQuiz   ScheduledQuiz?
   sessionQuestion UserQuizSessionQuestion?
 
-  @@index([questionId])
+  @@index([questionTelegramId])
   @@index([telegramChatId])
   @@index([telegramMsgId])
   @@index([postedAt])

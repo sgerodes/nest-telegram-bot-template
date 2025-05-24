@@ -9,7 +9,7 @@ import { TelegrafService } from '@telegram/telegraf.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import { shuffleArray } from '@telegram/utils';
-import { Quiz, QuizQuestion } from '@telegram/models';
+import { Quiz, QuizQuestionCreationDto } from '@telegram/models';
 
 @Wizard(SCENES.SCENE_QUIZ)
 export class SceneQuiz {

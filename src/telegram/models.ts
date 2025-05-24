@@ -1,5 +1,5 @@
 
-export class QuizQuestion {
+export class QuizQuestionCreationDto {
   question: string;
   answers: string[];
   correctAnswerIndex: number;
@@ -23,8 +23,8 @@ export class QuizQuestion {
     this.advice = advice;
   }
 
-  static fromJSON(json: any): QuizQuestion {
-    return new QuizQuestion(
+  static fromJSON(json: any): QuizQuestionCreationDto {
+    return new QuizQuestionCreationDto(
       json.question,
       json.answers,
       json.correct_answer,
@@ -34,14 +34,14 @@ export class QuizQuestion {
 }
 
 export class Quiz {
-  questions: QuizQuestion[];
+  questions: QuizQuestionCreationDto[];
 
-  constructor(questions: QuizQuestion[]) {
+  constructor(questions: QuizQuestionCreationDto[]) {
     this.questions = questions;
   }
 
   static fromJSON(jsonArray: any[]): Quiz {
-    const questions = jsonArray.map(QuizQuestion.fromJSON);
+    const questions = jsonArray.map(QuizQuestionCreationDto.fromJSON);
     return new Quiz(questions);
   }
 }

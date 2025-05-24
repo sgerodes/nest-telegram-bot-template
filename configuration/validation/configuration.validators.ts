@@ -56,6 +56,9 @@ export class TelegramIdsConfig {
   playgroundSuperGroupId!: number;
 
   @IsTelegramId()
+  quizGroupId!: number;
+
+  @IsTelegramId()
   ownerTelegramId!: number;
 
   @IsTelegramId()

@@ -26,6 +26,7 @@ export const configuration = (): RootConfig => ({
       playgroundChannelId: -1002377415957,
       playgroundGroupId: -1001864900132,
       playgroundSuperGroupId: -1001864900132,
+      quizGroupId: -1001864900132,
       ownerTelegramId: 41459859, //sg
       adminGroupId: -4948426032,
       adminTelegramIds: [219327518, 399103080, 49576483, 7304566667],

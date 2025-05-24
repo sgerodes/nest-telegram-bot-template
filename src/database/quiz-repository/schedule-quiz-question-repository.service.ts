@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@database/prisma.service';
 import { AbstractRepository } from '@database/abstract.repository';
-import { Prisma, ScheduledQuiz } from '@prisma/client';
+import { Prisma, QuizQuestion, ScheduledQuiz } from '@prisma/client';
 
 @Injectable()
 export class ScheduledQuizRepositoryService extends AbstractRepository<
@@ -12,4 +12,26 @@ export class ScheduledQuizRepositoryService extends AbstractRepository<
   constructor(private readonly prisma: PrismaService) {
     super(prisma.scheduledQuiz);
   }
+
+  async readScheduledForToday(): Promise<(ScheduledQuiz & { question: QuizQuestion })[]> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.modelDelegate.findMany({
+      where: {
+        scheduledAt: {
+          gte: today,
+          lt: tomorrow,
+        },
+        postedQuestionId: null,
+      },
+      include: {
+        question: true,
+      },
+    });
+  }
+
 }

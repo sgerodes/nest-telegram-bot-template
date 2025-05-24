@@ -36,5 +36,6 @@ import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
     LanguageModule,
   ],
   providers: [UserRepositoryService, BotUpdate, TelegrafService, BotAdminUpdate, SceneQuizCreate],
+  exports: [TelegrafService],
 })
 export class TelegramModule {}

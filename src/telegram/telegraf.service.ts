@@ -4,7 +4,7 @@ import { Telegraf } from 'telegraf';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
 import { I18nTranslations } from '@i18n/i18n.generated';
 import { I18nService } from 'nestjs-i18n';
-import { TelegramConfig } from '@configuration/validation/configuration.validators';
+import { QuizConfig, TelegramConfig } from '@configuration/validation/configuration.validators';
 import { LanguageService } from '@language/language.service';
 import { i18nKeys } from '@i18n/i18n.keys';
 import { CatchErrors } from '@telegram/decorators';
@@ -18,6 +18,7 @@ export class TelegrafService {
     private readonly bot: Telegraf<TelegrafI18nContext<I18nTranslations>>,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly telegramConfig: TelegramConfig,
+    private readonly quizConfig: QuizConfig,
     private readonly languageService: LanguageService,
   ) {
     // this.setupListeners();
@@ -42,6 +43,7 @@ export class TelegrafService {
     this.logger.debug('Trying to send');
     const response = await this.bot.telegram.sendMessage(chatId, text);
     this.logger.debug(`Message sent successfully id=${response.message_id}`);
+    return response;
   }
 
   @CatchErrors
@@ -67,6 +69,11 @@ export class TelegrafService {
     }
     if (photo) {
       await this.bot.telegram.sendPhoto(chatId, { source: photo });
+    }
+    if (question.length > this.quizConfig.maxQuestionLength) {
+      const longQuestion: string = question;
+      question = "What's the correct answer?"
+      const _responseLongQuestion = await this.sendMessageToChatId(chatId, longQuestion);
     }
     const response = await this.bot.telegram.sendQuiz(
       chatId,

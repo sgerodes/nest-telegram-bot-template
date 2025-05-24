@@ -72,6 +72,9 @@ export class QuizConfig {
 
   @IsTimeString({ message: 'scheduledQuizDefaultPostTime must be in HH:mm format' })
   dailyScheduledQuizPostTime!: string;
+
+  @IsInt()
+  maxQuestionLength!: number;
 }
 
 export class TelegramConfig {

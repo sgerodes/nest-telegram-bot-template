@@ -8,12 +8,16 @@ import { QuizQuestion } from '@telegram/models';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { parse, isValid, format } from 'date-fns';
 import { RootConfig, TelegramConfig } from '@configuration/validation/configuration.validators';
+import { QuizQuestionRepositoryService } from '@database/quiz-repository/quiz-question-repository.service';
 
 @Wizard(SCENES.SCENE_QUESTION_CREATE)
 export class SceneQuizCreate extends BaseTelegramHandler {
+  quizStateSessionKey: string = 'quiz';
+
   constructor(
     private readonly telegrafService: TelegrafService,
     private readonly rootConfig: RootConfig,
+    private readonly quizQuestionRepository: QuizQuestionRepositoryService,
     ) {
     super();
   }
@@ -65,7 +69,7 @@ export class SceneQuizCreate extends BaseTelegramHandler {
     }
 
     await this.previewQuestion(ctx, quizQuestion, photo);
-    ctx.wizard.state['quiz'] = quizQuestion;
+    ctx.wizard.state[this.quizStateSessionKey] = quizQuestion;
 
     await ctx.reply("Save this question?", {
       reply_markup: { inline_keyboard: [
@@ -86,13 +90,20 @@ export class SceneQuizCreate extends BaseTelegramHandler {
 
   @Action(TELEGRAM_BTN_ACTIONS.SAVE_QUIZ)
   async saveQuiz(@Ctx() ctx: WizardI18nContext) {
-    const quiz = ctx.wizard.state['quiz'];
-    await ctx.reply(`Saving quiz TODO ${quiz.question}`);
+    const quiz = ctx.wizard.state[this.quizStateSessionKey];
+    if (!quiz) {
+      this.logger.warn(`While saving the quiz, the object was not found.`);
+      await ctx.reply(`Error saving quiz. Please try again`);
+      await ctx.scene.leave();
+    }
+
+    await ctx.reply(`Saving quiz ${quiz.question}`);
   }
 
   @Action(TELEGRAM_BTN_ACTIONS.NOT_SAVE_QUIZ)
   async notSaveQuiz(@Ctx() ctx: WizardI18nContext) {
-    await ctx.reply("Not saving quiz TODO");
+    await ctx.reply("Aborting question creation");
+    await ctx.scene.leave();
   }
 
   async previewQuestion(ctx: WizardI18nContext, quizQuestion: QuizQuestion, photo: Buffer) {

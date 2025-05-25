@@ -1,32 +1,16 @@
-import { Context as TelegrafContext } from 'telegraf';
 import {
-  Action,
-  Command,
-  // Context as NestjsTelegrafContext,
   Ctx,
-  Hears,
-  Help,
   On,
-  Start,
   Update,
 } from 'nestjs-telegraf';
-import { Logger } from '@nestjs/common';
 import {
-  BOT_ADMIN_CHAT_COMMANDS,
-  BOT_COMMANDS,
   BOT_ON,
-  SCENES,
-  TELEGRAM_BTN_ACTIONS,
 } from '@configuration/telegramConstants';
-import { InlineKeyboardButton, PollAnswer } from '@telegraf/types';
+import {  PollAnswer } from '@telegraf/types';
 import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
-import { i18nKeys } from '@i18n/i18n.keys';
 import { TelegrafService } from '@telegram/telegraf.service';
-import { AdminOnly, WizardI18nContext } from '@telegram/utils';
-import { GroupChatOnly, PrivateChatOnly } from '@telegram/decorators';
-import { I18nTranslations } from '@i18n/i18n.generated';
-import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
+import {  WizardI18nContext } from '@telegram/utils';
 import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
 import {
   PostedQuestionRepositoryService,
@@ -80,7 +64,7 @@ export class BotUpdate extends BaseTelegramHandler {
       return;
     }
     this.logger.debug(
-      `User ${userId} answered poll ${pollId} with option ${selectedOption}. Is correct: ${isCorrect}`,
+      `User ${user.username} (${user.telegramId}) answered poll ${pollId} with option ${selectedOption}. Is correct: ${isCorrect}`,
     );
   }
 

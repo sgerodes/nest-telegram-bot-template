@@ -120,6 +120,12 @@ export class TelegrafService {
   }
 
   @CatchErrors
+  async closePoll(chatId: number | string, messageId: number): Promise<void> {
+    await this.bot.telegram.stopPoll(chatId, messageId);
+    this.logger.debug(`Poll ${messageId} in chat ${chatId} closed.`);
+  }
+
+  @CatchErrors
   async getBotName(): Promise<string> {
     const botInfo = await this.bot.telegram.getMe();
     return botInfo.username;

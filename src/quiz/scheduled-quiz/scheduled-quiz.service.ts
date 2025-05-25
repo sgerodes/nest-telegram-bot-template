@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
-import { PrismaService } from '@database/prisma.service';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { TelegramConfig, QuizConfig } from '@configuration/validation/configuration.validators';
 import { ScheduledQuizRepositoryService } from '@database/quiz-repository/schedule-quiz-question-repository.service';
@@ -36,6 +35,7 @@ export class ScheduledQuizService {
 
     this.logger.log(`Scheduled daily quiz post at ${cronExpression}`);
   }
+
 
   private async executeScheduledQuizJob() {
       let scheduledForToday: (ScheduledQuiz & { question: QuizQuestion })[] = await this.scheduledQuizRepositoryService.readScheduledForToday();

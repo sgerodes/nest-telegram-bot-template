@@ -60,17 +60,22 @@ export class ScheduledQuizService {
       return;
     }
 
-    const pollIdInt = BigInt(response.poll.id)
+    const pollId = BigInt(response.poll.id)
 
     const postedQuestionResponse = await this.postedQuestionRepositoryService.createData({
       telegramChatId: this.telegramConfig.telegramIds.quizGroupId,
-      telegramMsgId: pollIdInt,
+      telegramMsgId: pollId,
       question: { connect: { id: firstQuestion.id } },
     })
     if (!postedQuestionResponse) {
       this.logger.error("Could not write the postedQuestion to the db");
       return;
     }
+
+    const pinResponse = await this.telegrafService.pinMessage(
+      this.telegramConfig.telegramIds.quizGroupId,
+      response.message_id
+    )
 
   }
 

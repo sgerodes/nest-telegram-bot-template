@@ -126,17 +126,19 @@ export class TelegrafService {
   }
 
   @CatchErrors
-  async pinMessage(chatId: number | string, messageId: number, silent = false): Promise<void> {
-    await this.bot.telegram.pinChatMessage(chatId, messageId, {
+  async pinMessage(chatId: number | string, messageId: number, silent = false) {
+    const response = await this.bot.telegram.pinChatMessage(chatId, messageId, {
       disable_notification: silent,
     });
     this.logger.debug(`Pinned message ${messageId} in chat ${chatId}`);
+    return response
   }
 
   @CatchErrors
-  async unpinMessage(chatId: number | string, messageId: number): Promise<void> {
-    await this.bot.telegram.unpinChatMessage(chatId, messageId);
+  async unpinMessage(chatId: number | string, messageId: number) {
+    const response = await this.bot.telegram.unpinChatMessage(chatId, messageId);
     this.logger.debug(`Unpinned message ${messageId} in chat ${chatId}`);
+    return response
   }
 
   @CatchErrors

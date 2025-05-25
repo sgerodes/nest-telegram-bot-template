@@ -36,9 +36,10 @@ export const configuration = (): RootConfig => ({
   },
   quiz: {
     quizQuestionDirectory: getAbsolutePathForProjectDirectory('resources/quiz/'),
-    dailyScheduledQuizPostTime: '07:00',
+    dailyScheduledQuizPostTime: '13:17',
     maxQuestionLength: 255,
     maxAnswerLength: 100,
+    openPeriodDurationSeconds: 60 * 60 * 24, // a day
   },
   database: {
     url: process.env.DATABASE_URL,

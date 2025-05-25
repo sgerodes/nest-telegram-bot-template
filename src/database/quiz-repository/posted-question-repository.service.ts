@@ -13,9 +13,9 @@ export class PostedQuestionRepositoryService extends AbstractRepository<
     super(prisma.postedQuestion);
   }
 
-  async readByIdIncludeQuestion(id: number): Promise<PostedQuestion & { question: QuizQuestion } | null> {
+  async readByTelegramMsgIdIncludeQuestion(id: bigint | number): Promise<PostedQuestion & { question: QuizQuestion } | null> {
     return this.prisma.postedQuestion.findUnique({
-      where: { id },
+      where: { telegramMsgId: id },
       include: { question: true },
     });
   }

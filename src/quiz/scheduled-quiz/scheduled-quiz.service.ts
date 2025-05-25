@@ -5,6 +5,8 @@ import { TelegrafService } from '@telegram/telegraf.service';
 import { TelegramConfig, QuizConfig } from '@configuration/validation/configuration.validators';
 import { ScheduledQuizRepositoryService } from '@database/quiz-repository/schedule-quiz-question-repository.service';
 import { CronJob } from 'cron';
+import { QuizQuestion, ScheduledQuiz } from '@prisma/client';
+import { PostedQuestionRepositoryService } from '@database/quiz-repository/posted-question-repository.service';
 
 @Injectable()
 export class ScheduledQuizService {
@@ -13,8 +15,10 @@ export class ScheduledQuizService {
   constructor(
     private readonly telegrafService: TelegrafService,
     private readonly quizConfig: QuizConfig,
+    private readonly telegramConfig: TelegramConfig,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly scheduledQuizRepositoryService: ScheduledQuizRepositoryService,
+    private readonly postedQuestionRepositoryService: PostedQuestionRepositoryService
   ) {}
 
 
@@ -34,7 +38,40 @@ export class ScheduledQuizService {
   }
 
   private async executeScheduledQuizJob() {
-      let scheduledForToday = await this.scheduledQuizRepositoryService.readScheduledForToday();
+      let scheduledForToday: (ScheduledQuiz & { question: QuizQuestion })[] = await this.scheduledQuizRepositoryService.readScheduledForToday();
+      if (!scheduledForToday || scheduledForToday.length == 0) {
+        this.logger.debug(`No scheduled quizzes for today: ${scheduledForToday}`);
+        return;
+      }
+    const firstScheduledQuiz = scheduledForToday[0];
+    const firstQuestion: QuizQuestion = firstScheduledQuiz.question;
+    const image = firstQuestion.image ? Buffer.from(firstQuestion.image) : undefined;
+
+    const response = await this.telegrafService.sendQuizToChatId(
+      this.telegramConfig.telegramIds.quizGroupId,
+      firstQuestion.question,
+      JSON.parse(firstQuestion.answers),
+      firstQuestion.correctAnswerIndex,
+      image,
+    )
+
+    if (!response || !response.poll || !response.poll.id) {
+      this.logger.error("Could not create a poll");
+      return;
+    }
+
+    const pollIdInt = BigInt(response.poll.id)
+
+    const postedQuestionResponse = await this.postedQuestionRepositoryService.createData({
+      telegramChatId: this.telegramConfig.telegramIds.quizGroupId,
+      telegramMsgId: pollIdInt,
+      question: { connect: { id: firstQuestion.id } },
+    })
+    if (!postedQuestionResponse) {
+      this.logger.error("Could not write the postedQuestion to the db");
+      return;
+    }
+
   }
 
   // @Cron('* * * * *') // every minute

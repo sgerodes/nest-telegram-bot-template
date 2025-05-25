@@ -81,6 +81,9 @@ export class QuizConfig {
 
   @IsInt()
   maxAnswerLength!: number;
+
+  @IsInt()
+  openPeriodDurationSeconds!: number;
 }
 
 export class TelegramConfig {

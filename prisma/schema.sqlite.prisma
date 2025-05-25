@@ -43,7 +43,7 @@ model PostedQuestion {
   telegramChatId     BigInt
   telegramMsgId      BigInt   @unique
   questionTelegramId Int
-  isOpen              Boolean @default(true)
+  isOpen             Boolean  @default(true)
   postedAt           DateTime @default(now())
 
   question QuizQuestion @relation(fields: [questionTelegramId], references: [id], onDelete: Cascade)
@@ -54,8 +54,8 @@ model PostedQuestion {
 
   @@index([questionTelegramId])
   @@index([telegramChatId])
-  @@index([telegramMsgId])
   @@index([postedAt])
+  @@index([isOpen])
 }
 
 model UserAnswer {

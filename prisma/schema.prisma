@@ -49,8 +49,8 @@ model PostedQuestion {
 
   @@index([questionTelegramId])
   @@index([telegramChatId])
-  @@index([telegramMsgId])
   @@index([postedAt])
+  @@index([isOpen])
 }
 
 model UserAnswer {

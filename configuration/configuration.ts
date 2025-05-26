@@ -39,6 +39,7 @@ export const configuration = (): RootConfig => ({
     dailyScheduledQuizPostTime: '15:19',
     maxQuestionLength: 255,
     maxAnswerLength: 100,
+    maxAnswerAmount: 10,
     openPeriodDurationSeconds: 60 * 60 * 23, // 23 hours
   },
   database: {

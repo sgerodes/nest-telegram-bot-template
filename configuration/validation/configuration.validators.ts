@@ -83,6 +83,9 @@ export class QuizConfig {
   maxAnswerLength!: number;
 
   @IsInt()
+  maxAnswerAmount!: number;
+
+  @IsInt()
   openPeriodDurationSeconds!: number;
 }
 

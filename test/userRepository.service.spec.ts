@@ -7,7 +7,7 @@ describe('UserRepositoryService', () => {
   let prismaService: PrismaService;
 
   const mockPrismaService = {
-    user: {
+    telegramUser: {
       findUnique: jest.fn(),
       findFirst: jest.fn(),
       count: jest.fn(),
@@ -33,22 +33,22 @@ describe('UserRepositoryService', () => {
 
   describe('readByTelegramId', () => {
     it('should return a user if found', async () => {
-      const mockUser = { id: 1, telegramId: 123456, name: 'John Doe' };
-      (prismaService.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
+      const mockUser = { id: 1, telegramId: 123456, username: 'John Doe' };
+      (prismaService.telegramUser.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await userRepository.readByTelegramId(123456);
       expect(result).toEqual(mockUser);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.telegramUser.findUnique).toHaveBeenCalledWith({
         where: { telegramId: 123456 },
       });
     });
 
     it('should return null if no user is found', async () => {
-      (prismaService.user.findUnique as jest.Mock).mockResolvedValue(null);
+      (prismaService.telegramUser.findUnique as jest.Mock).mockResolvedValue(null);
 
       const result = await userRepository.readByTelegramId(123456);
       expect(result).toBeNull();
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.telegramUser.findUnique).toHaveBeenCalledWith({
         where: { telegramId: 123456 },
       });
     });
@@ -56,23 +56,23 @@ describe('UserRepositoryService', () => {
 
   describe('existsByTelegramId', () => {
     it('should return true if the user exists', async () => {
-      (prismaService.user.findFirst as jest.Mock).mockResolvedValue({
+      (prismaService.telegramUser.findFirst as jest.Mock).mockResolvedValue({
         telegramId: 123456,
       });
 
       const result = await userRepository.existsByTelegramId(123456);
       expect(result).toBe(true);
-      expect(prismaService.user.findFirst).toHaveBeenCalledWith({
+      expect(prismaService.telegramUser.findFirst).toHaveBeenCalledWith({
         where: { telegramId: 123456 },
       });
     });
 
     it('should return false if the user does not exist', async () => {
-      (prismaService.user.findFirst as jest.Mock).mockResolvedValue(null);
+      (prismaService.telegramUser.findFirst as jest.Mock).mockResolvedValue(null);
 
       const result = await userRepository.existsByTelegramId(123456);
       expect(result).toBe(false);
-      expect(prismaService.user.findFirst).toHaveBeenCalledWith({
+      expect(prismaService.telegramUser.findFirst).toHaveBeenCalledWith({
         where: { telegramId: 123456 },
       });
     });
@@ -82,11 +82,11 @@ describe('UserRepositoryService', () => {
     it('should create a user and return the created user', async () => {
       const mockUserInput = { name: 'Jane Doe', telegramId: 654321 };
       const mockUser = { id: 2, ...mockUserInput };
-      (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
+      (prismaService.telegramUser.create as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await userRepository.createData(mockUserInput);
       expect(result).toEqual(mockUser);
-      expect(prismaService.user.create).toHaveBeenCalledWith({
+      expect(prismaService.telegramUser.create).toHaveBeenCalledWith({
         data: mockUserInput,
       });
     });
@@ -94,12 +94,12 @@ describe('UserRepositoryService', () => {
 
   describe('readById', () => {
     it('should return a user by id', async () => {
-      const mockUser = { id: 1, telegramId: 123456, name: 'John Doe' };
-      (prismaService.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
+      const mockUser = { id: 1, telegramId: 123456, username: 'John Doe' };
+      (prismaService.telegramUser.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await userRepository.readById(1);
       expect(result).toEqual(mockUser);
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.telegramUser.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
       });
     });

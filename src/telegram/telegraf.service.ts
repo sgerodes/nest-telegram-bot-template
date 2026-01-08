@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { InjectBot } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
 import { TelegrafI18nContext } from 'nestjs-telegraf-i18n';
@@ -10,6 +11,7 @@ import { i18nKeys } from '@i18n/i18n.keys';
 import { CatchErrors } from '@telegram/decorators';
 import { Cacheable } from 'typescript-cacheable';
 import { Message } from '@telegraf/types';
+import { lastValueFrom } from 'rxjs';
 import PollMessage = Message.PollMessage;
 
 @Injectable()
@@ -22,6 +24,7 @@ export class TelegrafService {
     private readonly telegramConfig: TelegramConfig,
     private readonly quizConfig: QuizConfig,
     private readonly languageService: LanguageService,
+    private readonly httpService: HttpService,
   ) {
     // this.setupListeners();
     this.setupOnErrorLogging()
@@ -30,7 +33,7 @@ export class TelegrafService {
   setupOnErrorLogging(){
     this.bot.catch((err, ctx) => {
       const username = ctx?.botInfo?.username ?? 'unknown';
-      console.error('🔴 Telegraf caught error:', {
+      this.logger.error('🔴 Telegraf caught error:', {
         error: err,
         stack: err instanceof Error ? err.stack : undefined,
         ctxType: ctx?.updateType,
@@ -51,8 +54,10 @@ export class TelegrafService {
   @CatchErrors
   async getFileByFileId(fileId: string): Promise<Buffer> {
     const fileLink = await this.bot.telegram.getFileLink(fileId);
-    const res = await fetch(fileLink.href);
-    return Buffer.from(await res.arrayBuffer());
+    const response = await lastValueFrom(
+      this.httpService.get(fileLink.href, { responseType: 'arraybuffer' }),
+    );
+    return Buffer.from(response.data);
   }
 
   @CatchErrors

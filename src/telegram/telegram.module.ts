@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotUpdate } from '@telegram/bot.update';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
@@ -14,6 +15,7 @@ import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
 
 @Module({
   imports: [
+    HttpModule,
     TelegrafI18nModule,
     DatabaseModule,
     MiddlewareModule,

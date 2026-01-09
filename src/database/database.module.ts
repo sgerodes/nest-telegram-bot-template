@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserRepositoryService } from './user-repository/user-repository.service';
+import { UserRepositoryV2Service } from './user-repository/user-repository.v2.service';
 import { PrismaService } from '@database/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { QuizQuestionRepositoryService } from '@database/quiz-repository/quiz-question-repository.service';
@@ -11,7 +12,23 @@ import { UserAnswerRepositoryService } from '@database/quiz-repository/user-answ
 
 @Module({
   imports: [ConfigModule.forRoot()],
-  providers: [PrismaService, UserRepositoryService, QuizQuestionRepositoryService, ScheduledQuizRepositoryService, PostedQuestionRepositoryService, UserAnswerRepositoryService],
-  exports: [PrismaService, UserRepositoryService, QuizQuestionRepositoryService, ScheduledQuizRepositoryService, PostedQuestionRepositoryService, UserAnswerRepositoryService],
+  providers: [
+    PrismaService,
+    UserRepositoryService,
+    UserRepositoryV2Service,
+    QuizQuestionRepositoryService,
+    ScheduledQuizRepositoryService,
+    PostedQuestionRepositoryService,
+    UserAnswerRepositoryService,
+  ],
+  exports: [
+    PrismaService,
+    UserRepositoryService,
+    UserRepositoryV2Service,
+    QuizQuestionRepositoryService,
+    ScheduledQuizRepositoryService,
+    PostedQuestionRepositoryService,
+    UserAnswerRepositoryService,
+  ],
 })
 export class DatabaseModule {}

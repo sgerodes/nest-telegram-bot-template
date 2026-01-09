@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserRepositoryV2Service } from '@database/user-repository/user-repository.v2.service';
+import { TelegramUserRepositoryV2Service } from '@database/user-repository/user-repository.v2.service';
 import { PrismaService } from '@database/prisma.service';
 
-describe('UserRepositoryV2Service', () => {
-  let userRepository: UserRepositoryV2Service;
+describe('TelegramUserRepositoryV2Service', () => {
+  let userRepository: TelegramUserRepositoryV2Service;
   let prismaService: PrismaService;
 
   const mockPrismaService = {
@@ -12,13 +12,14 @@ describe('UserRepositoryV2Service', () => {
       findFirst: jest.fn(),
       count: jest.fn(),
       create: jest.fn(),
+      $modelName: 'TelegramUser', // Mocking the injected metadata
     },
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UserRepositoryV2Service,
+        TelegramUserRepositoryV2Service,
         {
           provide: PrismaService,
           useValue: mockPrismaService,
@@ -26,8 +27,12 @@ describe('UserRepositoryV2Service', () => {
       ],
     }).compile();
 
-    userRepository = module.get<UserRepositoryV2Service>(UserRepositoryV2Service);
+    userRepository = module.get<TelegramUserRepositoryV2Service>(TelegramUserRepositoryV2Service);
     prismaService = module.get<PrismaService>(PrismaService);
+    
+    // Manually trigger onModuleInit for discovery in tests
+    await userRepository.onModuleInit();
+    
     jest.clearAllMocks();
   });
 

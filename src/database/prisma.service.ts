@@ -4,7 +4,7 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PrismaService
@@ -13,10 +13,27 @@ export class PrismaService
 {
   private readonly logger = new Logger(this.constructor.name);
 
+  constructor() {
+    super();
+    this.patchDelegates();
+  }
+
   async onModuleInit() {
     this.logger.log('Connecting to the db...');
     await this.$connect();
     this.logger.log('Database connection established.');
+  }
+
+  private patchDelegates() {
+    const modelNames = Object.values(Prisma.ModelName);
+    for (const modelName of modelNames) {
+      const delegateKey =
+        modelName.charAt(0).toLowerCase() + modelName.slice(1);
+      const delegate = (this as any)[delegateKey];
+      if (delegate) {
+        delegate.$modelName = modelName;
+      }
+    }
   }
 
   async onModuleDestroy() {

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserRepositoryService } from './user-repository/user-repository.service';
-import { TelegramUserRepositoryV2Service } from './user-repository/user-repository.v2.service';
+import { TelegramUserRepositoryV3Service } from './user-repository/user-repository.v3.service';
 import { PrismaService } from '@database/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { QuizQuestionRepositoryService } from '@database/quiz-repository/quiz-question-repository.service';
@@ -15,7 +15,7 @@ import { UserAnswerRepositoryService } from '@database/quiz-repository/user-answ
   providers: [
     PrismaService,
     UserRepositoryService,
-    TelegramUserRepositoryV2Service,
+    TelegramUserRepositoryV3Service,
     QuizQuestionRepositoryService,
     ScheduledQuizRepositoryService,
     PostedQuestionRepositoryService,
@@ -24,7 +24,7 @@ import { UserAnswerRepositoryService } from '@database/quiz-repository/user-answ
   exports: [
     PrismaService,
     UserRepositoryService,
-    TelegramUserRepositoryV2Service,
+    TelegramUserRepositoryV3Service,
     QuizQuestionRepositoryService,
     ScheduledQuizRepositoryService,
     PostedQuestionRepositoryService,

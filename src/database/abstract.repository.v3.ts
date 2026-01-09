@@ -1,24 +1,25 @@
-import { Inject, Logger } from '@nestjs/common';
+import { Inject, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '@database/prisma.service';
 
 /**
- * AbstractRepository V2
+ * AbstractRepository V3
  * 
- * A base repository providing common database operations with a manual delegate getter.
- * Maximum type safety with native Prisma argument types.
+ * A base repository providing common database operations with automatic model discovery.
+ * The correct Prisma delegate is automatically found based on the class name.
  * 
  * @template T The Prisma Model type.
  */
-export abstract class AbstractRepositoryV2<T> {
+export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
   @Inject(PrismaService)
   protected readonly prisma: PrismaService;
 
   protected readonly logger = new Logger(this.constructor.name);
 
   /**
-   * Child classes provide the specific Prisma delegate.
+   * The Prisma delegate for the specific model.
+   * Automatically discovered in onModuleInit.
    */
-  public abstract get delegate(): {
+  public delegate: {
     create: (args: any) => Promise<T>;
     findUnique: (args: any) => Promise<T | null>;
     findFirst: (args: any) => Promise<T | null>;
@@ -26,6 +27,36 @@ export abstract class AbstractRepositoryV2<T> {
     update: (args: any) => Promise<T>;
     delete: (args: any) => Promise<T>;
   };
+
+  /**
+   * Automatically discovers the Prisma delegate based on the class name.
+   */
+  onModuleInit() {
+    const className = this.constructor.name;
+    
+    // Iterate over all properties in PrismaService to find patched delegates
+    const allDelegateKeys = Object.keys(this.prisma).filter((key) => {
+      const prop = (this.prisma as any)[key];
+      return prop && typeof prop === 'object' && prop.$modelName;
+    });
+
+    const foundKey = allDelegateKeys.find((key) => {
+      const modelName = (this.prisma as any)[key].$modelName;
+      // Check if the class name contains the model name (case-insensitive)
+      return className.toLowerCase().includes(modelName.toLowerCase());
+    });
+
+    if (!foundKey) {
+      this.logger.error(
+        `Could not automatically find Prisma delegate for ${className}. ` +
+        `Available models: ${allDelegateKeys.map(k => (this.prisma as any)[k].$modelName).join(', ')}`
+      );
+      throw new Error(`Failed to initialize repository: ${className}`);
+    }
+
+    this.delegate = (this.prisma as any)[foundKey];
+    this.logger.debug(`Automatically linked ${className} to Prisma model: ${(this.delegate as any).$modelName}`);
+  }
 
   /**
    * Creates a new record using standard Prisma arguments.
@@ -93,3 +124,4 @@ export abstract class AbstractRepositoryV2<T> {
     return this.delegate.delete(args);
   }
 }
+

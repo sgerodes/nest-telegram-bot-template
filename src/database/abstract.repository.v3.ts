@@ -3,10 +3,10 @@ import { PrismaService } from '@database/prisma.service';
 
 /**
  * AbstractRepository V3
- * 
+ *
  * A base repository providing common database operations with automatic model discovery.
  * The correct Prisma delegate is automatically found based on the class name.
- * 
+ *
  * @template T The Prisma Model type.
  */
 export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
@@ -33,7 +33,7 @@ export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
    */
   onModuleInit() {
     const className = this.constructor.name;
-    
+
     // Iterate over all properties in PrismaService to find patched delegates
     const allDelegateKeys = Object.keys(this.prisma).filter((key) => {
       const prop = (this.prisma as any)[key];
@@ -55,7 +55,7 @@ export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
     }
 
     this.delegate = (this.prisma as any)[foundKey];
-    this.logger.debug(`Automatically linked ${className} to Prisma model: ${(this.delegate as any).$modelName}`);
+    // this.logger.debug(`Automatically linked ${className} to Prisma model: ${(this.delegate as any).$modelName}`);
   }
 
   /**

@@ -24,7 +24,8 @@
     "prisma:sqlite:regenerate": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma",
     "prisma:postres:migrate": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",
     "prisma:postres:generate": "npx prisma generate --schema=prisma/schema.postgresql.prisma",
-    "seed:quiz": "pnpm exec ts-node src/quiz/seed-questions.ts"
+    "seed:quiz": "pnpm exec ts-node src/quiz/seed-questions.ts",
+    "cloudflare:tunnel": "cloudflared tunnel --url http://localhost:3000"
   },
   "engines": {
     "node": ">=20.10.0",
@@ -37,6 +38,7 @@
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.4.17",
     "@nestjs/schedule": "^6.0.0",
+    "@nestjs/platform-express": "^10.4.17",
     "@prisma/client": "^6.8.2",
     "@tonconnect/sdk": "^3.1.0",
     "axios": "^1.13.2",

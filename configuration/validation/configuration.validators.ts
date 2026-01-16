@@ -23,6 +23,12 @@ export class TelegramBotConfig {
   updateMetadata: boolean;
 }
 
+export class TelegramWebAppConfig {
+  @IsString()
+  @IsOptional()
+  url?: string;
+}
+
 export class TelegramI18nConfig {
   @IsString()
   fallbackLanguage!: string;
@@ -101,6 +107,10 @@ export class TelegramConfig {
   @Type(() => TelegramIdsConfig)
   @ValidateNested()
   telegramIds!: TelegramIdsConfig;
+
+  @Type(() => TelegramWebAppConfig)
+  @ValidateNested()
+  webApp!: TelegramWebAppConfig;
 }
 
 export class DatabaseConfig {

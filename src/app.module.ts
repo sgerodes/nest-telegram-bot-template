@@ -17,6 +17,7 @@ import {
 import { TonModule } from './ton/ton.module';
 import { QuizModule } from './quiz/quiz.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CloudStorageWebAppModule } from '@telegram/webapp/cloud-storage-webapp.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     ScheduleModule.forRoot(),
     TelegramModule,
+    CloudStorageWebAppModule,
     DatabaseModule,
     LanguageModule,
     TonModule,

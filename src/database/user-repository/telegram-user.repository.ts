@@ -4,13 +4,13 @@ import { TelegramUser } from '@prisma/client';
 
 @Injectable()
 export class TelegramUserRepository extends AbstractRepositoryV3<TelegramUser> {
-  async readByTelegramId(telegramId: number | bigint): Promise<TelegramUser | null> {
+  async readByTelegramId(telegramId: number): Promise<TelegramUser | null> {
     return this.findUnique({
       where: { telegramId }
     });
   }
 
-  async existsByTelegramId(telegramId: number | bigint): Promise<boolean> {
+  async existsByTelegramId(telegramId: number): Promise<boolean> {
     return this.exists({ telegramId });
   }
 }

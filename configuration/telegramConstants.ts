@@ -11,6 +11,7 @@ export enum BOT_COMMANDS {
 export enum BOT_ADMIN_CHAT_COMMANDS {
   CREATE_QUESTION = 'create_question',
   HELP = 'help',
+  CLOUD_STORAGE_WEBAPP = 'cloud_storage_webapp',
 }
 
 export const TELEGRAM_BTN_ACTIONS = {

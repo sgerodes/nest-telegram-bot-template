@@ -6,6 +6,10 @@ export class EnvironmentVariables {
   TELEGRAM_BOT_TOKEN: string;
 
   @IsString()
+  @IsOptional()
+  TELEGRAM_WEBAPP_URL?: string;
+
+  @IsString()
   @IsNotEmpty()
   DATABASE_URL: string;
 

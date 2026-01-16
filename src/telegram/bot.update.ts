@@ -45,7 +45,7 @@ export class BotUpdate extends BaseTelegramHandler {
       this.logger.warn(`Posted question with id '${pollId}' was not found in the db`);
       return;
     }
-    const userId = pollAnswer?.user?.id;
+    const userId: number = pollAnswer?.user?.id;
     const selectedOption = pollAnswer?.option_ids[0];
     const isCorrect = selectedOption === postedQuestion.question.correctAnswerIndex;
 

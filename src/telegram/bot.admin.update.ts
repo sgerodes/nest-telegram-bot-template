@@ -45,4 +45,28 @@ export class BotAdminUpdate extends BaseTelegramHandler {
     this.logger.debug(`${BOT_ADMIN_CHAT_COMMANDS.CREATE_QUESTION} command received`);
     await ctx.scene.enter(SCENES.SCENE_QUESTION_CREATE);
   }
+
+  @Command(BOT_ADMIN_CHAT_COMMANDS.CLOUD_STORAGE_WEBAPP)
+  @AdminOnly()
+  async cloudStorageWebApp(@Ctx() ctx: WizardI18nContext) {
+    this.logger.debug(`${BOT_ADMIN_CHAT_COMMANDS.CLOUD_STORAGE_WEBAPP} command received`);
+    const baseUrl = this.telegramConfig.webApp?.url;
+    if (!baseUrl) {
+      await ctx.reply('TELEGRAM_WEBAPP_URL is not configured.');
+      return;
+    }
+    let url: string;
+    try {
+      url = new URL('/webapp/cloud-storage', baseUrl).toString();
+    } catch (error) {
+      this.logger.error(`Invalid TELEGRAM_WEBAPP_URL: ${baseUrl}`, error?.stack);
+      await ctx.reply('TELEGRAM_WEBAPP_URL is invalid.');
+      return;
+    }
+    await ctx.reply('Open Cloud Storage WebApp:', {
+      reply_markup: {
+        inline_keyboard: [[{ text: 'Open', web_app: { url } }]],
+      },
+    });
+  }
 }

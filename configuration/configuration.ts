@@ -33,6 +33,9 @@ export const configuration = (): RootConfig => ({
       // Chat ID: -4948426032, Chat Name 'Playground Admin Group'
       // Chat ID: -1001864900132, Chat Name 'Playground Private Group'
     },
+    webApp: {
+      url: process.env.TELEGRAM_WEBAPP_URL,
+    },
   },
   quiz: {
     quizQuestionDirectory: getAbsolutePathForProjectDirectory('resources/quiz/'),

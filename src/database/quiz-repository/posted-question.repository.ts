@@ -3,7 +3,7 @@ import { AbstractRepositoryV3 } from '@database/abstract.repository.v3';
 import { PostedQuestion, QuizQuestion } from '@prisma/client';
 
 @Injectable()
-export class PostedQuestionRepositoryV3Service extends AbstractRepositoryV3<PostedQuestion> {
+export class PostedQuestionRepository extends AbstractRepositoryV3<PostedQuestion> {
   async readByTelegramMsgIdIncludeQuestion(id: bigint | number): Promise<PostedQuestion & { question: QuizQuestion } | null> {
     return this.delegate.findUnique({
       where: { telegramMsgId: id },

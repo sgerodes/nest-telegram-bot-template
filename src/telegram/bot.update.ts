@@ -6,27 +6,25 @@ import {
 import {
   BOT_ON,
 } from '@configuration/telegramConstants';
-import {  PollAnswer } from '@telegraf/types';
-import { UserRepositoryService } from '@database/user-repository/user-repository.service';
+import { PollAnswer } from '@telegraf/types';
+import { TelegramUserRepository } from '@database/user-repository/telegram-user.repository';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { TelegrafService } from '@telegram/telegraf.service';
-import {  WizardI18nContext } from '@telegram/utils';
+import { WizardI18nContext } from '@telegram/utils';
 import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
-import {
-  PostedQuestionRepositoryService,
-} from '@database/quiz-repository/posted-question-repository.service';
+import { PostedQuestionRepository } from '@database/quiz-repository/posted-question.repository';
 import { PostedQuestion, QuizQuestion } from '@prisma/client';
-import { UserAnswerRepositoryService } from '@database/quiz-repository/user-answer-repository.service';
+import { UserAnswerRepository } from '@database/quiz-repository/user-answer.repository';
 
 @Update()
 export class BotUpdate extends BaseTelegramHandler {
 
   constructor(
-    private readonly userRepositoryService: UserRepositoryService,
+    private readonly userRepository: TelegramUserRepository,
     private readonly telegramConfig: TelegramConfig,
     private readonly telegrafService: TelegrafService,
-    private readonly postedQuestionRepositoryService: PostedQuestionRepositoryService,
-    private readonly userAnswerRepositoryService: UserAnswerRepositoryService,
+    private readonly postedQuestionRepository: PostedQuestionRepository,
+    private readonly userAnswerRepository: UserAnswerRepository,
   ) {
     super();
     if (this.telegramConfig.bot.updateMetadata) {
@@ -42,7 +40,7 @@ export class BotUpdate extends BaseTelegramHandler {
     const pollAnswer: PollAnswer = ctx.pollAnswer;
     const pollId = BigInt(pollAnswer?.poll_id);
 
-    let postedQuestion: PostedQuestion & { question: QuizQuestion } | null = await this.postedQuestionRepositoryService.readByTelegramMsgIdIncludeQuestion(pollId);
+    let postedQuestion: PostedQuestion & { question: QuizQuestion } | null = await this.postedQuestionRepository.readByTelegramMsgIdIncludeQuestion(pollId);
     if (!postedQuestion) {
       this.logger.warn(`Posted question with id '${pollId}' was not found in the db`);
       return;
@@ -51,9 +49,9 @@ export class BotUpdate extends BaseTelegramHandler {
     const selectedOption = pollAnswer?.option_ids[0];
     const isCorrect = selectedOption === postedQuestion.question.correctAnswerIndex;
 
-    let user = await this.userRepositoryService.readByTelegramId(userId);
+    let user = await this.userRepository.readByTelegramId(userId);
 
-    const userAnswerResponse = await this.userAnswerRepositoryService.createData({
+    const userAnswerResponse = await this.userAnswerRepository.createData({
       user: { connect: { id: user.id } },
       postedQuestion: { connect: { id: postedQuestion.id } },
       selectedIdx: selectedOption,

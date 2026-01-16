@@ -3,7 +3,7 @@ import { AbstractRepositoryV3 } from '@database/abstract.repository.v3';
 import { Prisma, QuizQuestion } from '@prisma/client';
 
 @Injectable()
-export class QuizQuestionRepositoryV3Service extends AbstractRepositoryV3<QuizQuestion> {
+export class QuizQuestionRepository extends AbstractRepositoryV3<QuizQuestion> {
   async createData(obj: Prisma.QuizQuestionCreateInput): Promise<QuizQuestion> {
     if (!(await this.isValidQuizQuestion(obj))) {
       this.logger.error(`Quiz record validation error: ${JSON.stringify(obj)}`);
@@ -22,10 +22,9 @@ export class QuizQuestionRepositoryV3Service extends AbstractRepositoryV3<QuizQu
       return false;
     }
 
-    if (!Array.isArray(answers)) return false;
-    if (!answers.every(ans => typeof ans === 'string')) return false;
-    if (correctIndex < 0 || correctIndex >= answers.length) return false;
-
-    return true;
+    return Array.isArray(answers) &&
+      answers.every(ans => typeof ans === 'string') &&
+      correctIndex >= 0 &&
+      correctIndex < answers.length;
   }
 }

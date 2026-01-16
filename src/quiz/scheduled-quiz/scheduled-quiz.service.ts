@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { TelegramConfig, QuizConfig } from '@configuration/validation/configuration.validators';
-import { ScheduledQuizRepositoryService } from '@database/quiz-repository/schedule-quiz-question-repository.service';
+import { ScheduledQuizRepository } from '@database/quiz-repository/scheduled-quiz.repository';
 import { CronJob } from 'cron';
 import { QuizQuestion, ScheduledQuiz } from '@prisma/client';
-import { PostedQuestionRepositoryService } from '@database/quiz-repository/posted-question-repository.service';
+import { PostedQuestionRepository } from '@database/quiz-repository/posted-question.repository';
 
 @Injectable()
 export class ScheduledQuizService {
@@ -16,8 +16,8 @@ export class ScheduledQuizService {
     private readonly quizConfig: QuizConfig,
     private readonly telegramConfig: TelegramConfig,
     private readonly schedulerRegistry: SchedulerRegistry,
-    private readonly scheduledQuizRepositoryService: ScheduledQuizRepositoryService,
-    private readonly postedQuestionRepositoryService: PostedQuestionRepositoryService
+    private readonly scheduledQuizRepository: ScheduledQuizRepository,
+    private readonly postedQuestionRepository: PostedQuestionRepository
   ) {}
 
 
@@ -38,7 +38,7 @@ export class ScheduledQuizService {
 
 
   private async executeScheduledQuizJob() {
-      let scheduledForToday: (ScheduledQuiz & { question: QuizQuestion })[] = await this.scheduledQuizRepositoryService.readScheduledForToday();
+      let scheduledForToday: (ScheduledQuiz & { question: QuizQuestion })[] = await this.scheduledQuizRepository.readScheduledForToday();
       if (!scheduledForToday || scheduledForToday.length == 0) {
         this.logger.debug(`No scheduled quizzes for today: ${scheduledForToday}`);
         return;
@@ -62,7 +62,7 @@ export class ScheduledQuizService {
 
     const pollId = BigInt(response.poll.id)
 
-    const postedQuestionResponse = await this.postedQuestionRepositoryService.createData({
+    const postedQuestionResponse = await this.postedQuestionRepository.createData({
       telegramChatId: this.telegramConfig.telegramIds.quizGroupId,
       telegramMsgId: pollId,
       question: { connect: { id: firstQuestion.id } },
@@ -72,7 +72,7 @@ export class ScheduledQuizService {
       return;
     }
 
-    const pinResponse = await this.telegrafService.pinMessage(
+    await this.telegrafService.pinMessage(
       this.telegramConfig.telegramIds.quizGroupId,
       response.message_id
     )

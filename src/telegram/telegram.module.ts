@@ -4,7 +4,6 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { BotUpdate } from '@telegram/bot.update';
 import { TelegramConfig } from '@configuration/validation/configuration.validators';
 import { DatabaseModule } from '@database/database.module';
-import { UserRepositoryService } from '@database/user-repository/user-repository.service';
 import { LanguageModule } from '@language/language.module';
 import { TelegrafI18nModule, TelegrafI18nContext, } from 'nestjs-telegraf-i18n';
 import { TelegrafService } from '@telegram/telegraf.service';
@@ -37,7 +36,7 @@ import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
     }),
     LanguageModule,
   ],
-  providers: [UserRepositoryService, BotUpdate, TelegrafService, BotAdminUpdate, SceneQuizCreate],
+  providers: [BotUpdate, TelegrafService, BotAdminUpdate, SceneQuizCreate],
   exports: [TelegrafService],
 })
 export class TelegramModule {}

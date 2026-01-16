@@ -7,10 +7,10 @@ import { Message } from 'telegraf/typings/core/types/typegram';
 import { QuizQuestionCreationDto } from '@telegram/models';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { parse, isValid, format } from 'date-fns';
-import { RootConfig, TelegramConfig } from '@configuration/validation/configuration.validators';
-import { QuizQuestionRepositoryService } from '@database/quiz-repository/quiz-question-repository.service';
+import { RootConfig } from '@configuration/validation/configuration.validators';
+import { QuizQuestionRepository } from '@database/quiz-repository/quiz-question.repository';
 import { QuizQuestion } from '@prisma/client';
-import { ScheduledQuizRepositoryService } from '@database/quiz-repository/schedule-quiz-question-repository.service';
+import { ScheduledQuizRepository } from '@database/quiz-repository/scheduled-quiz.repository';
 
 @Wizard(SCENES.SCENE_QUESTION_CREATE)
 export class SceneQuizCreate extends BaseTelegramHandler {
@@ -19,8 +19,8 @@ export class SceneQuizCreate extends BaseTelegramHandler {
   constructor(
     private readonly telegrafService: TelegrafService,
     private readonly rootConfig: RootConfig,
-    private readonly quizQuestionRepository: QuizQuestionRepositoryService,
-    private readonly scheduledQuizRepositoryService: ScheduledQuizRepositoryService,
+    private readonly quizQuestionRepository: QuizQuestionRepository,
+    private readonly scheduledQuizRepository: ScheduledQuizRepository,
     ) {
     super();
   }
@@ -108,7 +108,7 @@ export class SceneQuizCreate extends BaseTelegramHandler {
       this.logger.error('Could not save quiz into the database');
       await ctx.reply(`Could not save the object into the database`);
     }
-    const responseScheduledQuiz = await this.scheduledQuizRepositoryService.createData(
+    const responseScheduledQuiz = await this.scheduledQuizRepository.createData(
       {
         scheduledAt: quiz.date,
         question: { connect: { id: responseQuizQuestion.id } },

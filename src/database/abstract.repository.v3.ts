@@ -20,12 +20,13 @@ export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
    * Automatically discovered in onModuleInit.
    */
   public delegate: {
-    create: (args: any) => Promise<T>;
-    findUnique: (args: any) => Promise<T | null>;
-    findFirst: (args: any) => Promise<T | null>;
+    create: (args: any) => Promise<any>;
+    findUnique: (args: any) => Promise<any>;
+    findFirst: (args: any) => Promise<any>;
+    findMany: (args: any) => Promise<any[]>;
     count: (args: any) => Promise<number>;
-    update: (args: any) => Promise<T>;
-    delete: (args: any) => Promise<T>;
+    update: (args: any) => Promise<any>;
+    delete: (args: any) => Promise<any>;
   };
 
   /**

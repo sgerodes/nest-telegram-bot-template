@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telegram Cloud Storage Test</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; }
+      .row { margin-bottom: 12px; }
+      label { display: block; font-weight: 600; margin-bottom: 4px; }
+      input, textarea { width: 100%; padding: 8px; }
+      button { margin-right: 8px; margin-top: 6px; }
+      pre { background: #f6f6f6; padding: 8px; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h2>Telegram Cloud Storage</h2>
+    <div class="row">
+      <label for="key">Key</label>
+      <input id="key" type="text" placeholder="example_key" />
+    </div>
+    <div class="row">
+      <label for="value">Value</label>
+      <textarea id="value" rows="4" placeholder="value"></textarea>
+    </div>
+    <div class="row">
+      <button id="btn-set">Set</button>
+      <button id="btn-get">Get</button>
+      <button id="btn-remove">Remove</button>
+      <button id="btn-keys">List Keys</button>
+    </div>
+    <pre id="output">Ready.</pre>
+
+    <script>
+      const tg = window.Telegram && window.Telegram.WebApp;
+      const output = document.getElementById('output');
+      const keyInput = document.getElementById('key');
+      const valueInput = document.getElementById('value');
+
+      function log(message) {
+        output.textContent = message;
+      }
+
+      if (!tg || !tg.CloudStorage) {
+        log('Telegram WebApp is not available. Open this page inside Telegram.');
+      } else {
+        tg.ready();
+        log('Cloud Storage ready.');
+      }
+
+      document.getElementById('btn-set').onclick = () => {
+        const key = keyInput.value.trim();
+        const value = valueInput.value;
+        if (!key) return log('Key is required.');
+        tg.CloudStorage.setItem(key, value, (err, ok) => {
+          log(err ? 'Error: ' + err : 'Saved: ' + ok);
+        });
+      };
+
+      document.getElementById('btn-get').onclick = () => {
+        const key = keyInput.value.trim();
+        if (!key) return log('Key is required.');
+        tg.CloudStorage.getItem(key, (err, value) => {
+          log(err ? 'Error: ' + err : (value ?? '(null)'));
+        });
+      };
+
+      document.getElementById('btn-remove').onclick = () => {
+        const key = keyInput.value.trim();
+        if (!key) return log('Key is required.');
+        tg.CloudStorage.removeItem(key, (err, ok) => {
+          log(err ? 'Error: ' + err : 'Removed: ' + ok);
+        });
+      };
+
+      document.getElementById('btn-keys').onclick = () => {
+        tg.CloudStorage.getKeys((err, keys) => {
+          log(err ? 'Error: ' + err : (keys && keys.length ? keys.join('\n') : '(no keys)'));
+        });
+      };
+    </script>
+  </body>
+</html>

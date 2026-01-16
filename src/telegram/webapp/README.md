@@ -1,6 +1,7 @@
 ## Cloud Storage WebApp (Local Test)
 
 ### 1) Expose local server with Cloudflare
+- `brew install cloudflare/cloudflare/cloudflared`
 - `cloudflared tunnel --url http://localhost:3000`
 - Copy the **https://...trycloudflare.com** URL
 

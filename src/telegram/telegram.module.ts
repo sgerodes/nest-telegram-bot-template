@@ -11,6 +11,7 @@ import { BotAdminUpdate } from '@telegram/bot.admin.update';
 import { MiddlewareModule } from '@telegram/middlewares/middleware.module';
 import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middleware.factory';
 import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
+import { WebAppUpdate } from '@telegram/webapp/webapp.update';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
     TelegrafService,
     BotAdminUpdate,
     SceneQuizCreate,
+    WebAppUpdate,
   ],
   exports: [TelegrafService],
 })

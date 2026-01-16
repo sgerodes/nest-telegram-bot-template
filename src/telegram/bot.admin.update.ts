@@ -65,7 +65,9 @@ export class BotAdminUpdate extends BaseTelegramHandler {
     }
     await ctx.reply('Open Cloud Storage WebApp:', {
       reply_markup: {
-        inline_keyboard: [[{ text: 'Open', web_app: { url } }]],
+        keyboard: [[{ text: 'Open WebApp', web_app: { url } }]],
+        resize_keyboard: true,
+        one_time_keyboard: true,
       },
     });
   }

@@ -30,9 +30,15 @@
       <button id="btn-remove">Remove</button>
       <button id="btn-keys">List Keys</button>
     </div>
+    <div class="row">
+      <label for="chat-message">Send to bot</label>
+      <input id="chat-message" type="text" placeholder="message" />
+      <button id="btn-send">Send to chat</button>
+    </div>
     <pre id="output">Ready.</pre>
 
     <script>
+      /** @type {any} */
       const tg = window.Telegram && window.Telegram.WebApp;
       const output = document.getElementById('output');
       const keyInput = document.getElementById('key');
@@ -78,6 +84,17 @@
         tg.CloudStorage.getKeys((err, keys) => {
           log(err ? 'Error: ' + err : (keys && keys.length ? keys.join('\n') : '(no keys)'));
         });
+      };
+
+      document.getElementById('btn-send').onclick = () => {
+        const message = document.getElementById('chat-message').value.trim();
+        if (!message) return log('Message is required.');
+        if (!tg || typeof tg.sendData !== 'function') {
+          return log('sendData is not available. Open inside Telegram.');
+        }
+        // noinspection JSUnresolvedFunction
+        tg.sendData(JSON.stringify({ type: 'webapp_message', message }));
+        log('Sent to bot.');
       };
     </script>
   </body>

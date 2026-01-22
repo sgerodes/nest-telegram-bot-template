@@ -50,5 +50,8 @@ export const configuration = (): RootConfig => ({
   },
   ton: {
     paymentAddress: process.env.TON_PAYMENT_ADDRESS,
+    endpoint: process.env.TON_API_URL,
+    apiKey: process.env.TON_API_KEY,
+    timeoutMs: process.env.TON_TIMEOUT_MS ? Number(process.env.TON_TIMEOUT_MS) : undefined,
   },
 });

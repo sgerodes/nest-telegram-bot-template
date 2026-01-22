@@ -6,7 +6,9 @@ import {
   IsArray,
   IsObject,
   Max,
-  IsInt, IsDate,
+  IsInt,
+  IsDate,
+  Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -123,6 +125,19 @@ export class TonConfig {
   @IsString()
   @IsNotEmpty()
   paymentAddress!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  endpoint!: string;
+
+  @IsString()
+  @IsOptional()
+  apiKey?: string;
+
+  @IsInt()
+  @Min(1000)
+  @IsOptional()
+  timeoutMs?: number;
 }
 
 export class RootConfig {

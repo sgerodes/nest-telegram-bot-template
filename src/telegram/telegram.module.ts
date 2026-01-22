@@ -12,6 +12,7 @@ import { MiddlewareModule } from '@telegram/middlewares/middleware.module';
 import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middleware.factory';
 import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
 import { WebAppUpdate } from '@telegram/webapp/webapp.update';
+import { TonModule } from '../ton/ton.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WebAppUpdate } from '@telegram/webapp/webapp.update';
     TelegrafI18nModule,
     DatabaseModule,
     MiddlewareModule,
+    TonModule,
     TelegrafModule.forRootAsync({
       inject: [
         TelegramConfig,

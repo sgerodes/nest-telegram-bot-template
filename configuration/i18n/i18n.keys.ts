@@ -10,7 +10,8 @@ export const i18nKeys = {
       "help": "i18n.command_descriptions.help",
       "hello": "i18n.command_descriptions.hello",
       "quiz": "i18n.command_descriptions.quiz",
-      "quiz_manager": "i18n.command_descriptions.quiz_manager"
+      "quiz_manager": "i18n.command_descriptions.quiz_manager",
+      "ton_balance": "i18n.command_descriptions.ton_balance"
     },
     "shared": {
       "buttons": {

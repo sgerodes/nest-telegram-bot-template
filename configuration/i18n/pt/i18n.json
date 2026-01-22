@@ -5,7 +5,8 @@
     "short_description": "Faz coisas incríveis"
   },
   "command_descriptions": {
-    "start": "▶️ Iniciar Bot"
+    "start": "▶️ Iniciar Bot",
+    "ton_balance": "TON balance"
   },
   "menus": {
     "start": {

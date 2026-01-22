@@ -34,6 +34,12 @@ export class LanguageService {
           lang,
         }),
       },
+      {
+        command: '/' + BOT_ADMIN_CHAT_COMMANDS.TON_BALANCE,
+        description: this.i18n.t(i18nKeys.i18n.command_descriptions.ton_balance, {
+          lang,
+        }),
+      },
     ];
   }
 

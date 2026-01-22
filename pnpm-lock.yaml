@@ -74,6 +74,9 @@ importers:
       ton:
         specifier: ^13.9.0
         version: 13.9.0(ton-core@0.53.0(ton-crypto@3.2.0))(ton-crypto@3.2.0)
+      ton-core:
+        specifier: ^0.53.0
+        version: 0.53.0(ton-crypto@3.2.0)
       typescript-cacheable:
         specifier: ^3.0.3
         version: 3.0.3

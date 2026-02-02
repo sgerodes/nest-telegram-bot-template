@@ -13,6 +13,7 @@ export enum BOT_ADMIN_CHAT_COMMANDS {
   HELP = 'help',
   CLOUD_STORAGE_WEBAPP = 'cloud_storage_webapp',
   TON_BALANCE = 'ton_balance',
+  TON_PAYLINK = 'ton_paylink',
 }
 
 export const TELEGRAM_BTN_ACTIONS = {

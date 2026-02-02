@@ -6,8 +6,7 @@
   },
   "command_descriptions": {
     "start": "▶️ Запустить Бота",
-    "hello": "\uD83D\uDC4B Привет, мир",
-    "ton_balance": "TON balance"
+    "hello": "\uD83D\uDC4B Привет, мир"
   },
   "shared": {
     "buttons": {

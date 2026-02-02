@@ -18,6 +18,7 @@ export type I18nTranslations = {
             "quiz": string;
             "quiz_manager": string;
             "ton_balance": string;
+            "ton_paylink": string;
         };
         "shared": {
             "buttons": {

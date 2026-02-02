@@ -10,7 +10,8 @@
     "hello": "\uD83D\uDC4B Hello world",
     "quiz": "\uD83E\uDDE0 test your skills \uD83D\uDE0F",
     "quiz_manager": "\uD83D\uDEE0\uFE0F Manage Quizzes",
-    "ton_balance": "TON balance"
+    "ton_balance": "TON balance",
+    "ton_paylink": "TON payment link"
   },
   "shared": {
     "buttons": {

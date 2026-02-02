@@ -100,6 +100,34 @@ export class BotAdminUpdate extends BaseTelegramHandler {
     }
   }
 
+  @Command(BOT_ADMIN_CHAT_COMMANDS.TON_PAYLINK)
+  @AdminOnly()
+  async tonPaylink(@Ctx() ctx: WizardI18nContext) {
+    const message = ctx.message;
+    const text = message && 'text' in message ? message.text : '';
+    const parts = text.trim().split(/\s+/);
+    const amount = parts[1];
+    const comment = parts.slice(2).join(' ') || undefined;
+
+    if (!amount) {
+      await ctx.reply('Usage: /ton_paylink <amount> [comment]');
+      return;
+    }
+
+    try {
+      const link = this.tonService.buildTransferLink(amount, comment);
+      await ctx.reply('Open payment in your wallet:', {
+        reply_markup: {
+          inline_keyboard: [[{ text: 'Pay in TON wallet', url: link }]],
+        },
+      });
+      await ctx.reply(`Payment link (fallback):\n${link}`);
+    } catch (error) {
+      const reply = error?.message ?? 'Failed to build payment link';
+      await ctx.reply(reply);
+    }
+  }
+
   private formatTon(balanceNano: bigint): string {
     const whole = balanceNano / 1_000_000_000n;
     const fraction = balanceNano % 1_000_000_000n;

@@ -138,6 +138,10 @@ export class TonConfig {
   @Min(1000)
   @IsOptional()
   timeoutMs?: number;
+
+  @IsString()
+  @IsOptional()
+  connectManifestUrl?: string;
 }
 
 export class RootConfig {

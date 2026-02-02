@@ -14,7 +14,9 @@ export class PrismaService
   private readonly logger = new Logger(this.constructor.name);
 
   constructor() {
-    super();
+    super({
+      datasourceUrl: process.env.DATABASE_URL,
+    });
     this.patchDelegates();
   }
 

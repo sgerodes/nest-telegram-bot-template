@@ -39,7 +39,7 @@
     "@nestjs/core": "^10.4.17",
     "@nestjs/platform-express": "^10.4.17",
     "@nestjs/schedule": "^6.0.0",
-    "@prisma/client": "^6.8.2",
+    "@prisma/client": "^7.3.0",
     "@tonconnect/sdk": "^3.1.0",
     "axios": "^1.13.2",
     "class-transformer": "^0.5.1",
@@ -70,6 +70,7 @@
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "depcheck": "^1.4.7",
+    "dotenv": "^17.2.3",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.4.0",
@@ -83,6 +84,11 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "zeptomatch": "1.2.1"
+    }
   },
   "jest": {
     "moduleFileExtensions": [

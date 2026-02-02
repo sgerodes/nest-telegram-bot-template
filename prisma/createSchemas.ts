@@ -15,13 +15,11 @@ schema = schema
 const dataSourceSqlite =
   'datasource db {\n' +
   '  provider = "sqlite"\n' +
-  '  url      = env("DATABASE_URL")\n' +
   '}\n\n';
 
 const dataSourcePostgres =
   'datasource db {\n' +
   '  provider = "postgresql"\n' +
-  '  url      = env("DATABASE_URL")\n' +
   '}\n\n';
 
 fs.writeFileSync(sqliteTargetSchema, dataSourceSqlite + schema, 'utf-8');

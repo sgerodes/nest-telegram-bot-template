@@ -3,6 +3,11 @@ generator client {
   binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
+enum AnswerMode {
+  MULTIPLE_CHOICE // select from predefined options
+  FREE_TEXT       // type the answer
+}
+
 model TelegramUser {
   id         Int      @id @default(autoincrement())
   telegramId BigInt   @unique
@@ -34,12 +39,13 @@ model QuizQuestion {
 }
 
 model PostedQuestion {
-  id                 Int      @id @default(autoincrement())
+  id                 Int        @id @default(autoincrement())
   telegramChatId     BigInt
-  telegramMsgId      BigInt   @unique
+  telegramMsgId      BigInt     @unique
   questionTelegramId Int
-  isOpen             Boolean  @default(true)
-  postedAt           DateTime @default(now())
+  answerMode         AnswerMode
+  isOpen             Boolean    @default(true)
+  postedAt           DateTime   @default(now())
 
   question QuizQuestion @relation(fields: [questionTelegramId], references: [id], onDelete: Cascade)
 
@@ -57,7 +63,8 @@ model UserAnswer {
   id               Int      @id @default(autoincrement())
   userId           Int
   postedQuestionId Int
-  selectedIdx      Int
+  selectedIdx      Int?     // for MULTIPLE_CHOICE mode
+  answerText       String?  // for FREE_TEXT mode
   isCorrect        Boolean
   answeredAt       DateTime @default(now())
 

@@ -1,12 +1,7 @@
-import { Context as TelegrafContext } from 'telegraf';
 import {
-  Action,
   Command,
-  // Context as NestjsTelegrafContext,
   Ctx,
-  Hears,
   Help,
-  On,
   Start,
   Update,
 } from 'nestjs-telegraf';

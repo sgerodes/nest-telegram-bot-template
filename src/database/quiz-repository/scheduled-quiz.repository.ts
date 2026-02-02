@@ -25,7 +25,7 @@ export class ScheduledQuizRepository extends AbstractRepositoryV3<ScheduledQuiz>
   }
 
   async readScheduledBetweenDates(gte: Date, lt: Date): Promise<(ScheduledQuiz & { question: QuizQuestion })[]> {
-    return this.delegate.findMany({
+    return await this.delegate.findMany({
       where: {
         scheduledAt: {
           gte: gte,
@@ -36,6 +36,6 @@ export class ScheduledQuizRepository extends AbstractRepositoryV3<ScheduledQuiz>
       include: {
         question: true,
       },
-    });
+    }) as (ScheduledQuiz & { question: QuizQuestion })[];
   }
 }

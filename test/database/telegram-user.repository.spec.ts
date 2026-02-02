@@ -51,11 +51,11 @@ describe('TelegramUserRepository', () => {
     });
   });
 
-  describe('readByTelegramId', () => {
+  describe('findByTelegramId', () => {
     it('should return a user when found by telegramId', async () => {
       mockTelegramUserDelegate.findUnique.mockResolvedValue(mockTelegramUser);
 
-      const result = await userRepository.readByTelegramId(mockTelegramUser.telegramId);
+      const result = await userRepository.findByTelegramId(mockTelegramUser.telegramId);
 
       expect(result).toEqual(mockTelegramUser);
       expect(mockTelegramUserDelegate.findUnique).toHaveBeenCalledWith({
@@ -66,7 +66,7 @@ describe('TelegramUserRepository', () => {
     it('should return null when user is not found', async () => {
       mockTelegramUserDelegate.findUnique.mockResolvedValue(null);
 
-      const result = await userRepository.readByTelegramId(BigInt(999));
+      const result = await userRepository.findByTelegramId(BigInt(999));
 
       expect(result).toBeNull();
     });
@@ -93,11 +93,11 @@ describe('TelegramUserRepository', () => {
     });
   });
 
-  describe('readById (Generic Base Method)', () => {
+  describe('findById (Generic Base Method)', () => {
     it('should return a user by internal database ID', async () => {
       mockTelegramUserDelegate.findUnique.mockResolvedValue(mockTelegramUser);
 
-      const result = await userRepository.readById(1);
+      const result = await userRepository.findById(1);
 
       expect(result).toEqual(mockTelegramUser);
       expect(mockTelegramUserDelegate.findUnique).toHaveBeenCalledWith({
@@ -154,7 +154,7 @@ describe('TelegramUserRepository', () => {
       const error = new Error('Database connection failed');
       mockTelegramUserDelegate.findUnique.mockRejectedValue(error);
 
-      await expect(userRepository.readByTelegramId(BigInt(1)))
+      await expect(userRepository.findByTelegramId(BigInt(1)))
         .rejects.toThrow('Database connection failed');
     });
   });

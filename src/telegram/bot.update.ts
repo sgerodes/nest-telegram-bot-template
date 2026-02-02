@@ -40,7 +40,7 @@ export class BotUpdate extends BaseTelegramHandler {
     const pollAnswer: PollAnswer = ctx.pollAnswer;
     const pollId = BigInt(pollAnswer?.poll_id);
 
-    let postedQuestion: PostedQuestion & { question: QuizQuestion } | null = await this.postedQuestionRepository.readByTelegramMsgIdIncludeQuestion(pollId);
+    let postedQuestion: PostedQuestion & { question: QuizQuestion } | null = await this.postedQuestionRepository.findByTelegramMsgIdWithQuestion(pollId);
     if (!postedQuestion) {
       this.logger.warn(`Posted question with id '${pollId}' was not found in the db`);
       return;
@@ -49,7 +49,7 @@ export class BotUpdate extends BaseTelegramHandler {
     const selectedOption = pollAnswer?.option_ids[0];
     const isCorrect = selectedOption === postedQuestion.question.correctAnswerIndex;
 
-    let user = await this.userRepository.readByTelegramId(userId);
+    let user = await this.userRepository.findByTelegramId(userId);
 
     const userAnswerResponse = await this.userAnswerRepository.createData({
       user: { connect: { id: user.id } },

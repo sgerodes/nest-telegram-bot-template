@@ -20,13 +20,13 @@ export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
    * Automatically discovered in onModuleInit.
    */
   public delegate: {
-    create: (args: any) => Promise<any>;
-    findUnique: (args: any) => Promise<any>;
-    findFirst: (args: any) => Promise<any>;
-    findMany: (args: any) => Promise<any[]>;
+    create: (args: any) => Promise<T>;
+    findUnique: (args: any) => Promise<T>;
+    findFirst: (args: any) => Promise<T>;
+    findMany: (args: any) => Promise<T[]>;
     count: (args: any) => Promise<number>;
-    update: (args: any) => Promise<any>;
-    delete: (args: any) => Promise<any>;
+    update: (args: any) => Promise<T>;
+    delete: (args: any) => Promise<T>;
   };
 
   /**
@@ -98,7 +98,7 @@ export abstract class AbstractRepositoryV3<T> implements OnModuleInit {
   /**
    * Finds a record by its primary ID.
    */
-  async readById(id: number): Promise<T | null> {
+  async findById(id: number): Promise<T | null> {
     return this.delegate.findUnique({
       where: { id } as any,
     });

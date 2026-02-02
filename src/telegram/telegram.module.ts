@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotUpdate } from '@telegram/bot.update';
@@ -13,6 +13,7 @@ import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middle
 import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
 import { WebAppUpdate } from '@telegram/webapp/webapp.update';
 import { TonModule } from '../ton/ton.module';
+import { QuizModule } from '../quiz/quiz.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TonModule } from '../ton/ton.module';
     DatabaseModule,
     MiddlewareModule,
     TonModule,
+    forwardRef(() => QuizModule),
     TelegrafModule.forRootAsync({
       inject: [
         TelegramConfig,

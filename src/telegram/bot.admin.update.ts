@@ -27,7 +27,12 @@ export class BotAdminUpdate extends BaseTelegramHandler {
   @Start()
   @AdminOnly()
   async startCommand(@Ctx() ctx: WizardI18nContext) {
-    await ctx.reply(ctx.t(i18nKeys.i18n.command.start.message));
+    await ctx.reply(ctx.t(i18nKeys.i18n.command.start.message), {
+      reply_markup: {
+        keyboard: [[{ text: ctx.t(i18nKeys.i18n.games.menu_button) }]],
+        resize_keyboard: true,
+      },
+    });
   }
 
   @Help()

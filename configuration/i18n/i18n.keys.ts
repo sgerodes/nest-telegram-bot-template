@@ -20,6 +20,16 @@ export const i18nKeys = {
         "leave": "i18n.shared.buttons.leave"
       }
     },
+    "games": {
+      "menu_button": "i18n.games.menu_button",
+      "select_game": "i18n.games.select_game",
+      "quiz_session": {
+        "button": "i18n.games.quiz_session.button",
+        "description": "i18n.games.quiz_session.description",
+        "starting": "i18n.games.quiz_session.starting",
+        "no_questions": "i18n.games.quiz_session.no_questions"
+      }
+    },
     "command": {
       "start": {
         "message": "i18n.command.start.message",

@@ -25,6 +25,8 @@ export const TELEGRAM_BTN_ACTIONS = {
   PREVIEW_QUIZ: 'id_5_preview_quiz',
   SAVE_QUIZ: 'id_6_save',
   NOT_SAVE_QUIZ: 'id_7_not_save',
+  OPEN_GAMES_MENU: 'id_8_games_menu',
+  START_QUIZ_SESSION: 'id_9_start_quiz_session',
 };
 
 export const SCENES = {

@@ -8,6 +8,8 @@ import {
 } from '@database/quiz-repository/scheduled-quiz.repository';
 import { PostedQuestionRepository } from '@database/quiz-repository/posted-question.repository';
 import { UserAnswerRepository } from '@database/quiz-repository/user-answer.repository';
+import { UserQuizSessionRepository } from '@database/quiz-repository/user-quiz-session.repository';
+import { UserQuizSessionQuestionRepository } from '@database/quiz-repository/user-quiz-session-question.repository';
 
 @Module({
   imports: [ConfigModule.forRoot()],
@@ -18,6 +20,8 @@ import { UserAnswerRepository } from '@database/quiz-repository/user-answer.repo
     ScheduledQuizRepository,
     PostedQuestionRepository,
     UserAnswerRepository,
+    UserQuizSessionRepository,
+    UserQuizSessionQuestionRepository,
   ],
   exports: [
     PrismaService,
@@ -26,6 +30,8 @@ import { UserAnswerRepository } from '@database/quiz-repository/user-answer.repo
     ScheduledQuizRepository,
     PostedQuestionRepository,
     UserAnswerRepository,
+    UserQuizSessionRepository,
+    UserQuizSessionQuestionRepository,
   ],
 })
 export class DatabaseModule {}

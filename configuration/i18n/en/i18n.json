@@ -19,6 +19,16 @@
       "leave": "❌ Leave"
     }
   },
+  "games": {
+    "menu_button": "🎮 Games",
+    "select_game": "Select a game to play:",
+    "quiz_session": {
+      "button": "🧠 Quiz Session ({rounds} rounds)",
+      "description": "Answer {rounds} questions in a row",
+      "starting": "Starting quiz session...",
+      "no_questions": "No questions available. Please try again later."
+    }
+  },
   "command": {
     "start": {
       "message": "Welcome.\n/help - for command descriptions",

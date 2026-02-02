@@ -44,6 +44,7 @@ export const configuration = (): RootConfig => ({
     maxAnswerLength: 100,
     maxAnswerAmount: 10,
     openPeriodDurationSeconds: 60 * 60 * 23, // 23 hours
+    sessionDefaultRounds: 3,
   },
   database: {
     url: process.env.DATABASE_URL,

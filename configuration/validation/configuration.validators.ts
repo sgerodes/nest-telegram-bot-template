@@ -93,6 +93,10 @@ export class QuizConfig {
 
   @IsInt()
   openPeriodDurationSeconds!: number;
+
+  @IsInt()
+  @Min(1)
+  sessionDefaultRounds!: number;
 }
 
 export class TelegramConfig {

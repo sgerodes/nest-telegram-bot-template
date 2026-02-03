@@ -8,11 +8,10 @@ import { LanguageModule } from '@language/language.module';
 import { TelegrafI18nModule, TelegrafI18nContext, } from 'nestjs-telegraf-i18n';
 import { TelegrafService } from '@telegram/telegraf.service';
 import { BotAdminUpdate } from '@telegram/bot.admin.update';
+import { QuizUpdate } from '@telegram/quiz.update';
 import { MiddlewareModule } from '@telegram/middlewares/middleware.module';
 import { TelegramMiddlewareFactory } from '@telegram/middlewares/telegram-middleware.factory';
 import { SceneQuizCreate } from '@telegram/scenes/quizCreate.scene';
-import { WebAppUpdate } from '@telegram/webapp/webapp.update';
-// import { TonModule } from '../ton/ton.module'; // Disabled - uncomment to enable TON features
 import { QuizModule } from '../quiz/quiz.module';
 
 @Module({
@@ -21,7 +20,6 @@ import { QuizModule } from '../quiz/quiz.module';
     TelegrafI18nModule,
     DatabaseModule,
     MiddlewareModule,
-    // TonModule, // Disabled - uncomment to enable TON features
     forwardRef(() => QuizModule),
     TelegrafModule.forRootAsync({
       inject: [
@@ -45,8 +43,8 @@ import { QuizModule } from '../quiz/quiz.module';
     BotUpdate,
     TelegrafService,
     BotAdminUpdate,
+    QuizUpdate,
     SceneQuizCreate,
-    WebAppUpdate,
   ],
   exports: [TelegrafService],
 })

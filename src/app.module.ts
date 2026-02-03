@@ -14,10 +14,8 @@ import {
   validateConfiguration,
   validateEnvironmentVariables,
 } from '@configuration/validation/validation';
-// import { TonModule } from './ton/ton.module'; // Disabled - uncomment to enable TON features
 import { QuizModule } from './quiz/quiz.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CloudStorageWebAppModule } from '@telegram/webapp/cloud-storage-webapp.module';
 
 @Module({
   imports: [
@@ -42,10 +40,8 @@ import { CloudStorageWebAppModule } from '@telegram/webapp/cloud-storage-webapp.
     }),
     ScheduleModule.forRoot(),
     TelegramModule,
-    CloudStorageWebAppModule,
     DatabaseModule,
     LanguageModule,
-    // TonModule, // Disabled - uncomment to enable TON features
     QuizModule,
   ],
 })

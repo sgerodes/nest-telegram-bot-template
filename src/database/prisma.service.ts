@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { PrismaLibSql } from '@prisma/adapter-libsql';
+import { DatabaseConfig } from '@configuration/validation/configuration.validators';
 
 @Injectable()
 export class PrismaService
@@ -14,10 +15,8 @@ export class PrismaService
 {
   private readonly logger = new Logger(this.constructor.name);
 
-  constructor() {
-    // For SQLite: DATABASE_URL should be like "file:./prisma/dev.sqlite"
-    const databaseUrl = process.env.DATABASE_URL || 'file:./prisma/dev.sqlite';
-    const adapter = new PrismaLibSql({ url: databaseUrl });
+  constructor(databaseConfig: DatabaseConfig) {
+    const adapter = new PrismaLibSql({ url: databaseConfig.url });
 
     super({ adapter });
 

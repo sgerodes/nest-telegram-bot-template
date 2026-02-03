@@ -71,6 +71,26 @@ Concise, high-signal overview to help future contributors or LLMs understand the
 ## Resources
 - Quiz JSON data in `resources/quiz/`.
 
+## Code Standards & Architecture Guidelines
+
+### Configuration Management
+- **No inline defaults**: Never use fallback values like `process.env.VAR || 'default'` in service code.
+- **Centralized configuration**: All environment variables go through `configuration/configuration.ts` with validation in `configuration/validation/configuration.validators.ts`.
+- **Fail fast**: Required variables must fail validation at startup if missing - no silent defaults.
+
+### Separation of Concerns
+- **Single responsibility**: Each file/class should focus on one domain or feature.
+- **Avoid bloated handlers**: Split Telegram update handlers by feature (e.g., `quiz.update.ts`, `bot.admin.update.ts`).
+- **Domain isolation**: Related functionality should be grouped in dedicated modules.
+
+### Comments Policy
+- **Minimal comments**: Code should be self-explanatory through clear naming and structure.
+- **No format documentation**: Don't use comments to describe expected formats (e.g., "URL should be like...").
+- **Why, not what**: Comments are only acceptable when explaining *why* something unusual is done, not *what* the code does.
+
+### Clean Code
+- **Consistent patterns**: Follow existing patterns in the codebase for similar functionality.
+
 ## Known Implementation Notes
 - Telegram cloud storage is WebApp-only; Bot API cannot access it.
 - Prisma uses `BigInt` for Telegram IDs, but some repository methods currently accept `number`.

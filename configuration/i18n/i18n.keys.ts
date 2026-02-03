@@ -30,6 +30,14 @@ export const i18nKeys = {
         "no_questions": "i18n.games.quiz_session.no_questions"
       }
     },
+    "errors": {
+      "webapp_not_configured": "i18n.errors.webapp_not_configured",
+      "webapp_invalid": "i18n.errors.webapp_invalid"
+    },
+    "webapp": {
+      "open_cloud_storage": "i18n.webapp.open_cloud_storage",
+      "open_button": "i18n.webapp.open_button"
+    },
     "command": {
       "start": {
         "message": "i18n.command.start.message",

@@ -26,6 +26,24 @@ export type I18nTranslations = {
                 "leave": string;
             };
         };
+        "games": {
+            "menu_button": string;
+            "select_game": string;
+            "quiz_session": {
+                "button": string;
+                "description": string;
+                "starting": string;
+                "no_questions": string;
+            };
+        };
+        "errors": {
+            "webapp_not_configured": string;
+            "webapp_invalid": string;
+        };
+        "webapp": {
+            "open_cloud_storage": string;
+            "open_button": string;
+        };
         "command": {
             "start": {
                 "message": string;

@@ -29,6 +29,14 @@
       "no_questions": "No questions available. Please try again later."
     }
   },
+  "errors": {
+    "webapp_not_configured": "WebApp URL is not configured.",
+    "webapp_invalid": "WebApp URL is invalid."
+  },
+  "webapp": {
+    "open_cloud_storage": "Open Cloud Storage WebApp:",
+    "open_button": "Open WebApp"
+  },
   "command": {
     "start": {
       "message": "Welcome.\n/help - for command descriptions",

@@ -4,14 +4,13 @@ Concise, high-signal overview to help future contributors or LLMs understand the
 
 ## What This Project Is
 - NestJS-based Telegram bot template with quiz features, admin utilities, and TON blockchain integration.
-- Includes a Telegram WebApp (Mini App) for Cloud Storage testing and WebApp-to-bot communication.
 
 ## Tech Stack
 - Backend: NestJS, TypeScript
-- Bot: Telegraf via `nestjs-telegraf`, i18n via `nestjs-i18n`
-- DB: Prisma (schemas in `prisma/`), supports SQLite/PostgreSQL
-- Scheduling: `@nestjs/schedule`
+- Bot: Telegraf via `nestjs-telegraf`, i18n via `nestjs-i18n` and `nestjs-telegraf-i18n`. Currently implement only english translations. Other will be added in the future.
+- DB: Prisma (schemas in `prisma/`), supports SQLite for local development and PostgreSQL for production. It has a custom generic abstract repository for convenience `src/database/abstract.repository.v3.ts`
 - TON: `ton` SDK + TonConnect SDK
+- Logging: use `protected readonly logger = new Logger(this.constructor.name);` for logging in services. The app shoudl have maningful logging, but also not overcomplicating or overlogging. Only what can be useful for development and debugging. Use logger levels approriately. 
 
 ## Entry Point
 - `src/main.ts` starts a Nest HTTP server (default port 3000).
@@ -22,7 +21,6 @@ Concise, high-signal overview to help future contributors or LLMs understand the
   - `DatabaseModule` (Prisma + repositories)
   - `QuizModule` (quiz flow)
   - `TonModule` (TON services)
-  - `CloudStorageWebAppModule` (Mini App endpoints)
   - `LanguageModule` (i18n command setup)
 
 ## Database Layer
@@ -64,15 +62,6 @@ Concise, high-signal overview to help future contributors or LLMs understand the
 ## Configuration
 - Central config: `configuration/configuration.ts`
 - Typed schema: `configuration/validation/configuration.validators.ts`
-- Key env vars:
-  - `TELEGRAM_BOT_TOKEN`
-  - `TELEGRAM_WEBAPP_URL`
-  - `DATABASE_URL`
-  - `TON_PAYMENT_ADDRESS`
-  - `TON_API_URL`
-  - `TON_API_KEY`
-  - `TON_TIMEOUT_MS`
-  - `TON_CONNECT_MANIFEST_URL`
 
 ## Tests
 - Database tests: `test/database/`

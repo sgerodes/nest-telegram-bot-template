@@ -18,7 +18,7 @@ import { BaseTelegramHandler } from '@telegram/abstract.base.telegram.handler';
 import { PostedQuestionRepository } from '@database/quiz-repository/posted-question.repository';
 import { PostedQuestion, QuizQuestion } from '@prisma/client';
 import { UserAnswerRepository } from '@database/quiz-repository/user-answer.repository';
-import { SessionQuizService } from '../quiz/session-quiz/session-quiz.service';
+import { SessionQuizService, SessionStartResult } from '../quiz/session-quiz/session-quiz.service';
 import { i18nKeys } from '@i18n/i18n.keys';
 
 @Update()
@@ -103,7 +103,11 @@ export class BotUpdate extends BaseTelegramHandler {
       return;
     }
 
-    await this.sessionQuizService.startSession(userId, chatId);
+    const result = await this.sessionQuizService.startSession(userId, chatId);
+
+    if (result === SessionStartResult.NO_QUESTIONS) {
+      await ctx.tReply(i18nKeys.i18n.games.quiz_session.no_questions);
+    }
   }
 
 }

@@ -9,6 +9,12 @@ import { UserQuizSessionQuestionRepository } from '@database/quiz-repository/use
 import { AnswerMode, QuizQuestion } from '@prisma/client';
 import { shuffleArray } from '@telegram/utils';
 
+export enum SessionStartResult {
+  SUCCESS = 'success',
+  USER_NOT_FOUND = 'user_not_found',
+  NO_QUESTIONS = 'no_questions',
+}
+
 @Injectable()
 export class SessionQuizService {
   protected readonly logger = new Logger(this.constructor.name);
@@ -23,19 +29,18 @@ export class SessionQuizService {
     private readonly userQuizSessionQuestionRepository: UserQuizSessionQuestionRepository,
   ) {}
 
-  async startSession(telegramUserId: number, chatId: number, rounds?: number): Promise<void> {
+  async startSession(telegramUserId: number, chatId: number, rounds?: number): Promise<SessionStartResult> {
     const numRounds = rounds ?? this.quizConfig.sessionDefaultRounds;
 
     const user = await this.userRepository.findByTelegramId(telegramUserId);
     if (!user) {
       this.logger.warn(`User with telegramId ${telegramUserId} not found`);
-      return;
+      return SessionStartResult.USER_NOT_FOUND;
     }
 
     const questions = await this.selectRandomQuestions(numRounds);
     if (questions.length === 0) {
-      await this.telegrafService.sendMessageToChatId(chatId, 'No questions available. Please try again later.');
-      return;
+      return SessionStartResult.NO_QUESTIONS;
     }
 
     const session = await this.userQuizSessionRepository.createData({
@@ -53,6 +58,7 @@ export class SessionQuizService {
     this.logger.log(`Created quiz session ${session.id} for user ${user.id} with ${questions.length} questions`);
 
     await this.postNextQuestion(session.id, chatId);
+    return SessionStartResult.SUCCESS;
   }
 
   async postNextQuestion(sessionId: number, chatId: number): Promise<boolean> {

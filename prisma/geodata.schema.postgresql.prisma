@@ -1,0 +1,246 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("GEODATA_DATABASE_URL")
+  schemas  = ["geodata"]
+}
+
+// ============================================================================
+// CORE REFERENCE TABLES
+// ============================================================================
+
+model Country {
+  alpha2       String  @id @db.Char(2)
+  alpha3       String? @unique @db.Char(3)
+  numeric      String? @db.Char(3)
+  ioc          String? @db.Char(3) // Olympic committee code
+  nameCommon   String
+  nameOfficial String
+  regionCode   String?
+  subregion    String?
+  latitude     Float?
+  longitude    Float?
+  area         Float?
+  landlocked   Boolean @default(false)
+  unMember     Boolean @default(false)
+  independent  Boolean @default(false)
+  status       String? // assigned, reserved, etc.
+  flagEmoji    String?
+
+  // Phone calling code
+  iddRoot     String? // e.g., "+1"
+  iddSuffixes String[] // e.g., ["201", "202", ...]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  region       Region?           @relation(fields: [regionCode], references: [code])
+  names        CountryName[]
+  currencies   CountryCurrency[]
+  languages    CountryLanguage[]
+  domains      Domain[]
+  cities       City[]
+  subdivisions Subdivision[]
+  flags        CountryFlag[]
+
+  // Self-referencing for borders
+  bordersTo   CountryBorder[] @relation("BorderFrom")
+  bordersFrom CountryBorder[] @relation("BorderTo")
+
+  @@map("countries")
+  @@schema("geodata")
+}
+
+model CountryName {
+  id            Int     @id @default(autoincrement())
+  countryAlpha2 String  @db.Char(2)
+  langCode      String  @db.VarChar(10) // e.g., "en", "de", "zh-tw"
+  nameCommon    String
+  nameOfficial  String?
+  isNative      Boolean @default(false) // true if this is a native name
+
+  country Country @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+
+  @@unique([countryAlpha2, langCode, isNative])
+  @@index([langCode])
+  @@index([nameCommon])
+  @@map("country_names")
+  @@schema("geodata")
+}
+
+model CountryBorder {
+  id             Int    @id @default(autoincrement())
+  countryAlpha2  String @db.Char(2)
+  neighborAlpha2 String @db.Char(2)
+
+  country  Country @relation("BorderFrom", fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+  neighbor Country @relation("BorderTo", fields: [neighborAlpha2], references: [alpha2], onDelete: Cascade)
+
+  @@unique([countryAlpha2, neighborAlpha2])
+  @@map("country_borders")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// CURRENCIES
+// ============================================================================
+
+model Currency {
+  code     String  @id @db.Char(3)
+  name     String
+  symbol   String?
+  decimals Int     @default(2)
+  number   String? // ISO 4217 numeric code
+
+  countries CountryCurrency[]
+
+  @@map("currencies")
+  @@schema("geodata")
+}
+
+model CountryCurrency {
+  id            Int    @id @default(autoincrement())
+  countryAlpha2 String @db.Char(2)
+  currencyCode  String @db.Char(3)
+
+  country  Country  @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+  currency Currency @relation(fields: [currencyCode], references: [code], onDelete: Cascade)
+
+  @@unique([countryAlpha2, currencyCode])
+  @@map("country_currencies")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// LANGUAGES
+// ============================================================================
+
+model Language {
+  alpha2        String? @db.Char(2)
+  alpha3        String  @id @db.Char(3)
+  name          String
+  bibliographic String? // bibliographic code if different
+
+  countries CountryLanguage[]
+
+  @@index([alpha2])
+  @@map("languages")
+  @@schema("geodata")
+}
+
+model CountryLanguage {
+  id             Int    @id @default(autoincrement())
+  countryAlpha2  String @db.Char(2)
+  languageAlpha3 String @db.Char(3)
+
+  country  Country  @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+  language Language @relation(fields: [languageAlpha3], references: [alpha3], onDelete: Cascade)
+
+  @@unique([countryAlpha2, languageAlpha3])
+  @@map("country_languages")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// REGIONS (Hierarchical)
+// ============================================================================
+
+model Region {
+  code       String  @id
+  name       String
+  parentCode String?
+
+  parent   Region?  @relation("RegionHierarchy", fields: [parentCode], references: [code])
+  children Region[] @relation("RegionHierarchy")
+
+  countries Country[]
+
+  @@map("regions")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// DOMAINS (TLDs)
+// ============================================================================
+
+model Domain {
+  tld           String @id // e.g., ".us", ".co.uk"
+  countryAlpha2 String @db.Char(2)
+
+  country Country @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+
+  @@index([countryAlpha2])
+  @@map("domains")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// CITIES
+// ============================================================================
+
+model City {
+  id            Int     @id @default(autoincrement())
+  countryAlpha2 String  @db.Char(2)
+  name          String
+  nameAscii     String
+  latitude      Float
+  longitude     Float
+  population    BigInt?
+  isCapital     Boolean @default(false)
+  capitalType   String? // "primary", "admin", "minor"
+  adminName     String? // state/province name
+  adminCode     String? // link to subdivision
+
+  country Country @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+
+  @@index([countryAlpha2])
+  @@index([name])
+  @@index([nameAscii])
+  @@index([isCapital])
+  @@index([population])
+  @@map("cities")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// SUBDIVISIONS (States, Provinces, Regions)
+// ============================================================================
+
+model Subdivision {
+  code          String  @id // e.g., "US-CA", "DE-BY"
+  countryAlpha2 String  @db.Char(2)
+  name          String
+  type          String? // "state", "province", "region", "territory", etc.
+
+  country Country @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+
+  @@index([countryAlpha2])
+  @@index([name])
+  @@map("subdivisions")
+  @@schema("geodata")
+}
+
+// ============================================================================
+// FLAGS (Binary images at multiple sizes)
+// ============================================================================
+
+model CountryFlag {
+  id            Int    @id @default(autoincrement())
+  countryAlpha2 String @db.Char(2)
+  size          Int // 16, 24, 32, 48, 64, 128
+  png           Bytes
+
+  country Country @relation(fields: [countryAlpha2], references: [alpha2], onDelete: Cascade)
+
+  @@unique([countryAlpha2, size])
+  @@index([countryAlpha2])
+  @@index([size])
+  @@map("country_flags")
+  @@schema("geodata")
+}

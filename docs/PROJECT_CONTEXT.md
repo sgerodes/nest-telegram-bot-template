@@ -19,9 +19,22 @@ Concise, high-signal overview to help future contributors or LLMs understand the
 - `src/app.module.ts` wires:
   - `TelegramModule` (bot handlers, scenes, middlewares)
   - `DatabaseModule` (Prisma + repositories)
-  - `QuizModule` (quiz flow)
+  - `QuizModule` (quiz flow: scheduled + session-based)
   - `TonModule` (TON services)
   - `LanguageModule` (i18n command setup)
+
+### Quiz Module (High-Level)
+- `src/quiz/quiz.module.ts` groups all quiz-related services:
+  - `QuizService` for generic quiz utilities.
+  - `ScheduledQuizService` for cron-like scheduled quizzes.
+  - `SessionQuizService` for interactive, per-user quiz sessions.
+- Session-based quizzes:
+  - `SessionQuizService` (`src/quiz/session-quiz/session-quiz.service.ts`) creates `UserQuizSession` records and links them to `UserQuizSessionQuestion` entities.
+  - Questions are selected randomly from `QuizQuestion` using `sessionDefaultRounds` from configuration.
+  - Each question is posted via `TelegrafService.sendQuizToChatId`, and the posted poll is tracked in `PostedQuestion`.
+- Scheduled quizzes:
+  - `ScheduledQuizService` (`src/quiz/scheduled-quiz/scheduled-quiz.service.ts`) uses `ScheduledQuiz` + `PostedQuestion` models to send quizzes at specific times.
+  - `@nestjs/schedule` (`ScheduleModule.forRoot()` in `AppModule`) powers cron/interval jobs that call this service.
 
 ## Database Layer
 - Prisma models in `prisma/schema.prisma`.
@@ -41,8 +54,13 @@ Concise, high-signal overview to help future contributors or LLMs understand the
   - `/cloud_storage_webapp` opens the Mini App.
   - `/ton_balance <address>` fetches TON balance.
   - `/ton_paylink <amount> [comment]` builds a `ton://transfer` link and sends via inline button.
+- `src/telegram/quiz.update.ts`: quiz-related admin commands (e.g., entering quiz creation scenes).
 - Scenes in `src/telegram/scenes/` (quiz creation, quiz flow, management).
 - Middlewares in `src/telegram/middlewares/`.
+
+### Telegraf Abstractions
+- `TelegrafService` (`src/telegram/telegraf.service.ts`) is the main abstraction for interacting with the Telegram Bot API (sending quizzes, messages, etc.).
+- `BaseTelegramHandler` (`src/telegram/abstract.base.telegram.handler.ts`) provides shared behavior (including a logger) for update handlers like `bot.update.ts`, `bot.admin.update.ts`, and `quiz.update.ts`.
 
 ## WebApp (Cloud Storage Test)
 - WebApp UI: `src/telegram/webapp/cloud-storage.html`.
@@ -62,14 +80,31 @@ Concise, high-signal overview to help future contributors or LLMs understand the
 ## Configuration
 - Central config: `configuration/configuration.ts`
 - Typed schema: `configuration/validation/configuration.validators.ts`
+- Quiz config:
+  - `QuizConfig` (part of the typed configuration) controls quiz behavior such as `sessionDefaultRounds`, injected into `SessionQuizService`.
+- I18n config:
+  - `TelegramI18nConfig` (from `configuration.validators.ts`) is injected into `I18nModule.forRootAsync` to configure `fallbackLanguage`, `fallbacks`, `i18nFolderPath`, and `typesOutputPath`.
 
 ## Tests
 - Database tests: `test/database/`
   - `db-test.utils.ts` provides mock Prisma delegates.
   - `telegram-user.repository.spec.ts` exercises repository discovery + CRUD helpers.
+- Quiz tests:
+  - `src/quiz/quiz.service.spec.ts` for generic quiz logic.
+  - `src/quiz/session-quiz/session-quiz.service.spec.ts` for session-based quiz flow.
+- TON tests:
+  - `src/ton/ton.service.spec.ts` for TON integration logic.
+- E2E tests:
+  - `test/app.e2e-spec.ts` for Nest application end-to-end behavior.
 
 ## Resources
 - Quiz JSON data in `resources/quiz/`.
+
+## I18n Tooling
+- I18n files live under `configuration/i18n/`:
+  - `i18n.json` per locale (e.g., `en`, `pt`, `ru`).
+  - `generate.i18n.keys.ts` + `i18n.generated.ts` + `i18n.keys.ts` provide type-safe i18n keys.
+  - `i18n-keys-validation-service` (`src/language/i18n-keys-validation-service/`) validates that keys exist and are consistent across locales.
 
 ## Code Standards & Architecture Guidelines
 

@@ -3,6 +3,6 @@ import { defineConfig } from 'prisma/config';
 
 export default defineConfig({
   datasource: {
-    url: process.env.LATITUDE_DATABASE_URL!,
+    url: process.env.GEODATA_DATABASE_URL!,
   },
 });

@@ -47,7 +47,8 @@ export const configuration = (): RootConfig => ({
     sessionDefaultRounds: 3,
   },
   database: {
-    url: process.env.DATABASE_URL,
+    latitudeUrl: process.env.LATITUDE_DATABASE_URL,
+    geodataUrl: process.env.GEODATA_DATABASE_URL,
   },
   ton: {
     paymentAddress: process.env.TON_PAYMENT_ADDRESS,

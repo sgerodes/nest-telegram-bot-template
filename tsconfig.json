@@ -15,7 +15,8 @@
       "@configuration/*": ["configuration/*"],
       "@i18n/*": ["configuration/i18n/*"],
       "@database/*": ["src/database/*"],
-      "@language/*": ["src/language/*"]
+      "@language/*": ["src/language/*"],
+      "@prisma-geodata/*": ["prisma/generated/geodata-client/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

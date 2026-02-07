@@ -120,7 +120,11 @@ export class TelegramConfig {
 export class DatabaseConfig {
   @IsString()
   @IsNotEmpty()
-  url!: string;
+  latitudeUrl!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  geodataUrl!: string;
 }
 
 export class TonConfig {

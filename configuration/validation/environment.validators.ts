@@ -11,7 +11,11 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
-  DATABASE_URL: string;
+  LATITUDE_DATABASE_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  GEODATA_DATABASE_URL: string;
 
   @IsBoolean()
   @IsOptional()

@@ -4,29 +4,33 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { PrismaClient, Prisma } from '@prisma/client';
-import { PrismaLibSql } from '@prisma/adapter-libsql';
+import { PrismaClient, Prisma } from '@prisma-geodata/client';
 import { DatabaseConfig } from '@configuration/validation/configuration.validators';
+import pg from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 @Injectable()
-export class PrismaService
+export class GeodataPrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
   private readonly logger = new Logger(this.constructor.name);
+  private readonly pool: pg.Pool;
 
   constructor(databaseConfig: DatabaseConfig) {
-    const adapter = new PrismaLibSql({ url: databaseConfig.latitudeUrl });
+    const pool = new pg.Pool({ connectionString: databaseConfig.geodataUrl });
+    const adapter = new PrismaPg(pool);
 
     super({ adapter });
 
+    this.pool = pool;
     this.patchDelegates();
   }
 
   async onModuleInit() {
-    this.logger.log('Connecting to the db...');
+    this.logger.log('Connecting to geodata database...');
     await this.$connect();
-    this.logger.log('Database connection established.');
+    this.logger.log('Geodata database connection established.');
   }
 
   private patchDelegates() {
@@ -42,8 +46,9 @@ export class PrismaService
   }
 
   async onModuleDestroy() {
-    this.logger.log('Disconnecting from the db...');
+    this.logger.log('Disconnecting from geodata database...');
     await this.$disconnect();
-    this.logger.log('Database connection closed.');
+    await this.pool.end();
+    this.logger.log('Geodata database connection closed.');
   }
 }

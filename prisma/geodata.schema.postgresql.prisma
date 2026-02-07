@@ -1,12 +1,10 @@
 generator client {
-  provider        = "prisma-client-js"
-  output          = "./generated/client"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
+  output   = "./generated/geodata-client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("GEODATA_DATABASE_URL")
   schemas  = ["geodata"]
 }
 

@@ -24,6 +24,9 @@
     "prisma:sqlite:regenerate": "npm run prisma:create:schemas && rm -f ./prisma/dev.sqlite && rm -f ./prisma/dev.sqlite-journal && npx prisma db push --schema=prisma/schema.sqlite.prisma && npx prisma generate --schema=prisma/schema.sqlite.prisma",
     "prisma:postres:migrate": "npx prisma migrate dev --schema=prisma/schema.postgresql.prisma --name init",
     "prisma:postres:generate": "npx prisma generate --schema=prisma/schema.postgresql.prisma",
+    "prisma:geodata:generate": "bun node_modules/prisma/build/index.js generate --schema=prisma/geodata.schema.postgresql.prisma --config=prisma.geodata.config.ts",
+    "prisma:geodata:pull": "bun node_modules/prisma/build/index.js db pull --schema=prisma/geodata.schema.postgresql.prisma --config=prisma.geodata.config.ts",
+    "prisma:all:generate": "npm run prisma:postres:generate && npm run prisma:geodata:generate",
     "seed:quiz": "pnpm exec ts-node src/quiz/seed-questions.ts",
     "cloudflare:tunnel": "cloudflared tunnel --url http://localhost:3000"
   },
